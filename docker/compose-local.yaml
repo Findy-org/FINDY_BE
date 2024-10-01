@@ -1,17 +1,16 @@
 services:
   findy-db:
-    image: mysql:8.0
+    image: postgres:latest
     platform: linux/x86_64
     ports:
-      - "3320:3306"
+      - "5433:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: findydb!
-      MYSQL_DATABASE: findy-db
-      MYSQL_USER: findy
-      MYSQL_PASSWORD: findydb!
+      POSTGRES_DB: findy-db
+      POSTGRES_USER: findy
+      POSTGRES_PASSWORD: findydb!
       TZ: Asia/Seoul
     volumes:
-      - ./db/mysql/data:/var/lib/mysql
-      - ./db/mysql/config:/etc/mysql/conf.d
+      - ./db/postgresql/data:/var/lib/postgresql/data
+      - ./db/postgresql/config:/etc/postgresql/conf.d
 networks:
   findy-db-local:

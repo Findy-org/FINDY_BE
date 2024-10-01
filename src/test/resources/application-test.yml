@@ -10,10 +10,10 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:tc:mysql:8.0.26:///testdb
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:tc:postgresql:12:///testdb
     username: test
     password: test
 
