@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 
 @Getter
@@ -20,7 +21,8 @@ import lombok.Getter;
 public abstract class BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
+	@SequenceGenerator(name = "entity_sequence", sequenceName = "entity_seq", allocationSize = 1)
 	private Long id;
 
 	@CreatedDate
