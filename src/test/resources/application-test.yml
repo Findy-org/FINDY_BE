@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: FINDY_BE
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:tc:mysql:8.0.26:///testdb
+    username: test
+    password: test
+
+jwt:
+  secretKey: my_test_secret_key
+
+  access:
+    expiration: 3600000
+    header: "Authorization"
+
+  refresh:
+    expiration: 1209600000
+    header: "Authorization-refresh"
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
