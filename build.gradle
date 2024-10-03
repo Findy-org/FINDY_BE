@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
 }
@@ -22,6 +23,60 @@ configurations {
 repositories {
     mavenCentral()
 }
+
+test {
+    finalizedBy jacocoTestReport
+    useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+    reportsDirectory = layout.buildDirectory.dir("reports/jacoco")
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, excludes: [
+                    "**/*Request*",
+                    "**/*Response*",
+                    "**/*Config*",
+                    "org/findy/findy_be/common/**",
+                    "org/findy/findy_be/auth/**",
+                    "org/findy/findy_be/**/dto/**",
+            ])
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+            }
+            excludes = [
+                    "**/*Request*",
+                    "**/*Response*",
+                    "**/*Config*",
+                    "org/findy/findy_be/common/**",
+                    "org/findy/findy_be/auth/**",
+                    "org/findy/findy_be/**/dto/**",
+            ]
+        }
+    }
+}
+
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -47,6 +102,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.testcontainers:postgresql"
     testImplementation 'org.testcontainers:junit-jupiter'
     runtimeOnly 'org.postgresql:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
