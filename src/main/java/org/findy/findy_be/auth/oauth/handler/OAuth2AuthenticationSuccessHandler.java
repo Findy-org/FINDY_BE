@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
-import org.findy.findy_be.auth.oauth.entity.SocialProviderType;
+import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfo;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfoFactory;
 import org.findy.findy_be.auth.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;

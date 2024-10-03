@@ -2,7 +2,7 @@ package org.findy.findy_be.user.entity;
 
 import java.time.LocalDateTime;
 
-import org.findy.findy_be.auth.oauth.entity.SocialProviderType;
+import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

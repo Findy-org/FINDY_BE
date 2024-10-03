@@ -2,7 +2,7 @@ package org.findy.findy_be.auth.oauth.info;
 
 import java.util.Map;
 
-import org.findy.findy_be.auth.oauth.entity.SocialProviderType;
+import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.info.implement.KakaoOAuth2UserInfo;
 import org.findy.findy_be.auth.oauth.info.implement.NaverOAuth2UserInfo;
 

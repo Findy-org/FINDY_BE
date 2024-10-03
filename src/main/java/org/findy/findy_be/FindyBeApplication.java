@@ -1,6 +1,6 @@
 package org.findy.findy_be;
 
-import org.findy.findy_be.auth.entity.CorsProperties;
+import org.findy.findy_be.auth.properties.CorsProperties;
 import org.findy.findy_be.common.config.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

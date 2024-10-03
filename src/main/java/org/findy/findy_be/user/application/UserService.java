@@ -1,4 +1,4 @@
-package org.findy.findy_be.user.service;
+package org.findy.findy_be.user.application;
 
 import org.findy.findy_be.user.entity.User;
 import org.findy.findy_be.user.repository.UserRepository;
