@@ -12,21 +12,10 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:tc:postgresql:12:///testdb
-    username: test
-    password: test
+    url: jdbc:postgresql://localhost:5333/testdb # 환경 변수를 통한 URL 설정
 
 jwt:
-  secretKey: my_test_secret_key
-
-  access:
-    expiration: 3600000
-    header: "Authorization"
-
-  refresh:
-    expiration: 1209600000
-    header: "Authorization-refresh"
+  secret: my_super_secret_key_that_is_long_enough_for_jwt
 
 logging:
   level:
