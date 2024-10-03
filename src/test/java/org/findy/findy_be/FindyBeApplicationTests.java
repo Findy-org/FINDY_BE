@@ -1,11 +1,12 @@
 package org.findy.findy_be;
 
+import org.findy.findy_be.common.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@Import(TestcontainersConfiguration.class)
+@Import({TestContainerConfiguration.class, SecurityConfig.class,}) // TestContainerConfiguration 추가
 @SpringBootTest
 @ActiveProfiles("test")
 class FindyBeApplicationTests {
@@ -14,4 +15,7 @@ class FindyBeApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void testDatabaseConnection() {
+	}
 }
