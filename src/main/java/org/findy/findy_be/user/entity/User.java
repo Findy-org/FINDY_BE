@@ -1,13 +1,18 @@
 package org.findy.findy_be.user.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.findy.findy_be.auth.oauth.entity.SocialProviderType;
+import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
+import org.findy.findy_be.auth.oauth.info.OAuth2UserInfo;
+import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,16 +20,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -32,47 +38,47 @@ import lombok.Setter;
 public class User {
 	@JsonIgnore
 	@Id
-	@Column(name = "USER_SEQ")
+	@Column(name = "user_seq")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userSeq;
 
-	@Column(name = "USER_ID", length = 64, unique = true)
+	@Column(name = "user_id", length = 64, unique = true)
 	@NotNull
 	@Size(max = 64)
 	private String userId;
 
-	@Column(name = "USERNAME", length = 100)
+	@Column(name = "username", length = 100)
 	@NotNull
 	@Size(max = 100)
 	private String username;
 
 	@JsonIgnore
-	@Column(name = "PASSWORD", length = 128)
+	@Column(name = "password", length = 128)
 	@NotNull
 	@Size(max = 128)
 	private String password;
 
-	@Column(name = "EMAIL", length = 512, unique = true)
+	@Column(name = "email", length = 512, unique = true)
 	@NotNull
 	@Size(max = 512)
 	private String email;
 
-	@Column(name = "EMAIL_VERIFIED_YN", length = 1)
+	@Column(name = "email_verified_yn", length = 1)
 	@NotNull
 	@Size(min = 1, max = 1)
 	private String emailVerifiedYn;
 
-	@Column(name = "PROFILE_IMAGE_URL", length = 512)
+	@Column(name = "profile_image_url", length = 512)
 	@NotNull
 	@Size(max = 512)
 	private String profileImageUrl;
 
-	@Column(name = "PROVIDER_TYPE", length = 20)
+	@Column(name = "provider_type", length = 20)
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	private SocialProviderType socialProviderType;
 
-	@Column(name = "ROLE_TYPE", length = 20)
+	@Column(name = "role_type", length = 20)
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	private RoleType roleType;
@@ -85,7 +91,20 @@ public class User {
 	@Column(columnDefinition = "TIMESTAMP", name = "updated_at")
 	private LocalDateTime updatedAt;
 
-	public User(
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Bookmark> bookmarks = new ArrayList<>();
+
+	public void updateUser(OAuth2UserInfo userInfo) {
+		if (userInfo.getName() != null && !this.username.equals(userInfo.getName())) {
+			this.username = userInfo.getName();
+		}
+
+		if (userInfo.getImageUrl() != null && !this.profileImageUrl.equals(userInfo.getImageUrl())) {
+			this.profileImageUrl = userInfo.getImageUrl();
+		}
+	}
+
+	public static User create(
 		@NotNull @Size(max = 64) String userId,
 		@NotNull @Size(max = 100) String username,
 		@NotNull @Size(max = 512) String email,
@@ -96,15 +115,19 @@ public class User {
 		@NotNull LocalDateTime createdAt,
 		@NotNull LocalDateTime updatedAt
 	) {
-		this.userId = userId;
-		this.username = username;
-		this.password = "NO_PASS";
-		this.email = email != null ? email : "NO_EMAIL";
-		this.emailVerifiedYn = emailVerifiedYn;
-		this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
-		this.socialProviderType = socialProviderType;
-		this.roleType = roleType;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		email = email != null ? email : "NO_EMAIL";
+		profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
+		return User.builder()
+			.userId(userId)
+			.username(username)
+			.password("NO_PASS")
+			.email(email)
+			.emailVerifiedYn(emailVerifiedYn)
+			.profileImageUrl(profileImageUrl)
+			.socialProviderType(socialProviderType)
+			.roleType(roleType)
+			.createdAt(createdAt)
+			.updatedAt(updatedAt)
+			.build();
 	}
 }

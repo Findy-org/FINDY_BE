@@ -1,4 +1,4 @@
-package org.findy.findy_be.auth.entity;
+package org.findy.findy_be.auth.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -2,7 +2,6 @@ package org.findy.findy_be.common.config;
 
 import java.util.Arrays;
 
-import org.findy.findy_be.auth.entity.CorsProperties;
 import org.findy.findy_be.auth.oauth.filter.TokenAuthenticationFilter;
 import org.findy.findy_be.auth.oauth.handler.OAuth2AuthenticationFailureHandler;
 import org.findy.findy_be.auth.oauth.handler.OAuth2AuthenticationSuccessHandler;
@@ -11,6 +10,7 @@ import org.findy.findy_be.auth.oauth.repository.OAuth2AuthorizationRequestBasedO
 import org.findy.findy_be.auth.oauth.service.CustomOAuth2UserService;
 import org.findy.findy_be.auth.oauth.service.CustomUserDetailsService;
 import org.findy.findy_be.auth.oauth.token.AuthTokenProvider;
+import org.findy.findy_be.auth.properties.CorsProperties;
 import org.findy.findy_be.user.repository.UserRefreshTokenRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

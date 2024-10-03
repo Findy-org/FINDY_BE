@@ -1,4 +1,4 @@
-package org.findy.findy_be.auth.oauth.entity;
+package org.findy.findy_be.auth.oauth.domain;
 
 import lombok.Getter;
 
