@@ -2,7 +2,7 @@ package org.findy.findy_be.auth.controller;
 
 import java.util.Date;
 
-import org.findy.findy_be.auth.entity.AuthReqModel;
+import org.findy.findy_be.auth.entity.AuthRequestModel;
 import org.findy.findy_be.auth.oauth.entity.UserPrincipal;
 import org.findy.findy_be.auth.oauth.token.AuthToken;
 import org.findy.findy_be.auth.oauth.token.AuthTokenProvider;
@@ -53,16 +53,16 @@ public class AuthController {
 	public String login(
 		HttpServletRequest request,
 		HttpServletResponse response,
-		@RequestBody AuthReqModel authReqModel
+		@RequestBody AuthRequestModel authRequestModel
 	) {
 		Authentication authentication = authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(
-				authReqModel.getId(),
-				authReqModel.getPassword()
+				authRequestModel.getId(),
+				authRequestModel.getPassword()
 			)
 		);
 
-		String userId = authReqModel.getId();
+		String userId = authRequestModel.getId();
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		Date now = new Date();
