@@ -6,6 +6,7 @@ import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfo;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfoFactory;
+import org.findy.findy_be.bookmark.application.BookmarkService;
 import org.findy.findy_be.common.exception.custom.OAuthProviderMissMatchException;
 import org.findy.findy_be.user.entity.RoleType;
 import org.findy.findy_be.user.entity.User;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private final UserRepository userRepository;
+	private final BookmarkService bookmarkService;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -54,7 +56,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 						" account. Please use your " + savedUser.getSocialProviderType() + " account to login."
 				);
 			}
-			updateUser(savedUser, userInfo);
+			savedUser.updateUser(userInfo);
 		} else {
 			savedUser = createUser(userInfo, socialProviderType);
 		}
@@ -64,7 +66,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private User createUser(OAuth2UserInfo userInfo, SocialProviderType socialProviderType) {
 		LocalDateTime now = LocalDateTime.now();
-		User user = new User(
+		User user = User.create(
 			userInfo.getId(),
 			userInfo.getName(),
 			userInfo.getEmail(),
@@ -75,19 +77,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			now,
 			now
 		);
-
-		return userRepository.saveAndFlush(user);
-	}
-
-	private User updateUser(User user, OAuth2UserInfo userInfo) {
-		if (userInfo.getName() != null && !user.getUsername().equals(userInfo.getName())) {
-			user.setUsername(userInfo.getName());
-		}
-
-		if (userInfo.getImageUrl() != null && !user.getProfileImageUrl().equals(userInfo.getImageUrl())) {
-			user.setProfileImageUrl(userInfo.getImageUrl());
-		}
-
+		userRepository.saveAndFlush(user);
+		bookmarkService.initBookmarks(user);
 		return user;
 	}
 }
