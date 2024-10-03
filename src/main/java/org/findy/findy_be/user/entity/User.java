@@ -92,6 +92,7 @@ public class User {
 	private LocalDateTime updatedAt;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@Builder.Default
 	private List<Bookmark> bookmarks = new ArrayList<>();
 
 	public void updateUser(OAuth2UserInfo userInfo) {
