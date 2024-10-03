@@ -1,4 +1,4 @@
-package org.findy.findy_be.auth.oauth.userinfo;
+package org.findy.findy_be.auth.oauth.info;
 
 import java.util.Map;
 
@@ -9,9 +9,13 @@ public abstract class OAuth2UserInfo {
 		this.attributes = attributes;
 	}
 
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
 	public abstract String getId();
 
-	public abstract String getNickname();
+	public abstract String getName();
 
 	public abstract String getEmail();
 
