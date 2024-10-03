@@ -12,7 +12,8 @@ spring:
         highlight_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: jdbc:postgresql://localhost:5333/testdb # 환경 변수를 통한 URL 설정
+    url: jdbc:postgresql://localhost:5333/testdb
+    driver-class-name: org.postgresql.Driver
 
 jwt:
   secret: my_super_secret_key_that_is_long_enough_for_jwt

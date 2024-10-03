@@ -21,7 +21,7 @@ import jakarta.transaction.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@ActiveProfiles("integration-test")
+@ActiveProfiles("test")
 @Ignore
 public class IntegrationTest {
 	@Autowired

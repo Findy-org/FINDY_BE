@@ -51,6 +51,7 @@ jacocoTestReport {
                     "org/findy/findy_be/common/**",
                     "org/findy/findy_be/auth/**",
                     "org/findy/findy_be/**/dto/**",
+                    "org/findy/findy_be/user/repository/UserRefreshTokenRepository.java",
             ])
         }))
     }
@@ -72,6 +73,7 @@ jacocoTestCoverageVerification {
                     "org/findy/findy_be/common/**",
                     "org/findy/findy_be/auth/**",
                     "org/findy/findy_be/**/dto/**",
+                    "org/findy/findy_be/user/repository/UserRefreshTokenRepository.java",
             ]
         }
     }

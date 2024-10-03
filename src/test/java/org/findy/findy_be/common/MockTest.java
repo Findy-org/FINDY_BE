@@ -9,8 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 @ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
 @TestPropertySource(properties = {
-	"web-client.base-url-test=http://localhost:8080",
-	"jwt.secretKey-test=my_test_secret_key"
+	"jwt.secret= my_super_secret_key_that_is_long_enough_for_jwt"
 })
 @Ignore
 public class MockTest {
