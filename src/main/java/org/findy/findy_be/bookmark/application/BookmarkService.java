@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
-import org.findy.findy_be.user.entity.User;
+import org.findy.findy_be.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

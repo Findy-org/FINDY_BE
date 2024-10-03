@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import org.findy.findy_be.user.entity.RoleType;
-import org.findy.findy_be.user.entity.User;
+import org.findy.findy_be.user.domain.RoleType;
+import org.findy.findy_be.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
