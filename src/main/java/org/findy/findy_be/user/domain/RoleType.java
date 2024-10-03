@@ -1,11 +1,9 @@
-package org.findy.findy_be.user.entity;
+package org.findy.findy_be.user.domain;
 
 import java.util.Arrays;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @AllArgsConstructor

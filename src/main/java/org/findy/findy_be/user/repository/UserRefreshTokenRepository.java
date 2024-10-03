@@ -1,6 +1,6 @@
 package org.findy.findy_be.user.repository;
 
-import org.findy.findy_be.user.entity.UserRefreshToken;
+import org.findy.findy_be.user.domain.UserRefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRefreshTokenRepository extends JpaRepository<UserRefreshToken, Long> {

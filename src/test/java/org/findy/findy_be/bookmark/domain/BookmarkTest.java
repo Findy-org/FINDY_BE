@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
-import org.findy.findy_be.user.entity.RoleType;
-import org.findy.findy_be.user.entity.User;
+import org.findy.findy_be.user.domain.RoleType;
+import org.findy.findy_be.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package org.findy.findy_be.user.entity;
+package org.findy.findy_be.user.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
