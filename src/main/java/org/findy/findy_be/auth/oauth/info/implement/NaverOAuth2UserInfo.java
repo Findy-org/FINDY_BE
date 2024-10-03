@@ -1,6 +1,8 @@
-package org.findy.findy_be.auth.oauth.userinfo;
+package org.findy.findy_be.auth.oauth.info.implement;
 
 import java.util.Map;
+
+import org.findy.findy_be.auth.oauth.info.OAuth2UserInfo;
 
 public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 
@@ -15,11 +17,12 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 		if (response == null) {
 			return null;
 		}
+
 		return (String)response.get("id");
 	}
 
 	@Override
-	public String getNickname() {
+	public String getName() {
 		Map<String, Object> response = (Map<String, Object>)attributes.get("response");
 
 		if (response == null) {
@@ -32,6 +35,10 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 	@Override
 	public String getEmail() {
 		Map<String, Object> response = (Map<String, Object>)attributes.get("response");
+
+		if (response == null) {
+			return null;
+		}
 
 		return (String)response.get("email");
 	}
