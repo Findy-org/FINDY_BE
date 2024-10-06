@@ -118,6 +118,21 @@ public class User {
 	) {
 		email = email != null ? email : "NO_EMAIL";
 		profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
+		return User.of(userId, username, email, emailVerifiedYn, profileImageUrl, socialProviderType, roleType,
+			createdAt, updatedAt);
+	}
+
+	public static User of(
+		@NotNull @Size(max = 64) String userId,
+		@NotNull @Size(max = 100) String username,
+		@NotNull @Size(max = 512) String email,
+		@NotNull @Size(max = 1) String emailVerifiedYn,
+		@NotNull @Size(max = 512) String profileImageUrl,
+		@NotNull SocialProviderType socialProviderType,
+		@NotNull RoleType roleType,
+		@NotNull LocalDateTime createdAt,
+		@NotNull LocalDateTime updatedAt
+	) {
 		return User.builder()
 			.userId(userId)
 			.username(username)

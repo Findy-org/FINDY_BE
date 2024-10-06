@@ -2,6 +2,7 @@ package org.findy.findy_be.auth.api;
 
 import java.util.Date;
 
+import org.findy.findy_be.auth.api.swagger.AuthAPIPresentation;
 import org.findy.findy_be.auth.dto.AuthRequestModel;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.auth.oauth.token.AuthToken;
@@ -23,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.jsonwebtoken.Claims;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthAPIPresentation {
 
 	private final AppProperties appProperties;
 	private final AuthTokenProvider tokenProvider;
@@ -44,11 +42,6 @@ public class AuthController {
 	private final static long THREE_DAYS_MSEC = 259200000;
 	private final static String REFRESH_TOKEN = "refresh_token";
 
-	@Operation(summary = "User login", description = "Authenticate user and return access token.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Successfully logged in"),
-		@ApiResponse(responseCode = "401", description = "Unauthorized")
-	})
 	@PostMapping("/login")
 	public String login(
 		HttpServletRequest request,
@@ -96,11 +89,6 @@ public class AuthController {
 		return accessToken.getToken();
 	}
 
-	@Operation(summary = "Refresh access token", description = "Refresh the access token using the refresh token.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Successfully refreshed token"),
-		@ApiResponse(responseCode = "401", description = "Unauthorized")
-	})
 	@GetMapping("/refresh")
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
 		// access token 확인

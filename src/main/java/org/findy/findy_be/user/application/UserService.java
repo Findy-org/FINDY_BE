@@ -16,9 +16,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
-	public User findUser(final Long userId) {
-		return userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("[Error] 사용자를 찾을 수 없습니다."));
+	public User findUser(final String userId) {
+		return userRepository.findByUserId(userId);
 	}
-
 }

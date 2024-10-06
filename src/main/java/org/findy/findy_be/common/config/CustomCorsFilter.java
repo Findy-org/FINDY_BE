@@ -27,6 +27,7 @@ public class CustomCorsFilter implements Filter {
 		String origin = request.getHeader("Origin");
 
 		if (origin != null && (origin.equals("http://localhost:5173") ||
+			origin.equals("http://localhost:8080") ||
 			origin.equals("https://nid.naver.com") ||
 			origin.equals("https://kauth.kakao.com"))) {
 			response.setHeader("Access-Control-Allow-Origin", origin);

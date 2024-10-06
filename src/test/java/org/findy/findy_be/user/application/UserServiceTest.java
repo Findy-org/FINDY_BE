@@ -3,8 +3,6 @@ package org.findy.findy_be.user.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Optional;
-
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
@@ -32,19 +30,19 @@ class UserServiceTest extends MockTest {
 	@Test
 	void 존재하는_사용자_조회() {
 		// given
-		Long userId = 1L;
+		String userId = "USERIDSKJFK";
 		User user = User.builder()
-			.userSeq(userId)
-			.userId("testUser")
+			.userSeq(1L)
+			.userId(userId)
 			.username("Test User")
 			.email("test@example.com")
 			.emailVerifiedYn("Y")
 			.profileImageUrl("http://example.com/image.png")
-			.socialProviderType(null) // 적절한 값을 넣으세요
-			.roleType(null) // 적절한 값을 넣으세요
+			.socialProviderType(null)
+			.roleType(null)
 			.build();
 
-		when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+		when(userRepository.findByUserId(userId)).thenReturn(user);
 
 		// when
 		User foundUser = userService.findUser(userId);
@@ -52,20 +50,6 @@ class UserServiceTest extends MockTest {
 		// then
 		assertThat(foundUser).isNotNull();
 		assertThat(foundUser.getUsername()).isEqualTo("Test User");
-		verify(userRepository, times(1)).findById(userId);
-	}
-
-	@DisplayName("존재하지 않는 사용자를 찾을 경우 예외 발생")
-	@Test
-	void 존재하지_않는_사용자_조회() {
-		// given
-		Long userId = 1L;
-
-		when(userRepository.findById(userId)).thenReturn(Optional.empty());
-
-		// when & then
-		assertThatThrownBy(() -> userService.findUser(userId))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessageContaining("[Error] 사용자를 찾을 수 없습니다.");
+		verify(userRepository, times(1)).findByUserId(userId);
 	}
 }

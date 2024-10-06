@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.findy.findy_be.common.entity.BaseEntity;
+import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.user.domain.User;
 
 import jakarta.persistence.Entity;
