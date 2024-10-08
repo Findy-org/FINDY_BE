@@ -10,8 +10,13 @@ import lombok.RequiredArgsConstructor;
 public enum MajorCategory {
 
 	RESTAURANT("음식점"),
-	TRAVEL_AND_ATTRACTION("여행,명소"),
-	SHOPPING_AND_DISTRIBUTION("쇼핑,유통");
+	CAFE_AND_DESSERT("카페/디저트"),
+	BAR("술집"),
+	SHOPPING_AND_DISTRIBUTION("쇼핑, 유통"),
+	TRAVEL_AND_ATTRACTION("여행, 명소"),
+	PUBLIC_AND_SOCIAL("공공, 사회"),
+	HOSPITAL_AND_CLINIC("병원, 의원"),
+	OTHER("기타");
 
 	private final String label;
 }
