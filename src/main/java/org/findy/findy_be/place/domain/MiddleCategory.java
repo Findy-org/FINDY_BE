@@ -14,7 +14,7 @@ public enum MiddleCategory {
 	JAPANESE(MajorCategory.RESTAURANT, "일식"),
 	WESTERN(MajorCategory.RESTAURANT, "양식"),
 	CHINESE(MajorCategory.RESTAURANT, "중식"),
-	FAST_FOOD(MajorCategory.RESTAURANT, "분식"),
+	KOREAN_STREET_FOOD(MajorCategory.RESTAURANT, "분식"),
 	OTHER_FOOD(MajorCategory.RESTAURANT, "기타 음식"),
 
 	// 카페/디저트 중분류
@@ -33,7 +33,7 @@ public enum MiddleCategory {
 	// 술집 중분류
 	WINE(MajorCategory.BAR, "와인"),
 	BAR(MajorCategory.BAR, "바(BAR)"),
-	ODENG(MajorCategory.BAR, "오뎅/꼬치"),
+	ODENG_SKEWER(MajorCategory.BAR, "오뎅/꼬치"),
 	POJANGMACHA(MajorCategory.BAR, "포장마차"),
 	DINING_BAR(MajorCategory.BAR, "요리주점"),
 	BEER_HOF(MajorCategory.BAR, "맥주/호프"),
