@@ -1,7 +1,9 @@
-package org.findy.findy_be.place.application.compare;
+package org.findy.findy_be.place.application.find;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
+import java.util.Optional;
 
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.place.domain.MajorCategory;
@@ -47,57 +49,49 @@ class FindPlaceServiceTest extends MockTest {
 
 	@DisplayName("주어진 PlaceRequest에 해당하는 장소를 성공적으로 조회")
 	@Test
-	void whenPlaceExists_returnPlace() {
+	void 주어진_PlaceRequest에_해당하는_장소를_성공적으로_조회() {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.address(),
 			placeRequest.roadAddress(),
 			placeRequest.mapx(),
-			placeRequest.mapy(),
-			placeRequest.majorCategory()
-		)).thenReturn(place);
+			placeRequest.mapy()
+		)).thenReturn(Optional.of(place));
 
 		// when
-		Place foundPlace = findPlaceService.invoke(placeRequest);
+		Place foundPlace = findPlaceService.invoke(placeRequest).get();
 
 		// then
 		assertThat(foundPlace).isNotNull();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.address(),
 			placeRequest.roadAddress(),
 			placeRequest.mapx(),
-			placeRequest.mapy(),
-			placeRequest.majorCategory()
+			placeRequest.mapy()
 		);
 	}
 
 	@DisplayName("주어진 PlaceRequest에 해당하는 장소가 없을 때 null을 반환")
 	@Test
-	void whenPlaceDoesNotExist_returnNull() {
+	void 주어진_PlaceRequest에_해당하는_장소가_없을_때_null을_반환() {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.address(),
 			placeRequest.roadAddress(),
 			placeRequest.mapx(),
-			placeRequest.mapy(),
-			placeRequest.majorCategory()
-		)).thenReturn(null);
+			placeRequest.mapy()
+		)).thenReturn(Optional.empty());
 
 		// when
-		Place foundPlace = findPlaceService.invoke(placeRequest);
+		Optional<Place> foundPlace = findPlaceService.invoke(placeRequest);
 
 		// then
-		assertThat(foundPlace).isNull();
+		assertThat(foundPlace).isEmpty();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.address(),
 			placeRequest.roadAddress(),
 			placeRequest.mapx(),
-			placeRequest.mapy(),
-			placeRequest.majorCategory()
+			placeRequest.mapy()
 		);
 	}
 }

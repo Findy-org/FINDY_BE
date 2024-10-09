@@ -1,4 +1,6 @@
-package org.findy.findy_be.place.application.compare;
+package org.findy.findy_be.place.application.find;
+
+import java.util.Optional;
 
 import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.dto.PlaceRequest;
@@ -15,14 +17,12 @@ public class FindPlaceService implements FindPlace {
 
 	private final PlaceRepository placeRepository;
 
-	public Place invoke(PlaceRequest request) {
+	public Optional<Place> invoke(PlaceRequest request) {
 		return placeRepository.findPlaceByDetails(
 			request.title(),
-			request.address(),
 			request.roadAddress(),
 			request.mapx(),
-			request.mapy(),
-			request.majorCategory()
+			request.mapy()
 		);
 	}
 }
