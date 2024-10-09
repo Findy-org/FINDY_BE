@@ -1,22 +1,26 @@
 spring:
+  config:
+    activate:
+      on-profile: test
+
   application:
     name: FINDY_BE
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl.auto: create
   datasource:
-    url: jdbc:postgresql://localhost:5333/testdb
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:tc:postgresql:10:///testdb
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
 
 jwt:
-  secret: my_super_secret_key_that_is_long_enough_for_jwt
+  secret: test_super_secret_key_for_jwt_testing
 
 logging:
   level:
@@ -24,4 +28,4 @@ logging:
       hibernate:
         type:
           descriptor:
-            sql: trace
+            sql: debug

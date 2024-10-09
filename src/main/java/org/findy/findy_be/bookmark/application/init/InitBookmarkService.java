@@ -1,4 +1,4 @@
-package org.findy.findy_be.bookmark.application;
+package org.findy.findy_be.bookmark.application.init;
 
 import java.util.List;
 
@@ -11,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-public class BookmarkService {
+@RequiredArgsConstructor
+public class InitBookmarkService implements InitBookmark {
 
 	private final BookmarkRepository bookmarkRepository;
 
-	public void initBookmarks(User user) {
+	@Override
+	public void invoke(User user) {
 		List<Bookmark> bookmarks = Bookmark.initBookmarks(user);
 		bookmarkRepository.saveAll(bookmarks);
 	}

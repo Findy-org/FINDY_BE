@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,10 +23,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "USER_REFRESH_TOKEN")
 public class UserRefreshToken {
+
 	@JsonIgnore
 	@Id
 	@Column(name = "REFRESH_TOKEN_SEQ")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "token_seq_gen")
+	@SequenceGenerator(name = "token_seq_gen", sequenceName = "token_sequence", allocationSize = 1)
 	private Long refreshTokenSeq;
 
 	@Column(name = "USER_ID", length = 64, unique = true)

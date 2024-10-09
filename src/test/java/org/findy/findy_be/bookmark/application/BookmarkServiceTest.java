@@ -2,6 +2,7 @@ package org.findy.findy_be.bookmark.application;
 
 import static org.mockito.Mockito.*;
 
+import org.findy.findy_be.bookmark.application.init.InitBookmarkService;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
@@ -19,7 +20,7 @@ class BookmarkServiceTest extends MockTest {
 	private BookmarkRepository bookmarkRepository;
 
 	@InjectMocks
-	private BookmarkService bookmarkService;
+	private InitBookmarkService initBookmark;
 
 	private Bookmark bookmark;
 	private User user;
@@ -35,7 +36,7 @@ class BookmarkServiceTest extends MockTest {
 	@Test
 	public void 즐겨찾기_초기화_성공() throws Exception {
 		// given // when
-		bookmarkService.initBookmarks(user);
+		initBookmark.invoke(user);
 
 		// then
 		verify(bookmarkRepository, times(1)).saveAll(anyList());

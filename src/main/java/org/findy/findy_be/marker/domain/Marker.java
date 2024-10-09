@@ -30,4 +30,11 @@ public class Marker extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "bookmark_id")
 	private Bookmark bookmark;
+
+	public static Marker create(final Bookmark bookmark, final Place place) {
+		return Marker.builder()
+			.place(place)
+			.bookmark(bookmark)
+			.build();
+	}
 }
