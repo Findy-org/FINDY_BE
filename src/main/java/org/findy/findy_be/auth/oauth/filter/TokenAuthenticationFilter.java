@@ -26,14 +26,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		final FilterChain filterChain) throws ServletException, IOException {
 
 		String tokenStr = HeaderUtil.getAccessToken(request);
-		AuthToken token = tokenProvider.convertAuthToken(tokenStr);
-
-		if (token.validate()) {
-			Authentication authentication = tokenProvider.getAuthentication(token);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+		if (tokenStr == null || tokenStr.isEmpty()) {
+			log.warn("No token found in request headers");
+		} else {
+			AuthToken token = tokenProvider.convertAuthToken(tokenStr);
+			if (token.validate()) {
+				Authentication authentication = tokenProvider.getAuthentication(token);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+				log.debug("Authenticated user: {}", authentication.getName());
+			} else {
+				log.error("Token validation failed for token: {}", tokenStr);
+			}
 		}
 
 		filterChain.doFilter(request, response);
-
 	}
 }

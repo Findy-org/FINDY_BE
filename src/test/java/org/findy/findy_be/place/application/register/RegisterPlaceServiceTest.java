@@ -3,11 +3,13 @@ package org.findy.findy_be.place.application.register;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.findy.findy_be.bookmark.application.find.FindBookMark;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.application.create.CreateMarker;
-import org.findy.findy_be.place.application.compare.FindPlace;
+import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
@@ -66,7 +68,7 @@ class RegisterPlaceServiceTest extends MockTest {
 	void 장소가_없을_경우_새로운_장소를_저장하고_마커_생성() {
 		// given
 		when(findBookMark.invokeById(placeRequest.bookmarkId())).thenReturn(bookmark);
-		when(findPlace.invoke(placeRequest)).thenReturn(null);
+		when(findPlace.invoke(placeRequest)).thenReturn(Optional.empty());
 		when(placeRepository.save(any(Place.class))).thenReturn(place);
 
 		// when
@@ -82,7 +84,7 @@ class RegisterPlaceServiceTest extends MockTest {
 	void 이미_존재하는_장소가_있을_경우_마커만_생성() {
 		// given
 		when(findBookMark.invokeById(placeRequest.bookmarkId())).thenReturn(bookmark);
-		when(findPlace.invoke(placeRequest)).thenReturn(place);
+		when(findPlace.invoke(placeRequest)).thenReturn(Optional.of(place));
 
 		// when
 		registerPlaceService.invoke(placeRequest);

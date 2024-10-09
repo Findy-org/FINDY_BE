@@ -1,5 +1,7 @@
 package org.findy.findy_be.marker.application.create;
 
+import java.util.Optional;
+
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.repository.MarkerRepository;
@@ -19,6 +21,9 @@ public class CreateMarkerService implements CreateMarker {
 	@Override
 	public void invoke(final Bookmark bookmark, final Place place) {
 		Marker marker = Marker.create(bookmark, place);
-		markerRepository.save(marker);
+		Optional<Marker> existingMarker = markerRepository.findByBookmarkAndPlace(bookmark, place);
+		if (existingMarker.isEmpty()) {
+			markerRepository.save(marker);
+		}
 	}
 }

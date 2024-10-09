@@ -139,7 +139,7 @@ class PlaceControllerTest extends IntegrationTest {
 	}
 
 	private @NotNull ResultActions perfromPostRegisterPlace(final PlaceRequest request) throws Exception {
-		return mvc.perform(post("/api/places/register")
+		return mvc.perform(post("/api/places")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
 			.andDo(print());

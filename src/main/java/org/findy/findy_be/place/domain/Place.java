@@ -1,6 +1,7 @@
 package org.findy.findy_be.place.domain;
 
 import org.findy.findy_be.common.entity.BaseEntity;
+import org.findy.findy_be.place.dto.PlaceRequest;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "places")
@@ -50,20 +51,18 @@ public class Place extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private MiddleCategory middleCategory;
 
-	public static Place create(final String address, final String description, final String link,
-		final MajorCategory majorCategory, final String mapx, final String mapy, final MiddleCategory middleCategory,
-		final String roadAddress, final String telephone, final String title) {
+	public static Place create(final PlaceRequest placeRequest) {
 		return Place.builder()
-			.address(address)
-			.description(description)
-			.link(link)
-			.majorCategory(majorCategory)
-			.mapx(mapx)
-			.mapy(mapy)
-			.middleCategory(middleCategory)
-			.roadAddress(roadAddress)
-			.telephone(telephone)
-			.title(title)
+			.address(placeRequest.address())
+			.description(placeRequest.description())
+			.link(placeRequest.link())
+			.majorCategory(placeRequest.majorCategory())
+			.mapx(placeRequest.mapx())
+			.mapy(placeRequest.mapy())
+			.middleCategory(placeRequest.middleCategory())
+			.roadAddress(placeRequest.roadAddress())
+			.telephone(placeRequest.telephone())
+			.title(placeRequest.title())
 			.build();
 	}
 }

@@ -40,20 +40,20 @@ public class AuthTokenProvider {
 	}
 
 	public Authentication getAuthentication(AuthToken authToken) {
-
 		if (authToken.validate()) {
-
 			Claims claims = authToken.getTokenClaims();
+			String role = claims.get(AUTHORITIES_KEY) != null ? claims.get(AUTHORITIES_KEY).toString() : "ROLE_USER";
 			Collection<? extends GrantedAuthority> authorities =
-				Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
+				Arrays.stream(new String[] {role})
 					.map(SimpleGrantedAuthority::new)
 					.collect(Collectors.toList());
 
-			log.debug("claims subject := [{}]", claims.getSubject());
+			log.debug("claims subject := [{}], role := [{}]", claims.getSubject(), role);
 			User principal = new User(claims.getSubject(), "", authorities);
 
 			return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
 		} else {
+			log.error("Token validation failed");
 			throw new TokenValidFailedException();
 		}
 	}

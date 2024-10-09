@@ -3,7 +3,7 @@ package org.findy.findy_be.place.application.register;
 import org.findy.findy_be.bookmark.application.find.FindBookMark;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.marker.application.create.CreateMarker;
-import org.findy.findy_be.place.application.compare.FindPlace;
+import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.dto.PlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
@@ -27,27 +27,20 @@ public class RegisterPlaceService implements RegisterPlace {
 	@Override
 	public void invoke(PlaceRequest request) {
 		Bookmark bookmark = findBookMark.invokeById(request.bookmarkId());
-		Place place = findPlace.invoke(request);
-		if (place == null) {
+		Place place = findPlace.invoke(request).orElse(null);
+		if (isNull(place)) {
 			log.info("저장된 장소가 없어 새로운 장소를 저장합니다.");
 			place = createAndSaveNewPlace(request);
 		}
 		createMarker.invoke(bookmark, place);
 	}
 
+	private static boolean isNull(final Place place) {
+		return place == null;
+	}
+
 	private Place createAndSaveNewPlace(PlaceRequest request) {
-		Place newPlace = Place.create(
-			request.address(),
-			request.description(),
-			request.link(),
-			request.majorCategory(),
-			request.mapx(),
-			request.mapy(),
-			request.middleCategory(),
-			request.roadAddress(),
-			request.telephone(),
-			request.title()
-		);
+		Place newPlace = Place.create(request);
 		return placeRepository.save(newPlace);
 	}
 }
