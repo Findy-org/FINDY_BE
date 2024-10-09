@@ -84,6 +84,8 @@ public class SecurityConfig {
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/index.html"))
 					.permitAll()
+					.requestMatchers(new MvcRequestMatcher(introspector, "/oauth**"))
+					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/oauth2/authorization/**"))
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/login"))
@@ -106,7 +108,7 @@ public class SecurityConfig {
 			.oauth2Login(oauth2Configurer ->
 				oauth2Configurer
 					.userInfoEndpoint(userInfoEndpointConfig ->
-						userInfoEndpointConfig.userService(oAuth2UserService) // UserService 설정
+						userInfoEndpointConfig.userService(oAuth2UserService)
 					)
 					.successHandler(oAuth2AuthenticationSuccessHandler())
 					.failureHandler(oAuth2AuthenticationFailureHandler()));
