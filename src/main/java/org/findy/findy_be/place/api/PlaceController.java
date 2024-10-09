@@ -25,7 +25,7 @@ public class PlaceController implements PlaceAPIPresentation {
 		@CustomApiResponse(error = "EntityNotFoundException", status = 404, message = "해당 id : 1의 즐겨찾기가 존재하지 않습니다.", description = "장소를 저장할 즐겨찾기를 못 찾는 경우"),
 		@CustomApiResponse(error = "InternalServerError", status = 500, message = "내부 서버 오류가 발생했습니다.", description = "내부 서버 오류")
 	})
-	@PostMapping("/register")
+	@PostMapping()
 	public void registerPlace(@Valid @RequestBody PlaceRequest request) {
 		registerPlace.invoke(request);
 	}
