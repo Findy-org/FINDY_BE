@@ -23,6 +23,7 @@ public enum ErrorCode {
 
 	// 404 error
 	NOT_FOUND_EMAIL(NOT_FOUND, "해당 이메일이 존재하지 않습니다."),
+	NOT_FOUND_BOOKMARK_BY_ID(NOT_FOUND, "해당 id : %s의 즐겨찾기가 존재하지 않습니다."),
 	NOT_FOUND_USER(NOT_FOUND, "해당 이메일을 가진 유저가 존재하지 않습니다."),
 	NOT_FOUND_USER_BY_ID(NOT_FOUND, "해당 id : %s를 가진 유저가 존재하지 않습니다.");
 
