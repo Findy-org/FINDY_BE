@@ -19,6 +19,7 @@ import org.findy.findy_be.common.utils.CookieUtil;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.UserRefreshToken;
 import org.findy.findy_be.user.repository.UserRefreshTokenRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -36,6 +37,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+	@Value("${jwt.access.header}")
+	private String accessHeader;
+
+	private static final String BEARER = "Bearer ";
+
 	private final AuthTokenProvider tokenProvider;
 	private final AppProperties appProperties;
 	private final UserRefreshTokenRepository userRefreshTokenRepository;
@@ -50,6 +56,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 			logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
 			return;
 		}
+
+		// AccessToken을 헤더에 추가
+		AuthToken accessToken = tokenProvider.createAuthToken(
+			((OidcUser)authentication.getPrincipal()).getName(),
+			RoleType.USER.getCode(),
+			new Date(System.currentTimeMillis() + appProperties.getAuth().getTokenExpiry())
+		);
+
+		response.setHeader(accessHeader, BEARER + accessToken.getToken());
 
 		clearAuthenticationAttributes(request, response);
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);
@@ -106,7 +121,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
 		CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-		return UriComponentsBuilder.fromUriString(targetUrl)
+		return UriComponentsBuilder.fromUriString("http://localhost:5173")
 			.queryParam("token", accessToken.getToken())
 			.build().toUriString()
 			.replace("/?", "/oauth?");

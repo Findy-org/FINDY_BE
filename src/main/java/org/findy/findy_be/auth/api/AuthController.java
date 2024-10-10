@@ -20,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.jsonwebtoken.Claims;
@@ -30,7 +30,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController implements AuthAPIPresentation {
 
@@ -42,7 +41,12 @@ public class AuthController implements AuthAPIPresentation {
 	private final static long THREE_DAYS_MSEC = 259200000;
 	private final static String REFRESH_TOKEN = "refresh_token";
 
-	@PostMapping("/login")
+	@GetMapping("/oauth")
+	public String handleOAuthRedirect(@RequestParam("token") String token) {
+		return "Received token: " + token;
+	}
+
+	@PostMapping("/api/auth/login")
 	public String login(
 		HttpServletRequest request,
 		HttpServletResponse response,
@@ -89,7 +93,7 @@ public class AuthController implements AuthAPIPresentation {
 		return accessToken.getToken();
 	}
 
-	@GetMapping("/refresh")
+	@GetMapping("/api/auth/refresh")
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
 		// access token 확인
 		String accessToken = HeaderUtil.getAccessToken(request);
