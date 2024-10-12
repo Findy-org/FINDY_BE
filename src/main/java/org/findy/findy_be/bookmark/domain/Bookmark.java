@@ -1,11 +1,6 @@
 package org.findy.findy_be.bookmark.domain;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.findy.findy_be.common.entity.BaseEntity;
-import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.user.domain.User;
 
 import jakarta.persistence.Entity;
@@ -34,23 +29,28 @@ public class Bookmark extends BaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	@NotNull
-	private MajorCategory majorCategory;
+	private BookmarkType bookmarkType;
+
+	private String youtuberId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public static Bookmark of(String name, MajorCategory majorCategory, User user) {
+	public static Bookmark of(String name, BookmarkType type, String youtuberId, User user) {
 		return Bookmark.builder()
 			.name(name)
-			.majorCategory(majorCategory)
+			.bookmarkType(type)
+			.youtuberId(youtuberId)
 			.user(user)
 			.build();
 	}
 
-	public static List<Bookmark> initBookmarks(User user) {
-		return Stream.of(MajorCategory.values())
-			.map(category -> Bookmark.of(category.getLabel(), category, user))
-			.collect(Collectors.toList());
+	public static Bookmark createYoutubeType(String name, String youtuberId, User user) {
+		return Bookmark.of(name, BookmarkType.YOUTUBE, youtuberId, user);
+	}
+
+	public static Bookmark createCustomType(String name, User user) {
+		return Bookmark.of(name, BookmarkType.CUSTOM, null, user);
 	}
 }
