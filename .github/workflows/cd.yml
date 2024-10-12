@@ -1,16 +1,15 @@
 name: FINDY EGG CD Workflow
 
 on:
-  push:
-    branches: [ "main", "develop" ]
+  workflow_run:
+    workflows: [ "FINDY CI Workflow" ]
+    types:
+      - completed
 
 permissions:
   contents: read
 
 jobs:
-  integration:
-    runs-on: ubuntu-latest
-
   deploy:
     runs-on: ubuntu-latest
 
