@@ -6,7 +6,6 @@ import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfo;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfoFactory;
-import org.findy.findy_be.bookmark.application.init.InitBookmarkService;
 import org.findy.findy_be.common.exception.custom.OAuthProviderMissMatchException;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -26,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private final UserRepository userRepository;
-	private final InitBookmarkService bookmarkService;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -78,7 +76,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			now
 		);
 		userRepository.saveAndFlush(user);
-		bookmarkService.invoke(user);
 		return user;
 	}
 }

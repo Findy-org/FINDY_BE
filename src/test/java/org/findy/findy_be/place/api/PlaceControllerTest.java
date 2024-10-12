@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
 import org.findy.findy_be.place.application.register.RegisterPlace;
@@ -54,7 +55,7 @@ class PlaceControllerTest extends IntegrationTest {
 			LocalDateTime.now()
 		);
 		User savedUser = userRepository.save(user);
-		Bookmark bookmark = Bookmark.of("Test Bookmark", MajorCategory.RESTAURANT, savedUser);
+		Bookmark bookmark = Bookmark.of("Test Bookmark", BookmarkType.CUSTOM, null, savedUser);
 		bookmarkRepository.save(bookmark);
 	}
 
