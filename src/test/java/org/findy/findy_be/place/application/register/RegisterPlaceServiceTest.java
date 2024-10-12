@@ -1,5 +1,7 @@
 package org.findy.findy_be.place.application.register;
 
+import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.findy.findy_be.common.exception.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -7,6 +9,7 @@ import java.util.Optional;
 
 import org.findy.findy_be.bookmark.application.find.FindBookMark;
 import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.application.create.CreateMarker;
 import org.findy.findy_be.place.application.find.FindPlace;
@@ -61,6 +64,8 @@ class RegisterPlaceServiceTest extends MockTest {
 		);
 		bookmark = mock(Bookmark.class);
 		place = mock(Place.class);
+
+		when(bookmark.getBookmarkType()).thenReturn(BookmarkType.CUSTOM);
 	}
 
 	@DisplayName("장소가 없을 경우 새로운 장소를 저장하고 마커 생성")
@@ -92,5 +97,18 @@ class RegisterPlaceServiceTest extends MockTest {
 		// then
 		verify(placeRepository, never()).save(any(Place.class));
 		verify(createMarker, times(1)).invoke(bookmark, place);
+	}
+
+	@DisplayName("유튜브 즐겨찾기일 경우 IllegalArgumentException 발생")
+	@Test
+	void 유튜브_즐겨찾기일_경우_예외_발생() {
+		// given
+		when(findBookMark.invokeById(placeRequest.bookmarkId())).thenReturn(bookmark);
+		when(bookmark.getBookmarkType()).thenReturn(BookmarkType.YOUTUBE);
+
+		// when & then
+		assertThatThrownBy(() -> registerPlaceService.invoke(placeRequest))
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage(YOUTUBE_BOOKMARK_REGISTER_ERROR.getMessage());
 	}
 }
