@@ -1,0 +1,13 @@
+services:
+  findy-app:
+    container_name: findy
+    image: ${DOCKER_REPO}:develop-${GITHUB_RUN_NUMBER}
+    ports:
+      - "8080:8080"
+    networks:
+      - findy-dev
+    volumes:
+      - /home/ec2-user/logs:/logs'
+
+networks:
+  findy-dev:
