@@ -123,7 +123,7 @@ jobs:
           debug: true
 
       - name: Deploy to EC2 dev
-        uses: appleboy/ssh-action@v0.1.0
+        uses: appleboy/ssh-action@master
         if: contains(github.ref, 'develop')
         with:
           host: ${{ secrets.PUBLIC_DNS }}
