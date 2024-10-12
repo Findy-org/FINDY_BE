@@ -1,4 +1,4 @@
-name: FINDY CI-CD Workflow
+name: FINDY CI Workflow
 
 on:
   push:
