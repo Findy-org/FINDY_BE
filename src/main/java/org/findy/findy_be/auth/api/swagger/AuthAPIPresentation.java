@@ -1,6 +1,6 @@
 package org.findy.findy_be.auth.api.swagger;
 
-import org.findy.findy_be.auth.dto.AuthRequestModel;
+import org.findy.findy_be.auth.dto.request.AuthRequestModel;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
