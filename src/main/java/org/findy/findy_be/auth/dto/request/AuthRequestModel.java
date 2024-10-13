@@ -1,4 +1,4 @@
-package org.findy.findy_be.auth.dto;
+package org.findy.findy_be.auth.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

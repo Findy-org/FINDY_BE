@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.PlaceRequest;
+import org.findy.findy_be.place.dto.request.PlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

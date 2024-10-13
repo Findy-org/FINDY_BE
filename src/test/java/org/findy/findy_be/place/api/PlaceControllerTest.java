@@ -14,7 +14,7 @@ import org.findy.findy_be.common.IntegrationTest;
 import org.findy.findy_be.place.application.register.RegisterPlace;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
-import org.findy.findy_be.place.dto.PlaceRequest;
+import org.findy.findy_be.place.dto.request.PlaceRequest;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
