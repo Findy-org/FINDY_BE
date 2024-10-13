@@ -2,6 +2,7 @@ package org.findy.findy_be.user.api.swagger;
 
 import org.findy.findy_be.common.meta.LoginUser;
 import org.findy.findy_be.user.domain.User;
+import org.findy.findy_be.user.dto.UserInfoResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,6 +18,6 @@ public interface UserAPIPresentation {
 			@ApiResponse(responseCode = "401", description = "인증 실패"),
 			@ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
 		})
-	String getUser(@LoginUser User user);
+	UserInfoResponse getUser(@LoginUser User user);
 }
 
