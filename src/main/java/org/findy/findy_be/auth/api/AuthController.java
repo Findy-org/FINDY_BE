@@ -3,7 +3,7 @@ package org.findy.findy_be.auth.api;
 import java.util.Date;
 
 import org.findy.findy_be.auth.api.swagger.AuthAPIPresentation;
-import org.findy.findy_be.auth.dto.AuthRequestModel;
+import org.findy.findy_be.auth.dto.request.AuthRequestModel;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.auth.oauth.token.AuthToken;
 import org.findy.findy_be.auth.oauth.token.AuthTokenProvider;

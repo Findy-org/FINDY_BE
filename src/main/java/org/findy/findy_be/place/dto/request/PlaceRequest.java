@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.dto;
+package org.findy.findy_be.place.dto.request;
 
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;

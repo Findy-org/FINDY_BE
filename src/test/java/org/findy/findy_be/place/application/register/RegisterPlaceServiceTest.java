@@ -16,7 +16,7 @@ import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.PlaceRequest;
+import org.findy.findy_be.place.dto.request.PlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

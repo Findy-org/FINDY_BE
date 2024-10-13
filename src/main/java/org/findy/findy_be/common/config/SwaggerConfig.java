@@ -8,6 +8,7 @@ import org.findy.findy_be.common.exception.ErrorResponse;
 import org.findy.findy_be.common.meta.CustomApiResponse;
 import org.findy.findy_be.common.meta.CustomApiResponses;
 import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
@@ -24,9 +25,13 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.In;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
+import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
 public class SwaggerConfig {
+
+	@Value("${server.url:http://localhost:8080}")
+	private String serverUrl;
 
 	@Bean
 	public OpenAPI openAPI() {
@@ -40,7 +45,8 @@ public class SwaggerConfig {
 					.name("Authorization"))
 				.addSchemas("ErrorResponse", createErrorResponseSchema()))
 			.info(apiInfo())
-			.addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+			.addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+			.servers(List.of(new Server().url(serverUrl).description("Dynamic Server URL")));
 	}
 
 	private Info apiInfo() {

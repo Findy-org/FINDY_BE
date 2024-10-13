@@ -1,7 +1,7 @@
 package org.findy.findy_be.place.domain;
 
 import org.findy.findy_be.common.entity.BaseEntity;
-import org.findy.findy_be.place.dto.PlaceRequest;
+import org.findy.findy_be.place.dto.request.PlaceRequest;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

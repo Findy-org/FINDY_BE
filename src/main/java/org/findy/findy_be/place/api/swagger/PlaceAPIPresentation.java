@@ -1,6 +1,6 @@
 package org.findy.findy_be.place.api.swagger;
 
-import org.findy.findy_be.place.dto.PlaceRequest;
+import org.findy.findy_be.place.dto.request.PlaceRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
