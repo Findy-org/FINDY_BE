@@ -92,6 +92,8 @@ public class SecurityConfig {
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/auth/**"))
 					.permitAll()
+					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/users/check"))
+					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/places/**"))
 					.hasRole("USER")
 					.requestMatchers(new MvcRequestMatcher(introspector, ADMIN_API_PREFIX + "/**"))

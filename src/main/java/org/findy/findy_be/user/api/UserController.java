@@ -18,7 +18,7 @@ public class UserController implements UserAPIPresentation {
 
 	private final UserService userService;
 
-	@GetMapping
+	@GetMapping("/check")
 	public UserInfoResponse getUser(@LoginUser User user) {
 		return UserInfoResponse.of(user.getUsername(), user.getProfileImageUrl());
 	}
