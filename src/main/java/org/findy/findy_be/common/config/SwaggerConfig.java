@@ -30,7 +30,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
-	@Value("${server.url:http://localhost:8080}")
+	@Value("${server.url}")
 	private String serverUrl;
 
 	@Bean

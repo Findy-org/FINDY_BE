@@ -15,8 +15,6 @@ public interface UserAPIPresentation {
 		description = "현재 로그인한 사용자의 프로필 이미지 URL을 조회합니다.",
 		responses = {
 			@ApiResponse(responseCode = "200", description = "사용자 정보 조회 성공"),
-			@ApiResponse(responseCode = "401", description = "인증 실패"),
-			@ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
 		})
 	UserInfoResponse getUser(@LoginUser User user);
 }
