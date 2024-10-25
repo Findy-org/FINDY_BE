@@ -33,11 +33,11 @@ public record PlaceRequest(
 
 	@NotNull(message = "좌표는 비어있을 수 없습니다.")
 	@Schema(description = "x 좌표", example = "1269827323")
-	String mapx,
+	String mapX,
 
 	@NotNull(message = "좌표는 비어있을 수 없습니다.")
 	@Schema(description = "y 좌표", example = "375719345")
-	String mapy,
+	String mapY,
 
 	@NotNull(message = "대분류는 비어있을 수 없습니다.")
 	@Schema(description = "대분류", example = "RESTAURANT")

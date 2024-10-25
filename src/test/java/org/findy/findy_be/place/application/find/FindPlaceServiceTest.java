@@ -54,8 +54,8 @@ class FindPlaceServiceTest extends MockTest {
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
 			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.mapX(),
+			placeRequest.mapY()
 		)).thenReturn(Optional.of(place));
 
 		// when
@@ -66,8 +66,8 @@ class FindPlaceServiceTest extends MockTest {
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
 			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.mapX(),
+			placeRequest.mapY()
 		);
 	}
 
@@ -78,8 +78,8 @@ class FindPlaceServiceTest extends MockTest {
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
 			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.mapX(),
+			placeRequest.mapY()
 		)).thenReturn(Optional.empty());
 
 		// when
@@ -90,8 +90,8 @@ class FindPlaceServiceTest extends MockTest {
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
 			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.mapX(),
+			placeRequest.mapY()
 		);
 	}
 }

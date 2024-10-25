@@ -21,8 +21,8 @@ public class FindPlaceService implements FindPlace {
 		return placeRepository.findPlaceByDetails(
 			request.title(),
 			request.roadAddress(),
-			request.mapx(),
-			request.mapy()
+			request.mapX(),
+			request.mapY()
 		);
 	}
 }

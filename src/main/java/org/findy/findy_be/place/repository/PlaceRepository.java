@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
-	@Query("SELECT p FROM Place p WHERE p.title = :title AND p.roadAddress = :roadAddress AND p.mapx = :mapx AND p.mapy = :mapy")
+	@Query("SELECT p FROM Place p WHERE p.title = :title AND p.roadAddress = :roadAddress AND p.mapX = :mapX AND p.mapY = :mapY")
 	Optional<Place> findPlaceByDetails(@Param("title") String title, @Param("roadAddress") String roadAddress,
-		@Param("mapx") String mapx, @Param("mapy") String mapy);
+		@Param("mapX") String mapX, @Param("mapY") String mapY);
 }

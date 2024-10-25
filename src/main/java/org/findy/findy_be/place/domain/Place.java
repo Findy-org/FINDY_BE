@@ -39,10 +39,10 @@ public class Place extends BaseEntity {
 	private String roadAddress;
 
 	@NotNull
-	private String mapx;
+	private String mapX;
 
 	@NotNull
-	private String mapy;
+	private String mapY;
 
 	@Enumerated(EnumType.STRING)
 	@NotNull
@@ -57,8 +57,8 @@ public class Place extends BaseEntity {
 			.description(placeRequest.description())
 			.link(placeRequest.link())
 			.majorCategory(placeRequest.majorCategory())
-			.mapx(placeRequest.mapx())
-			.mapy(placeRequest.mapy())
+			.mapX(placeRequest.mapX())
+			.mapY(placeRequest.mapY())
 			.middleCategory(placeRequest.middleCategory())
 			.roadAddress(placeRequest.roadAddress())
 			.telephone(placeRequest.telephone())

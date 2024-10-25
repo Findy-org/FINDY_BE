@@ -40,7 +40,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 		// when
 		Place foundPlace = placeRepository.findPlaceByDetails(
 			savedPlace.getTitle(), savedPlace.getRoadAddress(),
-			savedPlace.getMapx(), savedPlace.getMapy()
+			savedPlace.getMapX(), savedPlace.getMapY()
 		).get();
 
 		// then
