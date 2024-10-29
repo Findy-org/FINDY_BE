@@ -28,12 +28,16 @@ class BookmarkTest {
 		// given
 		String name = "걍밍경";
 		String youtuberId = "@iammingki";
+		String profileLink = "https://yt3.googleusercontent.com/ytc/AIdro_mieTH2WSE4oBMmczfLHB3HhikzOg1nz9tFD-MLad93Xnw=s160-c-k-c0x00ffffff-no-rj";
 
 		// when
-		Bookmark bookmark = Bookmark.createYoutubeType(name, youtuberId, user);
+		Bookmark bookmark = Bookmark.createYoutubeType(name, youtuberId, profileLink, user);
 
 		// then
 		assertThat(bookmark.getBookmarkType()).isEqualTo(BookmarkType.YOUTUBE);
+		assertThat(bookmark.getName()).isEqualTo(name);
+		assertThat(bookmark.getYoutuberId()).isEqualTo(youtuberId);
+		assertThat(bookmark.getProfileLink()).isEqualTo(profileLink);
 	}
 
 	@DisplayName("Custom 즐겨찾기 생성 성공")
@@ -48,6 +52,7 @@ class BookmarkTest {
 		// then
 		assertThat(bookmark.getBookmarkType()).isEqualTo(BookmarkType.CUSTOM);
 		assertThat(bookmark.getYoutuberId()).isNull();
+		assertThat(bookmark.getName()).isEqualTo(name);
+		assertThat(bookmark.getProfileLink()).isNull();
 	}
-
 }
