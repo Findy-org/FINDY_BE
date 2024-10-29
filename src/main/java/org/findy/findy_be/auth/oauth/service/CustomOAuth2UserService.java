@@ -6,6 +6,8 @@ import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfo;
 import org.findy.findy_be.auth.oauth.info.OAuth2UserInfoFactory;
+import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.exception.custom.OAuthProviderMissMatchException;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -17,13 +19,18 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
+	private static final String INIT_BOOKMARK_NAME = "내 장소";
+
+	private final BookmarkRepository bookmarkRepository;
 	private final UserRepository userRepository;
 
 	@Override
@@ -75,8 +82,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			now,
 			now
 		);
-		userRepository.saveAndFlush(user);
-		return user;
+		User createdUser = userRepository.saveAndFlush(user);
+		Bookmark bookmark = Bookmark.createCustomType(INIT_BOOKMARK_NAME, createdUser);
+		bookmarkRepository.saveAndFlush(bookmark);
+		return createdUser;
 	}
 }
 
