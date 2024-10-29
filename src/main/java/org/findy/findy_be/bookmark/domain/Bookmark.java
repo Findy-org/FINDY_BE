@@ -32,25 +32,35 @@ public class Bookmark extends BaseEntity {
 	private BookmarkType bookmarkType;
 
 	private String youtuberId;
+	private String profileLink;
+
+	@NotNull
+	private Long placesCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public static Bookmark of(String name, BookmarkType type, String youtuberId, User user) {
+	public void incrementPlacesCount(int incrementValue) {
+		this.placesCount += incrementValue;
+	}
+
+	public static Bookmark of(String name, BookmarkType type, String youtuberId, String profileLink, User user) {
 		return Bookmark.builder()
 			.name(name)
 			.bookmarkType(type)
 			.youtuberId(youtuberId)
+			.profileLink(profileLink)
+			.placesCount(0L)
 			.user(user)
 			.build();
 	}
 
-	public static Bookmark createYoutubeType(String name, String youtuberId, User user) {
-		return Bookmark.of(name, BookmarkType.YOUTUBE, youtuberId, user);
+	public static Bookmark createYoutubeType(String name, String youtuberId, String profileLink, User user) {
+		return Bookmark.of(name, BookmarkType.YOUTUBE, youtuberId, profileLink, user);
 	}
 
 	public static Bookmark createCustomType(String name, User user) {
-		return Bookmark.of(name, BookmarkType.CUSTOM, null, user);
+		return Bookmark.of(name, BookmarkType.CUSTOM, null, null, user);
 	}
 }
