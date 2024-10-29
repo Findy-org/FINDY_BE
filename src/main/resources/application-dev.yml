@@ -15,6 +15,11 @@ spring:
         format_sql: true
         highlight_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 1000
+          order_inserts: true
+          order_updates: true
+          generate_statistics: true
     defer-datasource-initialization: false
 
 logging:
