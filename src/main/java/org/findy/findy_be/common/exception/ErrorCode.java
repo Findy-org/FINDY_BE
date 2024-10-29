@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 
 	// 400 error
+	BAD_REQUEST_YOUTUBE_BOOKMARK_REGISTER_ERROR(BAD_REQUEST, "유튜브 즐겨찾기는 장소를 추가할 수 없습니다."),
 
 	// 401 error
 	UNAUTHORIZED_REQUEST(UNAUTHORIZED, "로그인 후 다시 시도해주세요."),
