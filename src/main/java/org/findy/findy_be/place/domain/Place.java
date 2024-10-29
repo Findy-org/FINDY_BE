@@ -1,14 +1,13 @@
 package org.findy.findy_be.place.domain;
 
 import org.findy.findy_be.common.entity.BaseEntity;
+import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.domain.vo.Coordinate;
 import org.findy.findy_be.place.dto.request.PlaceRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -46,28 +45,21 @@ public class Place extends BaseEntity {
 	@Embedded
 	private Coordinate coordinate;
 
-	@Enumerated(EnumType.STRING)
-	@NotNull
-	@Column(name = "major_category")
-	private MajorCategory majorCategory;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "middle_category")
-	private MiddleCategory middleCategory;
+	@Embedded
+	private Category category;
 
 	public static Place create(final PlaceRequest request) {
 		Coordinate coordinate = Coordinate.of(request.mapX(), request.mapY());
+		Category category = Category.of(request.majorCategory(), request.middleCategory());
 		return Place.builder()
 			.address(request.address())
 			.description(request.description())
 			.link(request.link())
-			.majorCategory(request.majorCategory())
+			.category(category)
 			.coordinate(coordinate)
-			.middleCategory(request.middleCategory())
 			.roadAddress(request.roadAddress())
 			.telephone(request.telephone())
 			.title(request.title())
 			.build();
 	}
 }
-
