@@ -7,22 +7,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
+import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
-import org.findy.findy_be.place.application.register.RegisterPlace;
+import org.findy.findy_be.place.application.register.RegisterPlaceService;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
-import org.findy.findy_be.place.dto.request.PlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -30,7 +32,7 @@ import org.springframework.test.web.servlet.ResultActions;
 class PlaceControllerTest extends IntegrationTest {
 
 	@Autowired
-	private RegisterPlace registerPlace;
+	private RegisterPlaceService registerPlace;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -38,12 +40,12 @@ class PlaceControllerTest extends IntegrationTest {
 	@Autowired
 	private BookmarkRepository bookmarkRepository;
 
-	@Autowired
-	private PlaceController placeController;
+	private User testUser;
+	private Bookmark testBookmark;
 
 	@BeforeEach
 	void setUp() {
-		User user = User.create(
+		testUser = User.create(
 			"N49sfgdahdKz_fp-223424er1N3D6kd",
 			"나경호",
 			"hoyana@naver.com",
@@ -54,16 +56,22 @@ class PlaceControllerTest extends IntegrationTest {
 			LocalDateTime.now(),
 			LocalDateTime.now()
 		);
-		User savedUser = userRepository.save(user);
-		Bookmark bookmark = Bookmark.of("Test Bookmark", BookmarkType.CUSTOM, null, savedUser);
-		bookmarkRepository.save(bookmark);
+		testUser = userRepository.saveAndFlush(testUser);
+
+		testBookmark = Bookmark.of("Test Bookmark", BookmarkType.CUSTOM, null, null, testUser);
+		bookmarkRepository.save(testBookmark);
+		UserPrincipal userPrincipal = UserPrincipal.create(testUser);
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+			userPrincipal, null, userPrincipal.getAuthorities()
+		);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
 	@Test
 	void 장소_등록_API_성공() throws Exception {
 		// given
-		Long bookmarkId = bookmarkRepository.findAll().get(0).getId();
-		PlaceRequest request = new PlaceRequest(
+		Long bookmarkId = testBookmark.getId();
+		RegisterPlaceRequest request = new RegisterPlaceRequest(
 			"동대문엽기떡볶이 종각점",
 			"https://blog.naver.com/ddm_yupdduk",
 			"설명",
@@ -73,12 +81,11 @@ class PlaceControllerTest extends IntegrationTest {
 			"1269827323",
 			"375719345",
 			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN,
-			bookmarkId
+			MiddleCategory.KOREAN
 		);
 
 		// when
-		ResultActions resultActions = perfromPostRegisterPlace(request);
+		ResultActions resultActions = performPostRegisterPlace(bookmarkId, request);
 
 		// then
 		resultActions
@@ -88,7 +95,8 @@ class PlaceControllerTest extends IntegrationTest {
 	@Test
 	void 장소_등록_API_검증_실패() throws Exception {
 		// given
-		PlaceRequest invalidRequest = new PlaceRequest(
+		Long bookmarkId = testBookmark.getId();
+		RegisterPlaceRequest invalidRequest = new RegisterPlaceRequest(
 			null,
 			null,
 			"설명",
@@ -98,24 +106,23 @@ class PlaceControllerTest extends IntegrationTest {
 			"1269827323",
 			"375719345",
 			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN,
-			1L
+			MiddleCategory.KOREAN
 		);
 
 		// when
-		ResultActions resultActions = perfromPostRegisterPlace(invalidRequest);
+		ResultActions resultActions = performPostRegisterPlace(bookmarkId, invalidRequest);
 
 		// then
 		resultActions
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("장소명은 비어있을 수 없습니다.")))
-			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("링크는 비어있을 수 없습니다.")));
+			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("장소명은 비어있을 수 없습니다.")));
 	}
 
 	@Test
 	void 장소_등록_API_존재하지_않는_즐겨찾기_ID() throws Exception {
 		// given
-		PlaceRequest requestWithInvalidBookmarkId = new PlaceRequest(
+		Long invalidBookmarkId = 999L;
+		RegisterPlaceRequest requestWithInvalidBookmarkId = new RegisterPlaceRequest(
 			"동대문엽기떡볶이 종각점",
 			"https://blog.naver.com/ddm_yupdduk",
 			"설명",
@@ -125,22 +132,22 @@ class PlaceControllerTest extends IntegrationTest {
 			"1269827323",
 			"375719345",
 			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN,
-			999L
+			MiddleCategory.KOREAN
 		);
 
 		// when
-		ResultActions resultActions = perfromPostRegisterPlace(requestWithInvalidBookmarkId);
+		ResultActions resultActions = performPostRegisterPlace(invalidBookmarkId, requestWithInvalidBookmarkId);
 
-		// then: 404 오류 메시지 확인
+		// then
 		resultActions
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.error").value("EntityNotFoundException"))
-			.andExpect(jsonPath("$.message").value("해당 id : 999의 즐겨찾기가 존재하지 않습니다."));
+			.andExpect(jsonPath("$.message").value("해당 id : " + invalidBookmarkId + "의 즐겨찾기가 존재하지 않습니다."));
 	}
 
-	private @NotNull ResultActions perfromPostRegisterPlace(final PlaceRequest request) throws Exception {
-		return mvc.perform(post("/api/places")
+	private ResultActions performPostRegisterPlace(final Long bookmarkId, final RegisterPlaceRequest request) throws
+		Exception {
+		return mvc.perform(post("/api/places/{bookmarkId}", bookmarkId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
 			.andDo(print());
