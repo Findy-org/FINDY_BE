@@ -51,7 +51,7 @@ class FindBookMarkServiceTest extends MockTest {
 		when(bookmarkRepository.findById(customBookmarkId)).thenReturn(Optional.of(bookmark));
 
 		// when
-		Bookmark foundBookmark = findBookMarkService.invokeById(customBookmarkId);
+		Bookmark foundBookmark = findBookMarkService.invoke(customBookmarkId);
 
 		// then
 		assertThat(foundBookmark).isEqualTo(bookmark);
@@ -66,7 +66,7 @@ class FindBookMarkServiceTest extends MockTest {
 		when(bookmarkRepository.findById(nonExistentBookmarkId)).thenReturn(Optional.empty());
 
 		// when & then
-		assertThatThrownBy(() -> findBookMarkService.invokeById(nonExistentBookmarkId))
+		assertThatThrownBy(() -> findBookMarkService.invoke(nonExistentBookmarkId))
 			.isInstanceOf(EntityNotFoundException.class)
 			.hasMessageContaining(String.format(NOT_FOUND_BOOKMARK_BY_ID.getMessage(), nonExistentBookmarkId));
 	}
