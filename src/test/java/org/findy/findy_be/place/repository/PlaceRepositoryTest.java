@@ -2,16 +2,20 @@ package org.findy.findy_be.place.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.PlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class PlaceRepositoryTest extends RepositoryTest {
 
@@ -22,7 +26,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 	@Test
 	void 주어진_상세_정보로_장소를_조회할_수_있다() {
 		// given
-		PlaceRequest request = new PlaceRequest(
+		RegisterPlaceRequest request = new RegisterPlaceRequest(
 			"동대문엽기떡볶이 종각점",
 			"https://blog.naver.com/ddm_yupdduk",
 			"설명",
@@ -32,16 +36,15 @@ class PlaceRepositoryTest extends RepositoryTest {
 			"1269827323",
 			"375719345",
 			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN,
-			1L
+			MiddleCategory.KOREAN
 		);
 		Place savedPlace = placeRepository.save(Place.create(request));
 
 		// when
 		Place foundPlace = placeRepository.findPlaceByDetails(
-			savedPlace.getTitle(), savedPlace.getRoadAddress(),
-			savedPlace.getMapX(), savedPlace.getMapY()
-		).get();
+			savedPlace.getTitle(),
+			savedPlace.getRoadAddress()
+		).orElse(null);
 
 		// then
 		assertThat(foundPlace).isNotNull();
@@ -53,10 +56,40 @@ class PlaceRepositoryTest extends RepositoryTest {
 	void 주어진_상세_정보와_일치하는_장소가_없으면_null을_반환한다() {
 		// given // when
 		Optional<Place> foundPlace = placeRepository.findPlaceByDetails(
-			"존재하지 않는 장소", "도로명 주소", "123456", "654321"
+			"존재하지 않는 장소", "도로명 주소"
 		);
 
 		// then
 		assertThat(foundPlace).isEmpty();
+	}
+
+	@DisplayName("Bulk Insert를 통해 여러 장소를 일괄 삽입할 수 있다")
+	@Test
+	@Transactional
+	void bulkInsertPlaces_여러_장소_일괄_삽입() {
+		// given
+		List<Place> places = IntStream.range(0, 100)
+			.mapToObj(i -> Place.create(new RegisterPlaceRequest(
+				"장소" + i,
+				"https://blog.naver.com/place" + i,
+				"설명" + i,
+				"02-000-00" + i,
+				"서울특별시 종로구 공평동 124" + i,
+				"서울특별시 종로구 삼봉로 100" + i,
+				"12698273" + i,
+				"37571934" + i,
+				MajorCategory.RESTAURANT,
+				MiddleCategory.KOREAN
+			))).collect(Collectors.toList());
+
+		// when
+		placeRepository.bulkInsert(places);
+
+		// then
+		List<Place> savedPlaces = placeRepository.findAll();
+		assertThat(savedPlaces).hasSize(100);
+		for (int i = 0; i < 100; i++) {
+			assertThat(savedPlaces.get(i).getTitle()).isEqualTo("장소" + i);
+		}
 	}
 }
