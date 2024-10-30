@@ -32,7 +32,7 @@ public class Bookmark extends BaseEntity {
 	private BookmarkType bookmarkType;
 
 	private String youtuberId;
-	private String profileLink;
+	private String youtuberProfile;
 
 	@NotNull
 	private Long placesCount;
@@ -45,19 +45,19 @@ public class Bookmark extends BaseEntity {
 		this.placesCount += incrementValue;
 	}
 
-	public static Bookmark of(String name, BookmarkType type, String youtuberId, String profileLink, User user) {
+	public static Bookmark of(String name, BookmarkType type, String youtuberId, String youtuberProfile, User user) {
 		return Bookmark.builder()
 			.name(name)
 			.bookmarkType(type)
 			.youtuberId(youtuberId)
-			.profileLink(profileLink)
+			.youtuberProfile(youtuberProfile)
 			.placesCount(0L)
 			.user(user)
 			.build();
 	}
 
-	public static Bookmark createYoutubeType(String name, String youtuberId, String profileLink, User user) {
-		return Bookmark.of(name, BookmarkType.YOUTUBE, youtuberId, profileLink, user);
+	public static Bookmark createYoutubeType(String name, String youtuberId, String youtuberProfile, User user) {
+		return Bookmark.of(name, BookmarkType.YOUTUBE, youtuberId, youtuberProfile, user);
 	}
 
 	public static Bookmark createCustomType(String name, User user) {
