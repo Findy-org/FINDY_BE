@@ -3,7 +3,7 @@ package org.findy.findy_be.place.domain;
 import org.findy.findy_be.common.entity.BaseEntity;
 import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.domain.vo.Coordinate;
-import org.findy.findy_be.place.dto.request.PlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -48,7 +48,7 @@ public class Place extends BaseEntity {
 	@Embedded
 	private Category category;
 
-	public static Place create(final PlaceRequest request) {
+	public static Place create(final RegisterPlaceRequest request) {
 		Coordinate coordinate = Coordinate.of(request.mapX(), request.mapY());
 		Category category = Category.of(request.majorCategory(), request.middleCategory());
 		return Place.builder()
