@@ -37,7 +37,7 @@ class BookmarkTest {
 		assertThat(bookmark.getBookmarkType()).isEqualTo(BookmarkType.YOUTUBE);
 		assertThat(bookmark.getName()).isEqualTo(name);
 		assertThat(bookmark.getYoutuberId()).isEqualTo(youtuberId);
-		assertThat(bookmark.getProfileLink()).isEqualTo(profileLink);
+		assertThat(bookmark.getYoutuberProfile()).isEqualTo(profileLink);
 	}
 
 	@DisplayName("Custom 즐겨찾기 생성 성공")
@@ -53,6 +53,6 @@ class BookmarkTest {
 		assertThat(bookmark.getBookmarkType()).isEqualTo(BookmarkType.CUSTOM);
 		assertThat(bookmark.getYoutuberId()).isNull();
 		assertThat(bookmark.getName()).isEqualTo(name);
-		assertThat(bookmark.getProfileLink()).isNull();
+		assertThat(bookmark.getYoutuberProfile()).isNull();
 	}
 }
