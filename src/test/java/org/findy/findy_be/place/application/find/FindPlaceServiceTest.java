@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.PlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +25,13 @@ class FindPlaceServiceTest extends MockTest {
 	@InjectMocks
 	private FindPlaceService findPlaceService;
 
-	private PlaceRequest placeRequest;
+	private RegisterPlaceRequest placeRequest;
 	private Place place;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		placeRequest = new PlaceRequest(
+		placeRequest = new RegisterPlaceRequest(
 			"동대문 엽기떡볶이 종각점",
 			"https://blog.naver.com/ddm_yupdduk",
 			"설명",
@@ -41,8 +41,7 @@ class FindPlaceServiceTest extends MockTest {
 			"1269827323",
 			"375719345",
 			MajorCategory.RESTAURANT,
-			null,
-			1L
+			null
 		);
 		place = mock(Place.class);
 	}
@@ -53,21 +52,17 @@ class FindPlaceServiceTest extends MockTest {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapX(),
-			placeRequest.mapY()
+			placeRequest.roadAddress()
 		)).thenReturn(Optional.of(place));
 
 		// when
-		Place foundPlace = findPlaceService.invoke(placeRequest).get();
+		Place foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress()).get();
 
 		// then
 		assertThat(foundPlace).isNotNull();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapX(),
-			placeRequest.mapY()
+			placeRequest.roadAddress()
 		);
 	}
 
@@ -77,21 +72,17 @@ class FindPlaceServiceTest extends MockTest {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapX(),
-			placeRequest.mapY()
+			placeRequest.roadAddress()
 		)).thenReturn(Optional.empty());
 
 		// when
-		Optional<Place> foundPlace = findPlaceService.invoke(placeRequest);
+		Optional<Place> foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress());
 
 		// then
 		assertThat(foundPlace).isEmpty();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapX(),
-			placeRequest.mapY()
+			placeRequest.roadAddress()
 		);
 	}
 }
