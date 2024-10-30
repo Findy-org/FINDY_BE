@@ -88,7 +88,24 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 
 		// then
 		verify(placeRepository, times(1)).bulkInsert(anyList());
+		verify(batchCreateMarker, times(1)).invoke(eq(testBookmark),
+			argThat(list -> list.contains(place1) && list.contains(place2)));
+	}
+	
+	@DisplayName("단일 장소가 등록되고 마커가 생성됨")
+	@Test
+	void 단일_장소_등록_및_마커_생성() {
+		// given
+		List<RegisterPlaceRequest> requests = Arrays.asList(request1);
+
+		when(findPlace.invoke(request1.title(), request1.roadAddress())).thenReturn(Optional.empty());
+		when(placeRepository.bulkInsert(anyList())).thenReturn(Arrays.asList(place1));
+
+		// when
+		batchRegisterPlaceService.invoke(testBookmark, requests);
+
+		// then
+		verify(placeRepository, times(1)).bulkInsert(anyList());
 		verify(batchCreateMarker, times(1)).invoke(testBookmark, Arrays.asList(place1));
-		verify(batchCreateMarker, never()).invoke(testBookmark, Arrays.asList(place2));
 	}
 }
