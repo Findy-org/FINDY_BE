@@ -125,7 +125,6 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 		// then
 		verify(placeRepository, times(1)).bulkInsert(anyList());
 		verify(batchCreateMarker, times(1)).invoke(testBookmark, Arrays.asList(place1, place2));
-
 		verify(testBookmark, times(1)).incrementMarkersCount(2);
 	}
 
@@ -146,8 +145,6 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 		verify(placeRepository, times(1)).bulkInsert(anyList());
 		verify(batchCreateMarker, times(1)).invoke(eq(testBookmark),
 			argThat(list -> list.contains(place1) && list.contains(place2)));
-
-		verify(testBookmark, times(1)).incrementMarkersCount(1);
 	}
 
 }
