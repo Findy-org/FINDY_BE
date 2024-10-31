@@ -1,6 +1,7 @@
 package org.findy.findy_be.marker.application.create;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.repository.MarkerRepository;
@@ -23,6 +25,9 @@ class BatchCreateMarkerServiceTest extends MockTest {
 
 	@Mock
 	private MarkerRepository markerRepository;
+
+	@Mock
+	private BookmarkRepository bookmarkRepository;
 
 	@InjectMocks
 	private BatchCreateMarkerService batchCreateMarkerService;
@@ -45,10 +50,9 @@ class BatchCreateMarkerServiceTest extends MockTest {
 		// given
 		List<Place> places = Arrays.asList(place1, place2);
 
-		when(markerRepository.findByBookmarkAndPlace(eq(testBookmark), eq(place1)))
-			.thenReturn(Optional.empty());
-		when(markerRepository.findByBookmarkAndPlace(eq(testBookmark), eq(place2)))
-			.thenReturn(Optional.empty());
+		when(bookmarkRepository.findById(anyLong())).thenReturn(Optional.of(testBookmark));
+		when(markerRepository.findAllByBookmarkAndPlaces(eq(testBookmark), eq(places)))
+			.thenReturn(List.of());
 
 		// when
 		batchCreateMarkerService.invoke(testBookmark, places);
@@ -62,18 +66,18 @@ class BatchCreateMarkerServiceTest extends MockTest {
 	void 이미_존재하는_마커가_있을_경우_새로운_마커_생성_하지_않음() {
 		// given
 		List<Place> places = Arrays.asList(place1, place2);
+		Marker existingMarker = mock(Marker.class);
+		when(existingMarker.getPlace()).thenReturn(place2);
 
-		when(markerRepository.findByBookmarkAndPlace(eq(testBookmark), eq(place1)))
-			.thenReturn(Optional.empty());
-		when(markerRepository.findByBookmarkAndPlace(eq(testBookmark), eq(place2)))
-			.thenReturn(Optional.of(mock(Marker.class)));
+		when(bookmarkRepository.findById(anyLong())).thenReturn(Optional.of(testBookmark));
+		when(markerRepository.findAllByBookmarkAndPlaces(eq(testBookmark), eq(places)))
+			.thenReturn(List.of(existingMarker));
 
 		// when
 		batchCreateMarkerService.invoke(testBookmark, places);
 
 		// then
 		verify(markerRepository, times(1)).bulkInsert(anyList());
-		verify(markerRepository, times(1)).findByBookmarkAndPlace(testBookmark, place1);
-		verify(markerRepository, times(1)).findByBookmarkAndPlace(testBookmark, place2);
+		verify(markerRepository, times(1)).findAllByBookmarkAndPlaces(testBookmark, places);
 	}
 }
