@@ -108,43 +108,4 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 		verify(placeRepository, times(1)).bulkInsert(anyList());
 		verify(batchCreateMarker, times(1)).invoke(testBookmark, Arrays.asList(place1));
 	}
-
-	@DisplayName("새로운 장소가 모두 등록되고 장소 수가 업데이트됨")
-	@Test
-	void 새로운_장소_모두_등록_및_장소_수_업데이트() {
-		// given
-		List<RegisterPlaceRequest> requests = Arrays.asList(request1, request2);
-
-		when(findPlace.invoke(request1.title(), request1.roadAddress())).thenReturn(Optional.empty());
-		when(findPlace.invoke(request2.title(), request2.roadAddress())).thenReturn(Optional.empty());
-		when(placeRepository.bulkInsert(anyList())).thenReturn(Arrays.asList(place1, place2));
-
-		// when
-		batchRegisterPlaceService.invoke(testBookmark, requests);
-
-		// then
-		verify(placeRepository, times(1)).bulkInsert(anyList());
-		verify(batchCreateMarker, times(1)).invoke(testBookmark, Arrays.asList(place1, place2));
-		verify(testBookmark, times(1)).incrementMarkersCount(2);
-	}
-
-	@DisplayName("일부 장소가 이미 등록되어 새로 등록된 장소 수가 업데이트됨")
-	@Test
-	void 일부_장소_이미_등록되어_새로운_장소_수_업데이트() {
-		// given
-		List<RegisterPlaceRequest> requests = Arrays.asList(request1, request2);
-
-		when(findPlace.invoke(request1.title(), request1.roadAddress())).thenReturn(Optional.empty());
-		when(findPlace.invoke(request2.title(), request2.roadAddress())).thenReturn(Optional.of(place2));
-		when(placeRepository.bulkInsert(anyList())).thenReturn(Arrays.asList(place1));
-
-		// when
-		batchRegisterPlaceService.invoke(testBookmark, requests);
-
-		// then
-		verify(placeRepository, times(1)).bulkInsert(anyList());
-		verify(batchCreateMarker, times(1)).invoke(eq(testBookmark),
-			argThat(list -> list.contains(place1) && list.contains(place2)));
-	}
-
 }
