@@ -35,14 +35,14 @@ public class Bookmark extends BaseEntity {
 	private String youtuberProfile;
 
 	@NotNull
-	private Long placesCount;
+	private Long markersCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public void incrementPlacesCount(int incrementValue) {
-		this.placesCount += incrementValue;
+	public void incrementMarkersCount(int incrementValue) {
+		this.markersCount += incrementValue;
 	}
 
 	public static Bookmark of(String name, BookmarkType type, String youtuberId, String youtuberProfile, User user) {
@@ -51,7 +51,7 @@ public class Bookmark extends BaseEntity {
 			.bookmarkType(type)
 			.youtuberId(youtuberId)
 			.youtuberProfile(youtuberProfile)
-			.placesCount(0L)
+			.markersCount(0L)
 			.user(user)
 			.build();
 	}

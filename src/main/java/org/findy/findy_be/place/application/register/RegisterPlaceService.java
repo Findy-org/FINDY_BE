@@ -45,7 +45,7 @@ public class RegisterPlaceService implements RegisterPlace {
 				createMarker.invoke(bookmark, newPlace);
 			}
 		);
-		bookmark.incrementPlacesCount(1);
+		bookmark.incrementMarkersCount(1);
 	}
 
 	private void validateBookmarkOwner(String userId, Bookmark bookmark) {
