@@ -21,6 +21,7 @@ public enum ErrorCode {
 
 	// 403 error,
 	AUTHENTICATION_EXCEPTION_ERROR(FORBIDDEN, "Authentication Content-Type not supported: %s"),
+	FORBIDDEN_BOOKMARK_ACCESS(FORBIDDEN, "해당 즐겨찾기에 접근할 권한이 없습니다."),
 
 	// 404 error
 	NOT_FOUND_EMAIL(NOT_FOUND, "해당 이메일이 존재하지 않습니다."),
