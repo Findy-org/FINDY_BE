@@ -22,7 +22,7 @@ public abstract class BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
-	@SequenceGenerator(name = "entity_sequence", sequenceName = "entity_seq", allocationSize = 1)
+	@SequenceGenerator(name = "entity_sequence", sequenceName = "entity_seq", allocationSize = 100)
 	private Long id;
 
 	@CreatedDate

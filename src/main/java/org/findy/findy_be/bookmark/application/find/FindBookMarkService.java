@@ -18,7 +18,7 @@ public class FindBookMarkService implements FindBookMark {
 	private final BookmarkRepository bookmarkRepository;
 
 	@Override
-	public Bookmark invokeById(final Long bookmarkId) {
+	public Bookmark invoke(final Long bookmarkId) {
 		return bookmarkRepository.findById(bookmarkId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(String.format(NOT_FOUND_BOOKMARK_BY_ID.getMessage(), bookmarkId)));

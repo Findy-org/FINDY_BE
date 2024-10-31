@@ -5,6 +5,8 @@ import static org.springframework.http.HttpStatus.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.apache.coyote.BadRequestException;
+import org.findy.findy_be.common.exception.custom.ForbiddenAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -26,6 +28,14 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e) {
+		String timestamp = getCurrentTimestamp();
+		log.error(LOG_FORMAT, timestamp, e.getClass().getSimpleName(), e.getMessage());
+		return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+			.body(ErrorResponse.of(e.getClass().getSimpleName(), INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+	}
+
+	@ExceptionHandler(ForbiddenAccessException.class)
+	public ResponseEntity<ErrorResponse> handleForbiddenAccessException(ForbiddenAccessException e) {
 		String timestamp = getCurrentTimestamp();
 		log.error(LOG_FORMAT, timestamp, e.getClass().getSimpleName(), e.getMessage());
 		return ResponseEntity.status(INTERNAL_SERVER_ERROR)
@@ -79,6 +89,14 @@ public class GlobalExceptionHandler {
 		log.error(LOG_FORMAT, timestamp, e.getClass().getSimpleName(), e.getMessage());
 		return ResponseEntity.status(FORBIDDEN)
 			.body(ErrorResponse.of(e.getClass().getSimpleName(), FORBIDDEN.value(), e.getMessage()));
+	}
+
+	@ExceptionHandler(BadRequestException.class)
+	protected ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException e) {
+		String timestamp = getCurrentTimestamp();
+		log.error(LOG_FORMAT, timestamp, e.getClass().getSimpleName(), e.getMessage());
+		return ResponseEntity.status(BAD_REQUEST)
+			.body(ErrorResponse.of(e.getClass().getSimpleName(), BAD_REQUEST.value(), e.getMessage()));
 	}
 
 	private String getCurrentTimestamp() {

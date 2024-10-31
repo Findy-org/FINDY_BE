@@ -1,14 +1,15 @@
 package org.findy.findy_be.place.application.register;
 
-import static org.findy.findy_be.common.exception.ErrorMessage.*;
+import static org.findy.findy_be.common.exception.ErrorCode.*;
 
 import org.findy.findy_be.bookmark.application.find.FindBookMark;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
+import org.findy.findy_be.common.exception.custom.ForbiddenAccessException;
 import org.findy.findy_be.marker.application.create.CreateMarker;
 import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.PlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,29 +29,41 @@ public class RegisterPlaceService implements RegisterPlace {
 	private final PlaceRepository placeRepository;
 
 	@Override
-	public void invoke(PlaceRequest request) {
-		Bookmark bookmark = findBookMark.invokeById(request.bookmarkId());
+	public void invoke(final String userId, final RegisterPlaceRequest request, final Long bookmarkId) {
+		Bookmark bookmark = findBookMark.invoke(bookmarkId);
 
+		validateBookmarkOwner(userId, bookmark);
 		validateBookmarkType(bookmark);
 
-		findPlace.invoke(request).ifPresentOrElse(
-			existingPlace -> createMarker.invoke(bookmark, existingPlace),
+		findPlace.invoke(request.title(), request.roadAddress()).ifPresentOrElse(
+			existingPlace -> {
+				createMarker.invoke(bookmark, existingPlace);
+			},
 			() -> {
 				log.info("저장된 장소가 없어 새로운 장소를 저장합니다.");
 				Place newPlace = createAndSaveNewPlace(request);
 				createMarker.invoke(bookmark, newPlace);
 			}
 		);
+		bookmark.incrementMarkersCount(1);
+	}
+
+	private void validateBookmarkOwner(String userId, Bookmark bookmark) {
+		String bookmarkUserId = bookmark.getUser().getUserId();
+		if (!bookmarkUserId.equals(userId)) {
+			throw new ForbiddenAccessException(FORBIDDEN_BOOKMARK_ACCESS.getMessage());
+		}
 	}
 
 	private void validateBookmarkType(Bookmark bookmark) {
 		if (bookmark.getBookmarkType().equals(BookmarkType.YOUTUBE)) {
-			throw new IllegalArgumentException(YOUTUBE_BOOKMARK_REGISTER_ERROR.getMessage());
+			throw new IllegalArgumentException(BAD_REQUEST_YOUTUBE_BOOKMARK_REGISTER_ERROR.getMessage());
 		}
 	}
 
-	private Place createAndSaveNewPlace(PlaceRequest request) {
+	private Place createAndSaveNewPlace(RegisterPlaceRequest request) {
 		Place newPlace = Place.create(request);
 		return placeRepository.save(newPlace);
 	}
 }
+

@@ -5,10 +5,12 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.PlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,24 +27,22 @@ class FindPlaceServiceTest extends MockTest {
 	@InjectMocks
 	private FindPlaceService findPlaceService;
 
-	private PlaceRequest placeRequest;
+	private RegisterPlaceRequest placeRequest;
 	private Place place;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		placeRequest = new PlaceRequest(
-			"동대문 엽기떡볶이 종각점",
-			"https://blog.naver.com/ddm_yupdduk",
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		placeRequest = new RegisterPlaceRequest(
+			"동대문엽기떡볶이 종각점",
 			"설명",
-			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
+			categoryRequest,
 			"1269827323",
 			"375719345",
-			MajorCategory.RESTAURANT,
-			null,
-			1L
+			"02-000-000"
 		);
 		place = mock(Place.class);
 	}
@@ -53,21 +53,17 @@ class FindPlaceServiceTest extends MockTest {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.roadAddress()
 		)).thenReturn(Optional.of(place));
 
 		// when
-		Place foundPlace = findPlaceService.invoke(placeRequest).get();
+		Place foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress()).get();
 
 		// then
 		assertThat(foundPlace).isNotNull();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.roadAddress()
 		);
 	}
 
@@ -77,21 +73,17 @@ class FindPlaceServiceTest extends MockTest {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.roadAddress()
 		)).thenReturn(Optional.empty());
 
 		// when
-		Optional<Place> foundPlace = findPlaceService.invoke(placeRequest);
+		Optional<Place> foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress());
 
 		// then
 		assertThat(foundPlace).isEmpty();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
-			placeRequest.mapx(),
-			placeRequest.mapy()
+			placeRequest.roadAddress()
 		);
 	}
 }

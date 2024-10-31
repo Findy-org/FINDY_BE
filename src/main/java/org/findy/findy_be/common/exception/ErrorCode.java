@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 
 	// 400 error
+	BAD_REQUEST_YOUTUBE_BOOKMARK_REGISTER_ERROR(BAD_REQUEST, "유튜브 즐겨찾기는 장소를 추가할 수 없습니다."),
 
 	// 401 error
 	UNAUTHORIZED_REQUEST(UNAUTHORIZED, "로그인 후 다시 시도해주세요."),
@@ -20,6 +21,7 @@ public enum ErrorCode {
 
 	// 403 error,
 	AUTHENTICATION_EXCEPTION_ERROR(FORBIDDEN, "Authentication Content-Type not supported: %s"),
+	FORBIDDEN_BOOKMARK_ACCESS(FORBIDDEN, "해당 즐겨찾기에 접근할 권한이 없습니다."),
 
 	// 404 error
 	NOT_FOUND_EMAIL(NOT_FOUND, "해당 이메일이 존재하지 않습니다."),

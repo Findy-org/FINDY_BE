@@ -22,4 +22,4 @@ springdoc:
     doc-expansion: none
 
 server:
-  url: ${SERVER_URL:http://localhost:8080}
+  url: ${SERVER_URL:http://localhost:8081}

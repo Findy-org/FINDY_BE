@@ -1,11 +1,13 @@
 package org.findy.findy_be.place.domain;
 
 import org.findy.findy_be.common.entity.BaseEntity;
-import org.findy.findy_be.place.dto.request.PlaceRequest;
+import org.findy.findy_be.place.domain.vo.Category;
+import org.findy.findy_be.place.domain.vo.Coordinate;
+import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -25,44 +27,35 @@ public class Place extends BaseEntity {
 	@NotNull
 	private String title;
 
-	@NotNull
-	private String link;
-
 	private String description;
 
 	private String telephone;
 
 	@NotNull
+	@Column(name = "address")
 	private String address;
 
 	@NotNull
+	@Column(name = "road_address")
 	private String roadAddress;
 
-	@NotNull
-	private String mapx;
+	@Embedded
+	private Coordinate coordinate;
 
-	@NotNull
-	private String mapy;
+	@Embedded
+	private Category category;
 
-	@Enumerated(EnumType.STRING)
-	@NotNull
-	private MajorCategory majorCategory;
-
-	@Enumerated(EnumType.STRING)
-	private MiddleCategory middleCategory;
-
-	public static Place create(final PlaceRequest placeRequest) {
+	public static Place create(final RegisterPlaceRequest request) {
+		Coordinate coordinate = Coordinate.of(request.mapX(), request.mapY());
+		Category category = Category.of(request.category().majorCategory(), request.category().middleCategory());
 		return Place.builder()
-			.address(placeRequest.address())
-			.description(placeRequest.description())
-			.link(placeRequest.link())
-			.majorCategory(placeRequest.majorCategory())
-			.mapx(placeRequest.mapx())
-			.mapy(placeRequest.mapy())
-			.middleCategory(placeRequest.middleCategory())
-			.roadAddress(placeRequest.roadAddress())
-			.telephone(placeRequest.telephone())
-			.title(placeRequest.title())
+			.address(request.address())
+			.description(request.description())
+			.category(category)
+			.coordinate(coordinate)
+			.roadAddress(request.roadAddress())
+			.telephone(request.telephone())
+			.title(request.title())
 			.build();
 	}
 }
