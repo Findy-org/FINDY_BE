@@ -25,6 +25,6 @@ public record YoutubeBookmarkRequest(
 	@Schema(description = "유튜브 링크", example = "https://www.youtube.com/watch?v=hE2wMo5Coco")
 	String youtubeLink,
 
-	List<RegisterPlaceRequest> selectedPlaces
+	List<RegisterPlaceRequest> places
 ) {
 }

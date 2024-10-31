@@ -1,7 +1,6 @@
 package org.findy.findy_be.place.dto.request;
 
-import org.findy.findy_be.place.domain.MajorCategory;
-import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.place.domain.Place;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,15 +13,8 @@ public record RegisterPlaceRequest(
 	@Schema(description = "장소명", example = "동대문<b>엽기떡볶이</b> 종각점")
 	String title,
 
-	@NotNull(message = "링크는 비어있을 수 없습니다.")
-	@Schema(description = "링크", example = "https://blog.naver.com/ddm_yupdduk")
-	String link,
-
 	@Schema(description = "설명", example = "설명")
 	String description,
-
-	@Schema(description = "전화번호", example = "02-000-000")
-	String telephone,
 
 	@NotNull(message = "주소는 비어있을 수 없습니다.")
 	@Schema(description = "주소", example = "서울특별시 종로구 공평동 124")
@@ -32,6 +24,8 @@ public record RegisterPlaceRequest(
 	@Schema(description = "도로명 주소", example = "서울특별시 종로구 삼봉로 100")
 	String roadAddress,
 
+	CategoryRequest category,
+
 	@NotNull(message = "좌표는 비어있을 수 없습니다.")
 	@Schema(description = "x 좌표", example = "1269827323")
 	String mapX,
@@ -40,12 +34,8 @@ public record RegisterPlaceRequest(
 	@Schema(description = "y 좌표", example = "375719345")
 	String mapY,
 
-	@NotNull(message = "대분류는 비어있을 수 없습니다.")
-	@Schema(description = "대분류", example = "RESTAURANT")
-	MajorCategory majorCategory,
-
-	@Schema(description = "중분류", example = "KOREAN")
-	MiddleCategory middleCategory
+	@Schema(description = "전화번호", example = "02-000-000")
+	String telephone
 ) {
 	public Place toEntity() {
 		return Place.create(this);

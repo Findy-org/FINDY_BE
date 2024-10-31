@@ -27,9 +27,6 @@ public class Place extends BaseEntity {
 	@NotNull
 	private String title;
 
-	@NotNull
-	private String link;
-
 	private String description;
 
 	private String telephone;
@@ -50,11 +47,10 @@ public class Place extends BaseEntity {
 
 	public static Place create(final RegisterPlaceRequest request) {
 		Coordinate coordinate = Coordinate.of(request.mapX(), request.mapY());
-		Category category = Category.of(request.majorCategory(), request.middleCategory());
+		Category category = Category.of(request.category().majorCategory(), request.category().middleCategory());
 		return Place.builder()
 			.address(request.address())
 			.description(request.description())
-			.link(request.link())
 			.category(category)
 			.coordinate(coordinate)
 			.roadAddress(request.roadAddress())

@@ -31,7 +31,7 @@ public class RegisterYoutubeBookmarkService implements RegisterYoutubeBookmark {
 	@Override
 	public void invoke(final String userId, final YoutubeBookmarkRequest request) {
 		User user = userService.findUser(userId);
-		List<RegisterPlaceRequest> placeRequests = request.selectedPlaces();
+		List<RegisterPlaceRequest> placeRequests = request.places();
 		bookmarkRepository.findByUserAndYoutuberId(user, request.youtuberId()).ifPresentOrElse(
 			existingBookmark -> {
 				validateBookmarkOwner(userId, existingBookmark);
