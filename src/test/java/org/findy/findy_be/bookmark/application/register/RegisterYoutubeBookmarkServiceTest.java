@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
@@ -47,11 +48,10 @@ class RegisterYoutubeBookmarkServiceTest extends MockTest {
 		MockitoAnnotations.openMocks(this);
 		testUser = mock(User.class);
 		when(testUser.getUserId()).thenReturn("N49sfgdahdKz_fp-223424er1N3D6kd");
-
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		selectedPlaces = List.of(
-			new RegisterPlaceRequest("Place1", "https://place1.com", "Description1", "02-000-0000",
-				"Address1", "RoadAddress1", "12345", "67890", MajorCategory.RESTAURANT, MiddleCategory.KOREAN)
-		);
+			new RegisterPlaceRequest("Place1", "Description1", "Address1", "RoadAddress1", categoryRequest, "12345",
+				"67890", "02-000-0000"));
 
 		request = new YoutubeBookmarkRequest("@iammingki", "걍밍경", "https://yt3.googleusercontent.com/ytc/...",
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", selectedPlaces);

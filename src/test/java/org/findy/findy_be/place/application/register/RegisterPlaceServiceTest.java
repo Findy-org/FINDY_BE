@@ -12,6 +12,7 @@ import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.bookmark.application.find.FindBookMark;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.common.exception.custom.ForbiddenAccessException;
 import org.findy.findy_be.marker.application.create.CreateMarker;
@@ -66,17 +67,16 @@ class RegisterPlaceServiceTest extends MockTest {
 			LocalDateTime.now(),
 			LocalDateTime.now()
 		);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		placeRequest = new RegisterPlaceRequest(
-			"동대문 엽기떡볶이 종각점",
-			"https://blog.naver.com/ddm_yupdduk",
+			"동대문엽기떡볶이 종각점",
 			"설명",
-			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
+			categoryRequest,
 			"1269827323",
 			"375719345",
-			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN
+			"02-000-000"
 		);
 
 		bookmark = mock(Bookmark.class);
@@ -123,7 +123,7 @@ class RegisterPlaceServiceTest extends MockTest {
 	void 유튜브_즐겨찾기일_경우_예외_발생() {
 		// given
 		Long bookmarkId = 1L;
-		
+
 		when(findBookMark.invoke(bookmarkId)).thenReturn(bookmark);
 		when(bookmark.getBookmarkType()).thenReturn(BookmarkType.YOUTUBE);
 

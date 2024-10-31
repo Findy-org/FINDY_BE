@@ -10,6 +10,7 @@ import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
 import org.findy.findy_be.place.application.register.RegisterPlaceService;
@@ -71,17 +72,16 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_성공() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		RegisterPlaceRequest request = new RegisterPlaceRequest(
 			"동대문엽기떡볶이 종각점",
-			"https://blog.naver.com/ddm_yupdduk",
 			"설명",
-			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
+			categoryRequest,
 			"1269827323",
 			"375719345",
-			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN
+			"02-000-000"
 		);
 
 		// when
@@ -96,17 +96,16 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_검증_실패() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		RegisterPlaceRequest invalidRequest = new RegisterPlaceRequest(
 			null,
-			null,
 			"설명",
-			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
+			categoryRequest,
 			"1269827323",
 			"375719345",
-			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN
+			"02-000-000"
 		);
 
 		// when
@@ -122,21 +121,20 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_존재하지_않는_즐겨찾기_ID() throws Exception {
 		// given
 		Long invalidBookmarkId = 999L;
-		RegisterPlaceRequest requestWithInvalidBookmarkId = new RegisterPlaceRequest(
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		RegisterPlaceRequest request = new RegisterPlaceRequest(
 			"동대문엽기떡볶이 종각점",
-			"https://blog.naver.com/ddm_yupdduk",
 			"설명",
-			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
+			categoryRequest,
 			"1269827323",
 			"375719345",
-			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN
+			"02-000-000"
 		);
 
 		// when
-		ResultActions resultActions = performPostRegisterPlace(invalidBookmarkId, requestWithInvalidBookmarkId);
+		ResultActions resultActions = performPostRegisterPlace(invalidBookmarkId, request);
 
 		// then
 		resultActions

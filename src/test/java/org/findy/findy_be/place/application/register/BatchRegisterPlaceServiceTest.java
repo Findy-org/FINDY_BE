@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.application.create.BatchCreateMarkerService;
 import org.findy.findy_be.place.application.find.FindPlaceService;
@@ -47,10 +48,12 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		testBookmark = mock(Bookmark.class);
-		request1 = new RegisterPlaceRequest("Place1", "https://example.com/1", "Description1", "02-000-0000",
-			"Address1", "RoadAddress1", "12345", "67890", MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		request2 = new RegisterPlaceRequest("Place2", "https://example.com/2", "Description2", "02-000-0001",
-			"Address2", "RoadAddress2", "54321", "09876", MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		request1 = new RegisterPlaceRequest("Place1", "Description1", "Address1", "RoadAddress1", categoryRequest,
+			"12345",
+			"67890", "02-000-0000");
+		request2 = new RegisterPlaceRequest("Place2", "Description2", "Address2", "RoadAddress2", categoryRequest,
+			"54321", "09876", "02-000-0001");
 		place1 = mock(Place.class);
 		place2 = mock(Place.class);
 	}

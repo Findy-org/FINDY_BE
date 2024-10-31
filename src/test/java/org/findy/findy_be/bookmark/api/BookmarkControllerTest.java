@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.common.IntegrationTest;
 import org.findy.findy_be.place.domain.MajorCategory;
@@ -60,10 +61,10 @@ class BookmarkControllerTest extends IntegrationTest {
 	@Test
 	void 유튜브_북마크_등록_성공() throws Exception {
 		// given
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		List<RegisterPlaceRequest> selectedPlaces = List.of(
-			new RegisterPlaceRequest("Place1", "https://place1.com", "Description1", "02-000-0000",
-				"Address1", "RoadAddress1", "12345", "67890", MajorCategory.RESTAURANT, MiddleCategory.KOREAN)
-		);
+			new RegisterPlaceRequest("Place1", "Description1", "Address1", "RoadAddress1", categoryRequest, "12345",
+				"67890", "02-000-0000"));
 		YoutubeBookmarkRequest request = new YoutubeBookmarkRequest(
 			"@iammingki", "걍밍경", "https://yt3.googleusercontent.com/ytc/...",
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", selectedPlaces);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
@@ -38,18 +39,18 @@ class BulkInsertRepositoryImplTest extends RepositoryTest {
 	}
 
 	private List<Place> generateTestPlaces(int entityCount) {
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		return IntStream.range(0, entityCount)
 			.mapToObj(i -> new RegisterPlaceRequest(
 				"Test Place " + i,
-				"https://example.com/place/" + i,
 				"Description " + i,
 				"02-1234-5678",
-				"Seoul Street " + i,
 				"Seoul Road " + i,
+				categoryRequest,
 				"1269827323",
 				"375719345",
-				MajorCategory.RESTAURANT,
-				MiddleCategory.KOREAN
+				"02-000-000"
+
 			))
 			.map(Place::create)
 			.collect(Collectors.toList());

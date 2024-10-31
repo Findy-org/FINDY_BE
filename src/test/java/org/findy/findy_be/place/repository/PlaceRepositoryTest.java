@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
@@ -26,17 +27,16 @@ class PlaceRepositoryTest extends RepositoryTest {
 	@Test
 	void 주어진_상세_정보로_장소를_조회할_수_있다() {
 		// given
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		RegisterPlaceRequest request = new RegisterPlaceRequest(
 			"동대문엽기떡볶이 종각점",
-			"https://blog.naver.com/ddm_yupdduk",
 			"설명",
-			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
+			categoryRequest,
 			"1269827323",
 			"375719345",
-			MajorCategory.RESTAURANT,
-			MiddleCategory.KOREAN
+			"02-000-000"
 		);
 		Place savedPlace = placeRepository.save(Place.create(request));
 
@@ -68,19 +68,20 @@ class PlaceRepositoryTest extends RepositoryTest {
 	@Transactional
 	void bulkInsertPlaces_여러_장소_일괄_삽입() {
 		// given
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		List<Place> places = IntStream.range(0, 100)
 			.mapToObj(i -> Place.create(new RegisterPlaceRequest(
-				"장소" + i,
-				"https://blog.naver.com/place" + i,
-				"설명" + i,
-				"02-000-00" + i,
-				"서울특별시 종로구 공평동 124" + i,
-				"서울특별시 종로구 삼봉로 100" + i,
-				"12698273" + i,
-				"37571934" + i,
-				MajorCategory.RESTAURANT,
-				MiddleCategory.KOREAN
-			))).collect(Collectors.toList());
+					"Test Place " + i,
+					"Description " + i,
+					"02-1234-5678",
+					"Seoul Road " + i,
+					categoryRequest,
+					"1269827323",
+					"375719345",
+					"02-000-000"
+
+				)
+			)).collect(Collectors.toList());
 
 		// when
 		placeRepository.bulkInsert(places);
@@ -89,7 +90,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 		List<Place> savedPlaces = placeRepository.findAll();
 		assertThat(savedPlaces).hasSize(100);
 		for (int i = 0; i < 100; i++) {
-			assertThat(savedPlaces.get(i).getTitle()).isEqualTo("장소" + i);
+			assertThat(savedPlaces.get(i).getTitle()).isEqualTo("Test Place " + i);
 		}
 	}
 }
