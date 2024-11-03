@@ -84,7 +84,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 			)).collect(Collectors.toList());
 
 		// when
-		placeRepository.bulkInsert(places);
+		placeRepository.saveAll(places);
 
 		// then
 		List<Place> savedPlaces = placeRepository.findAll();

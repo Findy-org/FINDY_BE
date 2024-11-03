@@ -25,9 +25,6 @@ class BulkInsertRepositoryImplTest extends RepositoryTest {
 	private PlaceRepository placeRepository;
 
 	@Autowired
-	private BulkInsertRepositoryImpl<Place> placeCustomRepository;
-
-	@Autowired
 	private EntityManager entityManager;
 
 	private List<Place> testPlaces;
@@ -56,28 +53,14 @@ class BulkInsertRepositoryImplTest extends RepositoryTest {
 			.collect(Collectors.toList());
 	}
 
-	@DisplayName("saveAll() 성능 테스트")
-	@ParameterizedTest
-	@ValueSource(ints = {10, 100, 1000, 10000})
-	void testSaveAllPerformance(int entityCount) {
-		testPlaces = generateTestPlaces(entityCount);
-
-		long startTime = System.nanoTime();
-		placeRepository.saveAll(testPlaces);
-		long endTime = System.nanoTime();
-
-		System.out.println(
-			"Time taken by saveAll() with " + entityCount + " entities: " + (endTime - startTime) / 1_000_000 + " ms");
-	}
-
 	@DisplayName("bulkInsertPlaces() 성능 테스트")
 	@ParameterizedTest
-	@ValueSource(ints = {10, 100, 1000, 10000})
+	@ValueSource(ints = {1, 10, 100, 1000, 10000})
 	void testBulkInsertPlacesPerformance(int entityCount) {
 		testPlaces = generateTestPlaces(entityCount);
 
 		long startTime = System.nanoTime();
-		placeCustomRepository.bulkInsert(testPlaces);
+		placeRepository.saveAll(testPlaces);
 		long endTime = System.nanoTime();
 
 		System.out.println(
