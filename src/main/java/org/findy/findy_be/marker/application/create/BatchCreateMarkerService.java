@@ -34,7 +34,7 @@ public class BatchCreateMarkerService implements BatchCreateMarker {
 		Set<Long> existingPlaceIds = getExistingPlaceIds(existingMarkers);
 		List<Marker> newMarkers = getNewMarkers(bookmark, places, existingPlaceIds);
 
-		markerRepository.bulkInsert(newMarkers);
+		markerRepository.saveAll(newMarkers);
 		updateMarkersCount(bookmark.getId(), newMarkers);
 	}
 

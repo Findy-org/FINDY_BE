@@ -66,13 +66,13 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 
 		when(findPlace.invoke(request1.title(), request1.roadAddress())).thenReturn(Optional.empty());
 		when(findPlace.invoke(request2.title(), request2.roadAddress())).thenReturn(Optional.empty());
-		when(placeRepository.bulkInsert(anyList())).thenReturn(Arrays.asList(place1, place2));
+		when(placeRepository.saveAll(anyList())).thenReturn(Arrays.asList(place1, place2));
 
 		// when
 		batchRegisterPlaceService.invoke(testBookmark, requests);
 
 		// then
-		verify(placeRepository, times(1)).bulkInsert(anyList());
+		verify(placeRepository, times(1)).saveAll(anyList());
 		verify(batchCreateMarker, times(1)).invoke(testBookmark, Arrays.asList(place1, place2));
 	}
 
@@ -84,13 +84,13 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 
 		when(findPlace.invoke(request1.title(), request1.roadAddress())).thenReturn(Optional.empty());
 		when(findPlace.invoke(request2.title(), request2.roadAddress())).thenReturn(Optional.of(place2));
-		when(placeRepository.bulkInsert(anyList())).thenReturn(Arrays.asList(place1));
+		when(placeRepository.saveAll(anyList())).thenReturn(Arrays.asList(place1));
 
 		// when
 		batchRegisterPlaceService.invoke(testBookmark, requests);
 
 		// then
-		verify(placeRepository, times(1)).bulkInsert(anyList());
+		verify(placeRepository, times(1)).saveAll(anyList());
 		verify(batchCreateMarker, times(1)).invoke(eq(testBookmark),
 			argThat(list -> list.contains(place1) && list.contains(place2)));
 	}
@@ -102,13 +102,13 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 		List<RegisterPlaceRequest> requests = Arrays.asList(request1);
 
 		when(findPlace.invoke(request1.title(), request1.roadAddress())).thenReturn(Optional.empty());
-		when(placeRepository.bulkInsert(anyList())).thenReturn(Arrays.asList(place1));
+		when(placeRepository.saveAll(anyList())).thenReturn(Arrays.asList(place1));
 
 		// when
 		batchRegisterPlaceService.invoke(testBookmark, requests);
 
 		// then
-		verify(placeRepository, times(1)).bulkInsert(anyList());
+		verify(placeRepository, times(1)).saveAll(anyList());
 		verify(batchCreateMarker, times(1)).invoke(testBookmark, Arrays.asList(place1));
 	}
 }

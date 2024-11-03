@@ -35,7 +35,7 @@ public class BatchRegisterPlaceService implements BatchRegisterPlace {
 		List<Place> existingPlaces = findExistingPlaces(requests);
 		List<Place> newPlaces = findNewPlaces(requests, existingPlaces);
 
-		List<Place> persistedPlaces = placeRepository.bulkInsert(newPlaces);
+		List<Place> persistedPlaces = placeRepository.saveAll(newPlaces);
 
 		List<Place> places = combineAllPlaces(existingPlaces, persistedPlaces);
 		batchCreateMarker.invoke(bookmark, places);

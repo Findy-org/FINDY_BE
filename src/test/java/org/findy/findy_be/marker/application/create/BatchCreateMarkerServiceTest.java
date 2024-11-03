@@ -58,7 +58,7 @@ class BatchCreateMarkerServiceTest extends MockTest {
 		batchCreateMarkerService.invoke(testBookmark, places);
 
 		// then
-		verify(markerRepository, times(1)).bulkInsert(anyList());
+		verify(markerRepository, times(1)).saveAll(anyList());
 		verify(testBookmark, times(1)).incrementMarkersCount(2);
 	}
 
@@ -78,7 +78,7 @@ class BatchCreateMarkerServiceTest extends MockTest {
 		batchCreateMarkerService.invoke(testBookmark, places);
 
 		// then
-		verify(markerRepository, times(1)).bulkInsert(anyList());
+		verify(markerRepository, times(1)).saveAll(anyList());
 		verify(markerRepository, times(1)).findAllByBookmarkAndPlaces(testBookmark, places);
 		verify(testBookmark, times(1)).incrementMarkersCount(0);
 	}

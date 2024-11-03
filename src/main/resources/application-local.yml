@@ -19,11 +19,11 @@ spring:
         format_sql: true
         highlight_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          batch_size: 1000
-          order_inserts: true
-          order_updates: true
-          generate_statistics: true
+        jdbc.batch_size: 100
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+        jdbc.lob.non_contextual_creation: true
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5433/findy-db

@@ -16,11 +16,11 @@ spring:
         highlight_sql: true
         hbm2ddl.auto: create
         show-sql: true
-        jdbc.batch_size: 100                  # Batch size 설정
-        order_inserts: true                  # Batch insert 시 Order by 적용
-        order_updates: true                  # Batch update 시 Order by 적용
-        batch_versioned_data: true           # 버전 관리되는 데이터를 Batch로 처리
-        jdbc.lob.non_contextual_creation: true  # PostgreSQL에서 Large Object 지원 설정
+        jdbc.batch_size: 100
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+        jdbc.lob.non_contextual_creation: true
   datasource:
     url: jdbc:tc:postgresql:10:///testdb
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
