@@ -3,6 +3,7 @@ package org.findy.findy_be.bookmark.application.find;
 import static org.findy.findy_be.common.exception.ErrorCode.*;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,10 @@ public class FindBookMarkService implements FindBookMark {
 	private final BookmarkRepository bookmarkRepository;
 
 	@Override
-	public Bookmark invoke(final Long bookmarkId) {
-		return bookmarkRepository.findById(bookmarkId)
+	public BookmarkResponse invoke(final Long bookmarkId) {
+		Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(String.format(NOT_FOUND_BOOKMARK_BY_ID.getMessage(), bookmarkId)));
+		return BookmarkResponse.from(bookmark);
 	}
 }

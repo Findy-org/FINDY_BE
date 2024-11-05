@@ -1,7 +1,7 @@
 package org.findy.findy_be.bookmark.application.find;
 
-import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 
 public interface FindBookMark {
-	Bookmark invoke(Long bookmarkId);
+	BookmarkResponse invoke(Long bookmarkId);
 }

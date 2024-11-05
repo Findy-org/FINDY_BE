@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.bookmark.domain.Bookmark;
-import org.findy.findy_be.bookmark.domain.BookmarkType;
+import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.user.domain.RoleType;
@@ -51,11 +51,10 @@ class FindBookMarkServiceTest extends MockTest {
 		when(bookmarkRepository.findById(customBookmarkId)).thenReturn(Optional.of(bookmark));
 
 		// when
-		Bookmark foundBookmark = findBookMarkService.invoke(customBookmarkId);
+		BookmarkResponse foundBookmarkResponse = findBookMarkService.invoke(customBookmarkId);
 
 		// then
-		assertThat(foundBookmark).isEqualTo(bookmark);
-		assertThat(foundBookmark.getBookmarkType()).isEqualTo(BookmarkType.CUSTOM);
+		assertThat(foundBookmarkResponse.name()).isEqualTo(bookmark.getName());
 	}
 
 	@DisplayName("존재하지 않는 즐겨찾기 ID일 경우 EntityNotFoundException 발생")
