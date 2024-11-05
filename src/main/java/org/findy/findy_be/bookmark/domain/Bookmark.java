@@ -1,14 +1,18 @@
 package org.findy.findy_be.bookmark.domain;
 
-import org.findy.findy_be.common.entity.BaseEntity;
+import org.findy.findy_be.common.entity.BaseTimeEntity;
 import org.findy.findy_be.user.domain.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -23,7 +27,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "bookmarks")
-public class Bookmark extends BaseEntity {
+@SequenceGenerator(name = "bookmark_sequence", sequenceName = "bookmark_seq")
+public class Bookmark extends BaseTimeEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookmark_sequence")
+	private Long id;
 
 	private String name;
 

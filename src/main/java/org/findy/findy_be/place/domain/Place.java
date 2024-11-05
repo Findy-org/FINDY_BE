@@ -1,6 +1,6 @@
 package org.findy.findy_be.place.domain;
 
-import org.findy.findy_be.common.entity.BaseEntity;
+import org.findy.findy_be.common.entity.BaseTimeEntity;
 import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.domain.vo.Coordinate;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
@@ -8,6 +8,10 @@ import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -22,7 +26,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "places")
-public class Place extends BaseEntity {
+@SequenceGenerator(name = "place_sequence", sequenceName = "place_seq")
+public class Place extends BaseTimeEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "marker_sequence")
+	private Long id;
 
 	@NotNull
 	private String title;
