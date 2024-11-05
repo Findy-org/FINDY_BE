@@ -45,6 +45,10 @@ public class Bookmark extends BaseEntity {
 		this.markersCount += incrementValue;
 	}
 
+	public void updateYoutuberName(String youtuberName) {
+		this.name = this.name.equals(youtuberName) ? this.name : youtuberName;
+	}
+
 	public static Bookmark of(String name, BookmarkType type, String youtuberId, String youtuberProfile, User user) {
 		return Bookmark.builder()
 			.name(name)
