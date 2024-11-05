@@ -7,11 +7,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.dto.request.CategoryRequest;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
