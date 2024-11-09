@@ -18,11 +18,8 @@ import org.findy.findy_be.common.IntegrationTest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.application.register.RegisterPlaceService;
-import org.findy.findy_be.place.domain.MajorCategory;
-import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.CategoryRequest;
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterSearchedPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -85,16 +82,15 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_성공() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterPlaceRequest request = new RegisterPlaceRequest(
+		RegisterSearchedPlaceRequest request = new RegisterSearchedPlaceRequest(
 			"동대문엽기떡볶이 종각점",
+			"음식점>분식",
 			"설명",
+			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
-			categoryRequest,
 			"1269827323",
-			"375719345",
-			"02-000-000"
+			"375719345"
 		);
 
 		// when
@@ -109,16 +105,15 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_검증_실패() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterPlaceRequest invalidRequest = new RegisterPlaceRequest(
+		RegisterSearchedPlaceRequest invalidRequest = new RegisterSearchedPlaceRequest(
 			null,
+			"음식점>분식",
 			"설명",
+			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
-			categoryRequest,
 			"1269827323",
-			"375719345",
-			"02-000-000"
+			"375719345"
 		);
 
 		// when
@@ -134,16 +129,15 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_존재하지_않는_즐겨찾기_ID() throws Exception {
 		// given
 		Long invalidBookmarkId = 999L;
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterPlaceRequest request = new RegisterPlaceRequest(
+		RegisterSearchedPlaceRequest request = new RegisterSearchedPlaceRequest(
 			"동대문엽기떡볶이 종각점",
+			"음식점>분식",
 			"설명",
+			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
-			categoryRequest,
 			"1269827323",
-			"375719345",
-			"02-000-000"
+			"375719345"
 		);
 
 		// when
@@ -203,7 +197,8 @@ class PlaceControllerTest extends IntegrationTest {
 			.andDo(print());
 	}
 
-	private ResultActions performPostRegisterPlace(final Long bookmarkId, final RegisterPlaceRequest request) throws
+	private ResultActions performPostRegisterPlace(final Long bookmarkId,
+		final RegisterSearchedPlaceRequest request) throws
 		Exception {
 		return mvc.perform(post("/api/places/{bookmarkId}", bookmarkId)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -212,19 +207,17 @@ class PlaceControllerTest extends IntegrationTest {
 	}
 
 	private void initPlacesForBookmark(Bookmark bookmark, int count) {
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		List<Place> places = IntStream.range(1, count + 1)
-			.mapToObj(i -> new RegisterPlaceRequest(
+			.mapToObj(i -> new RegisterSearchedPlaceRequest(
 				"Test Place " + i,
+				"음식점>분식",
 				"Description " + i,
+				"02-000-000" + i,
 				"Address " + i,
 				"RoadAddress " + i,
-				categoryRequest,
 				"1269827323",
-				"375719345",
-				"02-000-000" + i
-			))
-			.map(Place::create)
+				"375719345"
+			).toEntity())
 			.collect(Collectors.toList());
 
 		List<Place> placeList = placeRepository.saveAll(places);
