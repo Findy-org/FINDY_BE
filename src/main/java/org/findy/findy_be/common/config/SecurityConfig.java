@@ -96,15 +96,17 @@ public class SecurityConfig {
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/places/**"))
 					.hasRole("USER")
+					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/bookmarks/**"))
+					.hasRole("USER")
 					.requestMatchers(new MvcRequestMatcher(introspector, ADMIN_API_PREFIX + "/**"))
 					.hasRole("ADMIN")
 					.requestMatchers(new MvcRequestMatcher(introspector, "/findy/api-docs/**"))
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/findy/swagger-ui/index.html"))
 					.permitAll()
-					.requestMatchers(new MvcRequestMatcher(introspector, "/findy/swagger-ui/**")) // Swagger UI 접근 허용
+					.requestMatchers(new MvcRequestMatcher(introspector, "/findy/swagger-ui/**"))
 					.permitAll()
-					.requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**")) // Swagger API docs 접근 허용
+					.requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**"))
 					.permitAll()
 					.anyRequest().authenticated())
 			.oauth2Login(oauth2Configurer ->
