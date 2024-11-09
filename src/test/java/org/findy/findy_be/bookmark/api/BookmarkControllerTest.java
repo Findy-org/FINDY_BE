@@ -66,7 +66,7 @@ class BookmarkControllerTest extends IntegrationTest {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
-	@DisplayName("유효한 유튜브 북마크 요청으로 성공")
+	@DisplayName("[성공] 유효한 유튜브 북마크 요청")
 	@Test
 	void 유튜브_북마크_등록_성공() throws Exception {
 		// given
@@ -79,14 +79,14 @@ class BookmarkControllerTest extends IntegrationTest {
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", selectedPlaces);
 
 		// when
-		ResultActions resultActions = performPostRequest("/api/bookmarks/youtube", request);
+		ResultActions resultActions = PostYoutubeBookmark(request);
 
 		// then
 		resultActions
 			.andExpect(status().isOk());
 	}
 
-	@DisplayName("유튜브 북마크 요청 시 유효성 검증 실패 - 유튜버 ID 형식 오류")
+	@DisplayName("[실패] 유튜브 북마크 요청 시 유효성 검증 실패 - 유튜버 ID 형식 오류")
 	@Test
 	void 유튜브_북마크_등록_유효성_검증_실패_유튜버_ID_형식() throws Exception {
 		// given
@@ -95,7 +95,7 @@ class BookmarkControllerTest extends IntegrationTest {
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", null);
 
 		// when
-		ResultActions resultActions = performPostRequest("/api/bookmarks/youtube", invalidRequest);
+		ResultActions resultActions = PostYoutubeBookmark(invalidRequest);
 
 		// then
 		resultActions
@@ -103,7 +103,7 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("유튜버 ID는 @으로 시작해야합니다.")));
 	}
 
-	@DisplayName("유튜브 북마크 요청 시 유효성 검증 실패 - 유튜버 이름 누락")
+	@DisplayName("[실패] 유튜브 북마크 요청 시 유효성 검증 실패 - 유튜버 이름 누락")
 	@Test
 	void 유튜브_북마크_등록_유효성_검증_실패_유튜버_이름_누락() throws Exception {
 		// given
@@ -112,7 +112,7 @@ class BookmarkControllerTest extends IntegrationTest {
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", null);
 
 		// when
-		ResultActions resultActions = performPostRequest("/api/bookmarks/youtube", invalidRequest);
+		ResultActions resultActions = PostYoutubeBookmark(invalidRequest);
 
 		// then
 		resultActions
@@ -120,7 +120,7 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("유튜버 이름은 비어있을 수 없습니다.")));
 	}
 
-	@DisplayName("유저의 북마크 리스트를 페이징으로 조회 성공")
+	@DisplayName("[성공] 유저의 북마크 리스트를 페이징으로 조회 성공")
 	@Test
 	void 유저_북마크_리스트_페이징_조회_성공() throws Exception {
 		// given
@@ -130,7 +130,7 @@ class BookmarkControllerTest extends IntegrationTest {
 		initBookmark();
 
 		// when
-		ResultActions resultActions = getResultActions(pagedRequest);
+		ResultActions resultActions = GetPagedBookmarks(pagedRequest);
 
 		// then
 		resultActions
@@ -140,20 +140,17 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.nextCursor").isNotEmpty());
 	}
 
-	@DisplayName("유저의 북마크 리스트 페이징 조회 - 마지막 페이지일 경우")
+	@DisplayName("[성공 case2] 유저의 북마크 리스트 페이징 조회 - 마지막 페이지일 경우")
 	@Test
 	void 유저_북마크_리스트_페이징_조회_마지막_페이지() throws Exception {
 		// given
 		int size = 11;
 		Long cursor = 0L;
+		PagedRequest pagedRequest = new PagedRequest(cursor, size);
 		initBookmark();
 
 		// when
-		ResultActions resultActions = mvc.perform(get("/api/bookmarks")
-				.param("cursor", cursor.toString())
-				.param("size", String.valueOf(size))
-				.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print());
+		ResultActions resultActions = GetPagedBookmarks(pagedRequest);
 
 		// then
 		resultActions
@@ -163,14 +160,14 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.nextCursor").isEmpty());
 	}
 
-	private @NotNull ResultActions performPostRequest(String url, Object content) throws Exception {
-		return mvc.perform(post(url)
+	private @NotNull ResultActions PostYoutubeBookmark(Object content) throws Exception {
+		return mvc.perform(post("/api/bookmarks/youtube")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(content)))
 			.andDo(print());
 	}
 
-	private @NotNull ResultActions getResultActions(final PagedRequest pagedRequest) throws Exception {
+	private @NotNull ResultActions GetPagedBookmarks(final PagedRequest pagedRequest) throws Exception {
 		return mvc.perform(get("/api/bookmarks")
 				.param("cursor", pagedRequest.cursor() == null ? "" : pagedRequest.cursor().toString())
 				.param("size", String.valueOf(pagedRequest.size()))

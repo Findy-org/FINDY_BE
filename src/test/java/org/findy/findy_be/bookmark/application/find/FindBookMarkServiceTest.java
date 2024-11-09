@@ -43,7 +43,7 @@ class FindBookMarkServiceTest extends MockTest {
 		bookmark = Bookmark.createCustomType("서촌", user);
 	}
 
-	@DisplayName("즐겨찾기 찾기에 성공한 경우")
+	@DisplayName("[성공] 즐겨찾기 찾기")
 	@Test
 	void findBookMark_Success() throws Exception {
 		// given
@@ -57,7 +57,7 @@ class FindBookMarkServiceTest extends MockTest {
 		assertThat(foundBookmarkResponse.name()).isEqualTo(bookmark.getName());
 	}
 
-	@DisplayName("존재하지 않는 즐겨찾기 ID일 경우 EntityNotFoundException 발생")
+	@DisplayName("[실패] 존재하지 않는 즐겨찾기 ID일 경우 EntityNotFoundException 발생")
 	@Test
 	void findBookMark_NotFound_ThrowsException() {
 		// given

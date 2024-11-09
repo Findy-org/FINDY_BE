@@ -71,9 +71,9 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 		initPlacesForBookmark(testBookmark, 10);
 	}
 
-	@DisplayName("유저의 특정 북마크에 저장된 장소 목록을 페이징 조회 - 다음 페이지가 있는 경우")
+	@DisplayName("[성공 (다음 페이지가 있는 경우)]유저의 특정 북마크에 저장된 장소 목록을 페이징 조회")
 	@Test
-	void 유저_북마크_장소_조회_성공_다음페이지_있음() {
+	void 유저_북마크_장소_조회_성공_case1() {
 		Pageable pageable = PageRequest.of(0, 5);
 		Long cursor = 0L;
 
@@ -85,9 +85,9 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 		assertThat(placeSlice.getContent().get(0).getTitle()).isEqualTo("Test Place 1");
 	}
 
-	@DisplayName("유저의 특정 북마크에 저장된 장소 목록을 페이징 조회 - 마지막 페이지")
+	@DisplayName("[성공 (마지막 페이지)] 유저의 특정 북마크에 저장된 장소 목록을 페이징 조회")
 	@Test
-	void 유저_북마크_장소_조회_성공_마지막페이지() {
+	void 유저_북마크_장소_조회_성공_case2() {
 		Pageable pageable = PageRequest.of(0, 11);
 		Long cursor = 0L;
 

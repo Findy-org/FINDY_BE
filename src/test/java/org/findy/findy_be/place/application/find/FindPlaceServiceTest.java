@@ -47,9 +47,9 @@ class FindPlaceServiceTest extends MockTest {
 		place = mock(Place.class);
 	}
 
-	@DisplayName("주어진 PlaceRequest에 해당하는 장소를 성공적으로 조회")
+	@DisplayName("[성공] 주어진 PlaceRequest에 해당하는 장소를 성공적으로 조회")
 	@Test
-	void 주어진_PlaceRequest에_해당하는_장소를_성공적으로_조회() {
+	void PlaceRequest_장소_조회() {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
@@ -67,9 +67,9 @@ class FindPlaceServiceTest extends MockTest {
 		);
 	}
 
-	@DisplayName("주어진 PlaceRequest에 해당하는 장소가 없을 때 null을 반환")
+	@DisplayName("[성공 case2] 주어진 PlaceRequest에 해당하는 장소가 없을 때 null을 반환")
 	@Test
-	void 주어진_PlaceRequest에_해당하는_장소가_없을_때_null을_반환() {
+	void PlaceRequest에_해당하는_장소가_없을_때() {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),

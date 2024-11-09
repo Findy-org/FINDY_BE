@@ -26,7 +26,7 @@ class UserServiceTest extends MockTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
-	@DisplayName("존재하는 사용자를 찾을 수 있는 경우")
+	@DisplayName("[성공] 존재하는 사용자를 찾을 수 있는 경우")
 	@Test
 	void 존재하는_사용자_조회() {
 		// given

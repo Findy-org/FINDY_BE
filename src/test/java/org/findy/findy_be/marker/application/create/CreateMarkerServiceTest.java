@@ -35,9 +35,9 @@ class CreateMarkerServiceTest extends MockTest {
 		place = mock(Place.class);
 	}
 
-	@DisplayName("북마크와 장소 정보를 이용해 마커를 생성하고 저장")
+	@DisplayName("[성공] 북마크와 장소 정보를 이용해 마커를 생성하고 저장")
 	@Test
-	void 북마크와_장소_정보를_이용해_마커를_생성하고_저장() {
+	void 마커를_생성하고_저장() {
 		// given
 		Marker marker = Marker.create(bookmark, place);
 		when(markerRepository.findByBookmarkAndPlace(bookmark, place)).thenReturn(Optional.empty());
@@ -50,9 +50,9 @@ class CreateMarkerServiceTest extends MockTest {
 		verify(markerRepository, times(1)).save(any(Marker.class));
 	}
 
-	@DisplayName("이미 존재하는 마커가 있을 경우 새로운 마커를 저장하지 않음")
+	@DisplayName("[성공 case2] 이미 존재하는 마커가 있을 경우 새로운 마커를 저장하지 않음")
 	@Test
-	void 이미_존재하는_마커가_있을_경우_새로운_마커를_저장하지_않음() {
+	void 이미_존재하는_마커가_있을_경우() {
 		// given
 		Marker existingMarker = Marker.create(bookmark, place);
 		when(markerRepository.findByBookmarkAndPlace(bookmark, place)).thenReturn(Optional.of(existingMarker));

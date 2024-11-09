@@ -80,9 +80,9 @@ class RegisterPlaceServiceTest extends MockTest {
 		place = mock(Place.class);
 	}
 
-	@DisplayName("장소가 없을 경우 새로운 장소를 저장하고 마커 생성")
+	@DisplayName("[성공] 장소가 없을 경우 새로운 장소를 저장하고 마커 생성")
 	@Test
-	void 장소가_없을_경우_새로운_장소를_저장하고_마커_생성() {
+	void 새로운_장소를_저장_및_마커_생성() {
 		// given
 		Long bookmarkId = 1L;
 		when(bookmarkRepository.findByIdAndUserUserId(bookmarkId, user.getUserId())).thenReturn(Optional.of(bookmark));
@@ -97,9 +97,9 @@ class RegisterPlaceServiceTest extends MockTest {
 		verify(createMarker, times(1)).invoke(bookmark, place);
 	}
 
-	@DisplayName("이미 존재하는 장소가 있을 경우 마커만 생성")
+	@DisplayName("[성공 case2] 이미 존재하는 장소가 있을 경우 마커만 생성")
 	@Test
-	void 이미_존재하는_장소가_있을_경우_마커만_생성() {
+	void 이미_존재하는_장소가_있을_경우() {
 		// given
 		Long bookmarkId = 1L;
 		when(bookmarkRepository.findByIdAndUserUserId(bookmarkId, user.getUserId())).thenReturn(Optional.of(bookmark));
@@ -113,7 +113,7 @@ class RegisterPlaceServiceTest extends MockTest {
 		verify(createMarker, times(1)).invoke(bookmark, place);
 	}
 
-	@DisplayName("유튜브 즐겨찾기일 경우 IllegalArgumentException 발생")
+	@DisplayName("[실패] 유튜브 즐겨찾기일 경우 IllegalArgumentException 발생")
 	@Test
 	void 유튜브_즐겨찾기일_경우_예외_발생() {
 		// given

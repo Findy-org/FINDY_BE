@@ -18,6 +18,7 @@ import org.findy.findy_be.place.dto.response.PlaceResponse;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -59,8 +60,9 @@ class FindAllPagedPlacesServiceTest extends MockTest {
 			.collect(Collectors.toList());
 	}
 
+	@DisplayName("[성공 case1(다음페이지 있음)] 유저_북마크의 장소 조회 성공")
 	@Test
-	void 유저_북마크의_장소_조회_성공_다음페이지_있음() {
+	void 유저_북마크의_장소_조회_case1() {
 		// given
 		Long bookmarkId = 1L;
 		Pageable pageable = PageRequest.of(0, 3);
@@ -80,8 +82,9 @@ class FindAllPagedPlacesServiceTest extends MockTest {
 		assertThat(response.nextCursor()).isEqualTo(places.get(2).getId());
 	}
 
+	@DisplayName("[성공 case2(다음페이지 없음)] 유저_북마크의 장소 조회 성공")
 	@Test
-	void 유저_북마크의_장소_조회_성공_다음페이지_없음() {
+	void 유저_북마크의_장소_조회_성공_case2() {
 		// given
 		Long bookmarkId = 1L;
 		Pageable pageable = PageRequest.of(0, 3);

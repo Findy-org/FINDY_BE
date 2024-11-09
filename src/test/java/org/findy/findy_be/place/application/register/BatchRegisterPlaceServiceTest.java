@@ -58,7 +58,7 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 		place2 = mock(Place.class);
 	}
 
-	@DisplayName("새로운 장소가 모두 등록되고 마커가 생성됨")
+	@DisplayName("[성공] 새로운 장소가 모두 등록되고 마커가 생성됨")
 	@Test
 	void 새로운_장소_모두_등록_및_마커_생성() {
 		// given
@@ -76,9 +76,9 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 		verify(batchCreateMarker, times(1)).invoke(testBookmark, Arrays.asList(place1, place2));
 	}
 
-	@DisplayName("일부 장소는 이미 등록되어 새로 등록되지 않음")
+	@DisplayName("[성공 case2] 일부 장소는 이미 등록되어 새로 등록되지 않음")
 	@Test
-	void 일부_장소_이미_등록되어_새로_등록되지_않음() {
+	void 이미_등록된_장소_새로_등록되지_않음() {
 		// given
 		List<RegisterPlaceRequest> requests = Arrays.asList(request1, request2);
 
@@ -95,7 +95,7 @@ class BatchRegisterPlaceServiceTest extends MockTest {
 			argThat(list -> list.contains(place1) && list.contains(place2)));
 	}
 
-	@DisplayName("단일 장소가 등록되고 마커가 생성됨")
+	@DisplayName("[성공 case3] 단일 장소가 등록되고 마커가 생성됨")
 	@Test
 	void 단일_장소_등록_및_마커_생성() {
 		// given

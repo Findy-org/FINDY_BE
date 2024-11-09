@@ -31,7 +31,7 @@ class UserTest {
 		);
 	}
 
-	@DisplayName("User 객체 생성 성공")
+	@DisplayName("[성공] User 객체 생성 성공")
 	@Test
 	void userCreationSuccess() {
 		// given
@@ -49,7 +49,7 @@ class UserTest {
 		assertThat(user.getUserId()).isEqualTo(expectedUserId);
 	}
 
-	@DisplayName("User 정보 업데이트 성공")
+	@DisplayName("[성공] User 정보 업데이트 성공")
 	@Test
 	void updateUserInfoSuccess() {
 		// given
@@ -88,7 +88,7 @@ class UserTest {
 		assertThat(user.getEmail()).isEqualTo("hoyana@naver.com"); // 이메일은 업데이트 되지 않아야 함
 	}
 
-	@DisplayName("User 객체의 createdAt과 updatedAt이 잘 설정되는지 확인")
+	@DisplayName("[성공] User 객체의 createdAt과 updatedAt이 잘 설정되는지 확인")
 	@Test
 	void userTimestampsInitialization() {
 		// given

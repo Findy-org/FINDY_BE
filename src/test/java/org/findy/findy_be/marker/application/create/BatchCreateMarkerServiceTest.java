@@ -44,9 +44,9 @@ class BatchCreateMarkerServiceTest extends MockTest {
 		place2 = mock(Place.class);
 	}
 
-	@DisplayName("새로운 장소에 대한 마커 생성되고 마킹된 장소 수가 업데이트")
+	@DisplayName("[성공] 새로운 장소에 대한 마커 생성되고 마킹된 장소 수가 업데이트")
 	@Test
-	void 새로운_장소에_대한_마커_생성되고_마킹된_장소_수가_업데이트() {
+	void 새로운_장소() {
 		// given
 		List<Place> places = Arrays.asList(place1, place2);
 
@@ -62,9 +62,9 @@ class BatchCreateMarkerServiceTest extends MockTest {
 		verify(testBookmark, times(1)).incrementMarkersCount(2);
 	}
 
-	@DisplayName("이미 존재하는 마커가 있을 경우 새로운 마커를 생성하지 않음 마킹된 장소 수가 업데이트 없음")
+	@DisplayName("[성공 case2] 이미 존재하는 마커가 있을 경우 새로운 마커를 생성하지 않음 마킹된 장소 수가 업데이트 없음")
 	@Test
-	void 이미_존재하는_마커가_있을_경우_새로운_마커_생성_하지_않음_마킹된_장소_수가_업데이트_없음() {
+	void 이미_존재하는_마커가_있을_경우() {
 		// given
 		List<Place> places = Arrays.asList(place1, place2);
 		Marker existingMarker = mock(Marker.class);
