@@ -22,7 +22,7 @@ class BookmarkTest {
 			LocalDateTime.now(), LocalDateTime.now());
 	}
 
-	@DisplayName("Youtube 즐겨찾기 생성 성공")
+	@DisplayName("[성공] Youtube 즐겨찾기 생성")
 	@Test
 	public void Youtube_즐겨찾기_생성_성공() throws Exception {
 		// given
@@ -40,7 +40,7 @@ class BookmarkTest {
 		assertThat(bookmark.getYoutuberProfile()).isEqualTo(profileLink);
 	}
 
-	@DisplayName("Custom 즐겨찾기 생성 성공")
+	@DisplayName("[성공] Custom 즐겨찾기 생성")
 	@Test
 	public void Custom_즐겨찾기_생성_성공() throws Exception {
 		// given

@@ -12,6 +12,7 @@ import org.findy.findy_be.auth.oauth.service.CustomUserDetailsService;
 import org.findy.findy_be.auth.oauth.token.AuthTokenProvider;
 import org.findy.findy_be.auth.properties.CorsProperties;
 import org.findy.findy_be.user.repository.UserRefreshTokenRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,9 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+	@Value("${custom.swagger.key}")
+	private String swaggerKey;
 
 	private static final String API_PREFIX = "/api";
 	private static final String ADMIN_API_PREFIX = "/api/admin";
@@ -100,13 +104,15 @@ public class SecurityConfig {
 					.hasRole("USER")
 					.requestMatchers(new MvcRequestMatcher(introspector, ADMIN_API_PREFIX + "/**"))
 					.hasRole("ADMIN")
-					.requestMatchers(new MvcRequestMatcher(introspector, "/findy/api-docs/**"))
+					.requestMatchers(
+						new MvcRequestMatcher(introspector, String.format("/%s/swagger-ui**", swaggerKey)))
 					.permitAll()
-					.requestMatchers(new MvcRequestMatcher(introspector, "/findy/swagger-ui/index.html"))
-					.permitAll()
-					.requestMatchers(new MvcRequestMatcher(introspector, "/findy/swagger-ui/**"))
+					.requestMatchers(new MvcRequestMatcher(introspector, "/api-docs/**"))
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**"))
+					.permitAll().
+					requestMatchers(
+						new MvcRequestMatcher(introspector, String.format("/%s/swagger-ui/**", swaggerKey)))
 					.permitAll()
 					.anyRequest().authenticated())
 			.oauth2Login(oauth2Configurer ->

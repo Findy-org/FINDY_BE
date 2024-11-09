@@ -13,6 +13,7 @@ public enum ErrorCode {
 
 	// 400 error
 	BAD_REQUEST_YOUTUBE_BOOKMARK_REGISTER_ERROR(BAD_REQUEST, "유튜브 즐겨찾기는 장소를 추가할 수 없습니다."),
+	BAD_REQUEST_CATEGORY_FORM_ERROR(BAD_REQUEST, "올바른 형식의 Category String이 아닙니다: %s"),
 
 	// 401 error
 	UNAUTHORIZED_REQUEST(UNAUTHORIZED, "로그인 후 다시 시도해주세요."),
@@ -27,7 +28,8 @@ public enum ErrorCode {
 	NOT_FOUND_EMAIL(NOT_FOUND, "해당 이메일이 존재하지 않습니다."),
 	NOT_FOUND_BOOKMARK_BY_ID(NOT_FOUND, "해당 id : %s의 즐겨찾기가 존재하지 않습니다."),
 	NOT_FOUND_USER(NOT_FOUND, "해당 이메일을 가진 유저가 존재하지 않습니다."),
-	NOT_FOUND_USER_BY_ID(NOT_FOUND, "해당 id : %s를 가진 유저가 존재하지 않습니다.");
+	NOT_FOUND_USER_BY_ID(NOT_FOUND, "해당 id : %s를 가진 유저가 존재하지 않습니다."),
+	BAD_REQUEST_CATEGORY_NOT_FOUND_ERROR(NOT_FOUND, "해당 input : %s을 가진 카테고리가 없습니다.");
 
 	// 500 error
 

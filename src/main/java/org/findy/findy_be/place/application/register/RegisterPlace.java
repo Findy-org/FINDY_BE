@@ -1,7 +1,7 @@
 package org.findy.findy_be.place.application.register;
 
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterSearchedPlaceRequest;
 
 public interface RegisterPlace {
-	void invoke(final String userId, final RegisterPlaceRequest request, final Long bookmarkId);
+	void invoke(final Long bookmarkId, final RegisterSearchedPlaceRequest request, final String userId);
 }

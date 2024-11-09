@@ -43,21 +43,11 @@ class BookmarkRepositoryCustomImplTest extends RepositoryTest {
 		userRepository.save(testUser);
 	}
 
-	@DisplayName("주어진 사용자 ID와 커서 및 페이지 크기로 북마크를 페이지네이션 조회할 수 있다")
+	@DisplayName("[성공] 주어진 사용자 ID와 커서 및 페이지 크기로 북마크를 페이지네이션 조회")
 	@Test
-	void 주어진_사용자_ID와_커서_및_페이지_크기로_북마크_페이지네이션_조회() {
+	void 사용자_ID_cursor_및_page_size_bookmark_pagination_조회() {
 		// given
-		List<Bookmark> bookmarks = IntStream.rangeClosed(1, 20)
-			.mapToObj(i -> Bookmark.builder()
-				.name("Bookmark " + i)
-				.bookmarkType(BookmarkType.YOUTUBE)
-				.youtuberId("YoutuberId" + i)
-				.youtuberProfile("https://example.com/profile" + i)
-				.markersCount((long)(i * 10))
-				.user(testUser)
-				.build())
-			.collect(Collectors.toList());
-		bookmarkJpaRepository.saveAll(bookmarks);
+		initBookmarks(20);
 
 		Long cursor = 10L;
 		int size = 5;
@@ -73,11 +63,26 @@ class BookmarkRepositoryCustomImplTest extends RepositoryTest {
 		assertThat(resultSlice.getContent().get(0).getUser().getUserId()).isEqualTo(testUser.getUserId());
 	}
 
-	@DisplayName("마지막 페이지에서 다음 페이지가 없는 상태를 확인할 수 있다")
+	@DisplayName("[성공 case2] 마지막 페이지에서 다음 페이지가 없는 상태를 확인할 수 있다")
 	@Test
 	void 마지막_페이지에서_다음_페이지가_없는_상태_확인() {
 		// given
-		List<Bookmark> bookmarks = IntStream.rangeClosed(1, 5)
+		initBookmarks(2);
+
+		Long cursor = 0L;
+		int size = 6;
+		Pageable pageable = PageRequest.of(0, size);
+
+		// when
+		Slice<Bookmark> resultSlice = bookmarkRepository.findBookmarksByUserId(testUser.getUserId(), pageable, cursor);
+
+		// then
+		assertThat(resultSlice.getContent()).hasSize(2);
+		assertThat(resultSlice.hasNext()).isFalse();
+	}
+
+	private void initBookmarks(final int endInclusive) {
+		List<Bookmark> bookmarks = IntStream.rangeClosed(1, endInclusive)
 			.mapToObj(i -> Bookmark.builder()
 				.name("Bookmark " + i)
 				.bookmarkType(BookmarkType.YOUTUBE)
@@ -88,16 +93,5 @@ class BookmarkRepositoryCustomImplTest extends RepositoryTest {
 				.build())
 			.collect(Collectors.toList());
 		bookmarkJpaRepository.saveAll(bookmarks);
-
-		Long cursor = 3L;
-		int size = 2;
-		Pageable pageable = PageRequest.of(0, size);
-
-		// when
-		Slice<Bookmark> resultSlice = bookmarkRepository.findBookmarksByUserId(testUser.getUserId(), pageable, cursor);
-
-		// then
-		assertThat(resultSlice.getContent()).hasSize(2);
-		assertThat(resultSlice.hasNext()).isFalse();
 	}
 }

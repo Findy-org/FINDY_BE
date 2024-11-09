@@ -23,9 +23,9 @@ class PlaceRepositoryTest extends RepositoryTest {
 	@Autowired
 	private PlaceRepository placeRepository;
 
-	@DisplayName("주어진 상세 정보로 장소를 조회할 수 있다")
+	@DisplayName("[성공] 주어진 상세 정보로 장소를 조회할 수 있다")
 	@Test
-	void 주어진_상세_정보로_장소를_조회할_수_있다() {
+	void 주어진_상세_정보로_장소_조회() {
 		// given
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		RegisterPlaceRequest request = new RegisterPlaceRequest(
@@ -51,9 +51,9 @@ class PlaceRepositoryTest extends RepositoryTest {
 		assertThat(foundPlace.getId()).isEqualTo(savedPlace.getId());
 	}
 
-	@DisplayName("주어진 상세 정보와 일치하는 장소가 없으면 null을 반환한다")
+	@DisplayName("[성공 case2] 주어진 상세 정보와 일치하는 장소가 없으면 null을 반환한다")
 	@Test
-	void 주어진_상세_정보와_일치하는_장소가_없으면_null을_반환한다() {
+	void 주어진_상세_정보와_일치하는_장소가_없으면_null() {
 		// given // when
 		Optional<Place> foundPlace = placeRepository.findPlaceByDetails(
 			"존재하지 않는 장소", "도로명 주소"
@@ -63,7 +63,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 		assertThat(foundPlace).isEmpty();
 	}
 
-	@DisplayName("Bulk Insert를 통해 여러 장소를 일괄 삽입할 수 있다")
+	@DisplayName("[성능] Bulk Insert를 통해 여러 장소를 일괄 삽입할 수 있다")
 	@Test
 	@Transactional
 	void bulkInsertPlaces_여러_장소_일괄_삽입() {

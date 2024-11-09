@@ -15,19 +15,18 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
+import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.application.register.RegisterPlaceService;
-import org.findy.findy_be.place.domain.MajorCategory;
-import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.CategoryRequest;
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterSearchedPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -81,48 +80,48 @@ class PlaceControllerTest extends IntegrationTest {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
+	@DisplayName("[성공] 장소 등록 API")
 	@Test
 	void 장소_등록_API_성공() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterPlaceRequest request = new RegisterPlaceRequest(
+		RegisterSearchedPlaceRequest request = new RegisterSearchedPlaceRequest(
 			"동대문엽기떡볶이 종각점",
+			"음식점>분식",
 			"설명",
+			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
-			categoryRequest,
 			"1269827323",
-			"375719345",
-			"02-000-000"
+			"375719345"
 		);
 
 		// when
-		ResultActions resultActions = performPostRegisterPlace(bookmarkId, request);
+		ResultActions resultActions = PostSearchedPlace(bookmarkId, request);
 
 		// then
 		resultActions
 			.andExpect(status().isOk());
 	}
 
+	@DisplayName("[실패] 장소 등록 API 검증")
 	@Test
 	void 장소_등록_API_검증_실패() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterPlaceRequest invalidRequest = new RegisterPlaceRequest(
+		RegisterSearchedPlaceRequest invalidRequest = new RegisterSearchedPlaceRequest(
 			null,
+			"음식점>분식",
 			"설명",
+			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
-			categoryRequest,
 			"1269827323",
-			"375719345",
-			"02-000-000"
+			"375719345"
 		);
 
 		// when
-		ResultActions resultActions = performPostRegisterPlace(bookmarkId, invalidRequest);
+		ResultActions resultActions = PostSearchedPlace(bookmarkId, invalidRequest);
 
 		// then
 		resultActions
@@ -130,24 +129,24 @@ class PlaceControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("장소명은 비어있을 수 없습니다.")));
 	}
 
+	@DisplayName("[실패 case2] 장소 등록 API 존재하지 않는 즐겨찾기 ID")
 	@Test
-	void 장소_등록_API_존재하지_않는_즐겨찾기_ID() throws Exception {
+	void 장소_등록_API_예외_존재하지_않는_즐겨찾기_ID() throws Exception {
 		// given
 		Long invalidBookmarkId = 999L;
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterPlaceRequest request = new RegisterPlaceRequest(
+		RegisterSearchedPlaceRequest request = new RegisterSearchedPlaceRequest(
 			"동대문엽기떡볶이 종각점",
+			"음식점>분식",
 			"설명",
+			"02-000-000",
 			"서울특별시 종로구 공평동 124",
 			"서울특별시 종로구 삼봉로 100",
-			categoryRequest,
 			"1269827323",
-			"375719345",
-			"02-000-000"
+			"375719345"
 		);
 
 		// when
-		ResultActions resultActions = performPostRegisterPlace(invalidBookmarkId, request);
+		ResultActions resultActions = PostSearchedPlace(invalidBookmarkId, request);
 
 		// then
 		resultActions
@@ -156,17 +155,19 @@ class PlaceControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.message").value("해당 id : " + invalidBookmarkId + "의 즐겨찾기가 존재하지 않습니다."));
 	}
 
+	@DisplayName("[성공] 장소 조회 API")
 	@Test
 	public void 장소_조회_API_성공() throws Exception {
 		// given
 
 		Long bookmarkId = testBookmark.getId();
 		int size = 5;
-		Long cursor = null;
+		Long cursor = 0L;
+		PagedRequest pagedRequest = new PagedRequest(cursor, size);
 		initPlacesForBookmark(testBookmark, 7);
 
 		// when
-		ResultActions resultActions = performGetPlaces(bookmarkId, cursor, size);
+		ResultActions resultActions = GetBookmarks(bookmarkId, pagedRequest);
 
 		// then
 		resultActions
@@ -176,16 +177,18 @@ class PlaceControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.nextCursor").isNotEmpty());
 	}
 
+	@DisplayName("[성공 case 2] 장소 조회 API-마지막_페이지")
 	@Test
 	void 장소_조회_API_마지막_페이지() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
 		int size = 15;
 		Long cursor = 0L;
+		PagedRequest pagedRequest = new PagedRequest(cursor, size);
 		initPlacesForBookmark(testBookmark, 10);
 
 		// when
-		ResultActions resultActions = performGetPlaces(bookmarkId, cursor, size);
+		ResultActions resultActions = GetBookmarks(bookmarkId, pagedRequest);
 
 		// then
 		resultActions
@@ -195,15 +198,16 @@ class PlaceControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.nextCursor").doesNotExist());
 	}
 
-	private ResultActions performGetPlaces(final Long bookmarkId, final Long cursor, final int size) throws Exception {
+	private ResultActions GetBookmarks(final Long bookmarkId, final PagedRequest pagedRequest) throws Exception {
 		return mvc.perform((get("/api/places/{bookmarkId}", bookmarkId)
-				.param("cursor", cursor == null ? "" : cursor.toString())
-				.param("size", String.valueOf(size))
+				.param("cursor", pagedRequest.cursor() == null ? "" : pagedRequest.cursor().toString())
+				.param("size", String.valueOf(pagedRequest.size()))
 				.contentType(MediaType.APPLICATION_JSON)))
 			.andDo(print());
 	}
 
-	private ResultActions performPostRegisterPlace(final Long bookmarkId, final RegisterPlaceRequest request) throws
+	private ResultActions PostSearchedPlace(final Long bookmarkId,
+		final RegisterSearchedPlaceRequest request) throws
 		Exception {
 		return mvc.perform(post("/api/places/{bookmarkId}", bookmarkId)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -212,19 +216,17 @@ class PlaceControllerTest extends IntegrationTest {
 	}
 
 	private void initPlacesForBookmark(Bookmark bookmark, int count) {
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		List<Place> places = IntStream.range(1, count + 1)
-			.mapToObj(i -> new RegisterPlaceRequest(
+			.mapToObj(i -> new RegisterSearchedPlaceRequest(
 				"Test Place " + i,
+				"음식점>분식",
 				"Description " + i,
+				"02-000-000" + i,
 				"Address " + i,
 				"RoadAddress " + i,
-				categoryRequest,
 				"1269827323",
-				"375719345",
-				"02-000-000" + i
-			))
-			.map(Place::create)
+				"375719345"
+			).toEntity())
 			.collect(Collectors.toList());
 
 		List<Place> placeList = placeRepository.saveAll(places);

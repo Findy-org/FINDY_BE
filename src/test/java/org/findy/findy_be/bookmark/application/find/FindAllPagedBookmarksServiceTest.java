@@ -51,7 +51,7 @@ class FindAllPagedBookmarksServiceTest extends MockTest {
 		);
 	}
 
-	@DisplayName("유저의 북마크 목록을 페이징으로 조회 - 다음 페이지가 있을 경우")
+	@DisplayName("[성공] 유저의 북마크 목록을 페이징으로 조회 - 다음 페이지가 있을 경우")
 	@Test
 	void 유저_북마크_조회_성공_다음페이지_있음() {
 		// given
@@ -70,7 +70,7 @@ class FindAllPagedBookmarksServiceTest extends MockTest {
 		assertThat(response.nextCursor()).isEqualTo(bookmarks.get(2).getId());
 	}
 
-	@DisplayName("유저의 북마크 목록을 페이징으로 조회 - 다음 페이지가 없을 경우")
+	@DisplayName("[성공 case2] 유저의 북마크 목록을 페이징으로 조회 - 다음 페이지가 없을 경우")
 	@Test
 	void 유저_북마크_조회_성공_다음페이지_없음() {
 		// given

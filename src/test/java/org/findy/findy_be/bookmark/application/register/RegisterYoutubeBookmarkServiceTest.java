@@ -52,7 +52,7 @@ class RegisterYoutubeBookmarkServiceTest extends MockTest {
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", selectedPlaces);
 	}
 
-	@DisplayName("새로운 유튜브 북마크 생성")
+	@DisplayName("[성공] 새로운 유튜브 북마크 생성")
 	@Test
 	void 새로운_유튜브_북마크_생성() {
 		// given
