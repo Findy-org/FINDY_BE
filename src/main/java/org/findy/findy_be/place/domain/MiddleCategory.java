@@ -1,5 +1,8 @@
 package org.findy.findy_be.place.domain;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -190,4 +193,14 @@ public enum MiddleCategory {
 
 	private final MajorCategory majorCategory;
 	private final String label;
+
+	public static Optional<MiddleCategory> findByLabel(String label) {
+		return Arrays.stream(MiddleCategory.values())
+			.filter(category -> category.getLabel().equals(label))
+			.findFirst();
+	}
+
+	public boolean matchesMajorCategoryLabel(String label) {
+		return this.majorCategory.getLabel().equals(label);
+	}
 }
