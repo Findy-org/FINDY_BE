@@ -67,10 +67,10 @@ class BookmarkRepositoryCustomImplTest extends RepositoryTest {
 	@Test
 	void 마지막_페이지에서_다음_페이지가_없는_상태_확인() {
 		// given
-		initBookmarks(5);
+		initBookmarks(2);
 
-		Long cursor = 3L;
-		int size = 2;
+		Long cursor = 0L;
+		int size = 6;
 		Pageable pageable = PageRequest.of(0, size);
 
 		// when
