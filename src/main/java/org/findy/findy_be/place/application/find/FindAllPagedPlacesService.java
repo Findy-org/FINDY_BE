@@ -2,7 +2,7 @@ package org.findy.findy_be.place.application.find;
 
 import java.util.List;
 
-import org.findy.findy_be.common.dto.pagination.SliceResponse;
+import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
 import org.findy.findy_be.place.dto.response.PlaceResponse;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.springframework.data.domain.PageRequest;

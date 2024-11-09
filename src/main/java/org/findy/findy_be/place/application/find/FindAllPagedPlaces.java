@@ -1,6 +1,6 @@
 package org.findy.findy_be.place.application.find;
 
-import org.findy.findy_be.common.dto.pagination.SliceResponse;
+import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
 import org.findy.findy_be.place.dto.response.PlaceResponse;
 
 public interface FindAllPagedPlaces {

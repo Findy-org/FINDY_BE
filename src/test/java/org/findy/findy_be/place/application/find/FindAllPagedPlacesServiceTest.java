@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.MockTest;
-import org.findy.findy_be.common.dto.pagination.SliceResponse;
+import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;

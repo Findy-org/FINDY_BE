@@ -1,4 +1,4 @@
-package org.findy.findy_be.common.dto.pagination;
+package org.findy.findy_be.common.dto.pagination.response;
 
 import java.util.List;
 

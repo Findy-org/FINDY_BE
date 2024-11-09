@@ -1,9 +1,9 @@
 package org.findy.findy_be.bookmark.api.swagger;
 
-import org.findy.findy_be.bookmark.dto.request.PagedRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
-import org.findy.findy_be.common.dto.pagination.SliceResponse;
+import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
+import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
 import org.findy.findy_be.common.meta.CustomApiResponse;
 import org.findy.findy_be.common.meta.CustomApiResponses;
 import org.findy.findy_be.common.meta.LoginUser;

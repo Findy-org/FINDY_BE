@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
-import org.findy.findy_be.common.dto.pagination.SliceResponse;
+import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

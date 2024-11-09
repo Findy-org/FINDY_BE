@@ -10,7 +10,7 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
-import org.findy.findy_be.common.dto.pagination.SliceResponse;
+import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
 import org.findy.findy_be.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
