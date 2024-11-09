@@ -144,8 +144,8 @@ class BookmarkControllerTest extends IntegrationTest {
 	@Test
 	void 유저_북마크_리스트_페이징_조회_마지막_페이지() throws Exception {
 		// given
-		int size = 5;
-		Long cursor = 6L;
+		int size = 11;
+		Long cursor = 0L;
 		initBookmark();
 
 		// when
@@ -158,7 +158,7 @@ class BookmarkControllerTest extends IntegrationTest {
 		// then
 		resultActions
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.length()").value(4))
+			.andExpect(jsonPath("$.data.length()").value(10))
 			.andExpect(jsonPath("$.hasNext").value(false))
 			.andExpect(jsonPath("$.nextCursor").isEmpty());
 	}
