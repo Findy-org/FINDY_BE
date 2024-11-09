@@ -24,6 +24,7 @@ public class CreateMarkerService implements CreateMarker {
 		Optional<Marker> existingMarker = markerRepository.findByBookmarkAndPlace(bookmark, place);
 		if (existingMarker.isEmpty()) {
 			markerRepository.save(marker);
+			bookmark.incrementMarkersCount(1);
 		}
 	}
 }
