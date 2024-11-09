@@ -6,6 +6,6 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
 	Optional<Bookmark> findByUserAndYoutuberId(final User user, final String youtuberId);
 }

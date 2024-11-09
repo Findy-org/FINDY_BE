@@ -1,5 +1,6 @@
 package org.findy.findy_be.common;
 
+import org.findy.findy_be.common.config.QueryDslConfig;
 import org.findy.findy_be.common.config.SecurityConfig;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -16,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 
-@Import({TestcontainersConfiguration.class, SecurityConfig.class})
+@Import({TestcontainersConfiguration.class, SecurityConfig.class, QueryDslConfig.class})
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc

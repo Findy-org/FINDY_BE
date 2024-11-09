@@ -5,18 +5,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
-import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
+import org.findy.findy_be.marker.domain.Marker;
+import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.application.register.RegisterPlaceService;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.dto.request.CategoryRequest;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
@@ -41,6 +48,12 @@ class PlaceControllerTest extends IntegrationTest {
 	@Autowired
 	private BookmarkRepository bookmarkRepository;
 
+	@Autowired
+	private MarkerRepository markerRepository;
+
+	@Autowired
+	private PlaceRepository placeRepository;
+
 	private User testUser;
 	private Bookmark testBookmark;
 
@@ -59,8 +72,8 @@ class PlaceControllerTest extends IntegrationTest {
 		);
 		testUser = userRepository.saveAndFlush(testUser);
 
-		testBookmark = Bookmark.of("Test Bookmark", BookmarkType.CUSTOM, null, null, testUser);
-		bookmarkRepository.save(testBookmark);
+		Bookmark bookmark = Bookmark.of("Test Bookmark", BookmarkType.CUSTOM, null, null, testUser);
+		testBookmark = bookmarkRepository.save(bookmark);
 		UserPrincipal userPrincipal = UserPrincipal.create(testUser);
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 			userPrincipal, null, userPrincipal.getAuthorities()
@@ -143,6 +156,53 @@ class PlaceControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.message").value("해당 id : " + invalidBookmarkId + "의 즐겨찾기가 존재하지 않습니다."));
 	}
 
+	@Test
+	public void 장소_조회_API_성공() throws Exception {
+		// given
+
+		Long bookmarkId = testBookmark.getId();
+		int size = 5;
+		Long cursor = null;
+		initPlacesForBookmark(testBookmark, 7);
+
+		// when
+		ResultActions resultActions = performGetPlaces(bookmarkId, cursor, size);
+
+		// then
+		resultActions
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.length()").value(size))
+			.andExpect(jsonPath("$.hasNext").value(true))
+			.andExpect(jsonPath("$.nextCursor").isNotEmpty());
+	}
+
+	@Test
+	void 장소_조회_API_마지막_페이지() throws Exception {
+		// given
+		Long bookmarkId = testBookmark.getId();
+		int size = 15;
+		Long cursor = 0L;
+		initPlacesForBookmark(testBookmark, 10);
+
+		// when
+		ResultActions resultActions = performGetPlaces(bookmarkId, cursor, size);
+
+		// then
+		resultActions
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.length()").value(10))
+			.andExpect(jsonPath("$.hasNext").value(false))
+			.andExpect(jsonPath("$.nextCursor").doesNotExist());
+	}
+
+	private ResultActions performGetPlaces(final Long bookmarkId, final Long cursor, final int size) throws Exception {
+		return mvc.perform((get("/api/places/{bookmarkId}", bookmarkId)
+				.param("cursor", cursor == null ? "" : cursor.toString())
+				.param("size", String.valueOf(size))
+				.contentType(MediaType.APPLICATION_JSON)))
+			.andDo(print());
+	}
+
 	private ResultActions performPostRegisterPlace(final Long bookmarkId, final RegisterPlaceRequest request) throws
 		Exception {
 		return mvc.perform(post("/api/places/{bookmarkId}", bookmarkId)
@@ -150,4 +210,30 @@ class PlaceControllerTest extends IntegrationTest {
 				.content(objectMapper.writeValueAsString(request)))
 			.andDo(print());
 	}
+
+	private void initPlacesForBookmark(Bookmark bookmark, int count) {
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		List<Place> places = IntStream.range(1, count + 1)
+			.mapToObj(i -> new RegisterPlaceRequest(
+				"Test Place " + i,
+				"Description " + i,
+				"Address " + i,
+				"RoadAddress " + i,
+				categoryRequest,
+				"1269827323",
+				"375719345",
+				"02-000-000" + i
+			))
+			.map(Place::create)
+			.collect(Collectors.toList());
+
+		List<Place> placeList = placeRepository.saveAll(places);
+
+		List<Marker> markers = placeList.stream()
+			.map(place -> Marker.create(bookmark, place))
+			.collect(Collectors.toList());
+
+		markerRepository.saveAll(markers);
+	}
+
 }

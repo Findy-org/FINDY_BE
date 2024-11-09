@@ -1,5 +1,6 @@
 package org.findy.findy_be.common;
 
+import org.findy.findy_be.common.config.QueryDslConfig;
 import org.junit.Ignore;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -9,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
-@Import({TestcontainersConfiguration.class})
+@Import({TestcontainersConfiguration.class, QueryDslConfig.class})
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles("test")

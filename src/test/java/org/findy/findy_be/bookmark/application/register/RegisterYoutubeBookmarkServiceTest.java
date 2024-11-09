@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
-import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.place.application.register.BatchRegisterPlaceService;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.dto.request.CategoryRequest;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
-import org.findy.findy_be.user.application.UserService;
 import org.findy.findy_be.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,9 +24,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 class RegisterYoutubeBookmarkServiceTest extends MockTest {
-
-	@Mock
-	private UserService userService;
 
 	@Mock
 	private BookmarkRepository bookmarkRepository;
@@ -40,7 +36,6 @@ class RegisterYoutubeBookmarkServiceTest extends MockTest {
 
 	private User testUser;
 	private YoutubeBookmarkRequest request;
-	private Bookmark youtubeBookmark;
 	private List<RegisterPlaceRequest> selectedPlaces;
 
 	@BeforeEach
@@ -55,20 +50,16 @@ class RegisterYoutubeBookmarkServiceTest extends MockTest {
 
 		request = new YoutubeBookmarkRequest("@iammingki", "걍밍경", "https://yt3.googleusercontent.com/ytc/...",
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", selectedPlaces);
-
-		youtubeBookmark = Bookmark.createYoutubeType(request.youtuberName(), request.youtuberId(),
-			request.youtuberProfile(), testUser);
 	}
 
 	@DisplayName("새로운 유튜브 북마크 생성")
 	@Test
 	void 새로운_유튜브_북마크_생성() {
 		// given
-		when(userService.findUser(testUser.getUserId())).thenReturn(testUser);
 		when(bookmarkRepository.findByUserAndYoutuberId(testUser, request.youtuberId())).thenReturn(Optional.empty());
 
 		// when
-		registerYoutubeBookmarkService.invoke(testUser.getUserId(), request);
+		registerYoutubeBookmarkService.invoke(testUser, request);
 
 		// then
 		verify(bookmarkRepository, times(1)).save(any(Bookmark.class));

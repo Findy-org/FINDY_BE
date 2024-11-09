@@ -8,22 +8,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_sequence")
-	@SequenceGenerator(name = "entity_sequence", sequenceName = "entity_seq", allocationSize = 100)
-	private Long id;
+public abstract class BaseTimeEntity {
 
 	@CreatedDate
 	@Column(columnDefinition = "TIMESTAMP", name = "created_at", updatable = false)

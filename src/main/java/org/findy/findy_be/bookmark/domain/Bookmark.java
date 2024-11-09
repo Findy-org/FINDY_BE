@@ -1,14 +1,24 @@
 package org.findy.findy_be.bookmark.domain;
 
-import org.findy.findy_be.common.entity.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.findy.findy_be.common.entity.BaseTimeEntity;
+import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.user.domain.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -23,7 +33,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "bookmarks")
-public class Bookmark extends BaseEntity {
+@SequenceGenerator(name = "bookmark_sequence", sequenceName = "bookmark_seq")
+public class Bookmark extends BaseTimeEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookmark_sequence")
+	private Long id;
 
 	private String name;
 
@@ -41,8 +56,16 @@ public class Bookmark extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL)
+	@Builder.Default
+	private List<Marker> markers = new ArrayList<>();
+
 	public void incrementMarkersCount(int incrementValue) {
 		this.markersCount += incrementValue;
+	}
+
+	public void updateYoutuberName(String youtuberName) {
+		this.name = this.name.equals(youtuberName) ? this.name : youtuberName;
 	}
 
 	public static Bookmark of(String name, BookmarkType type, String youtuberId, String youtuberProfile, User user) {

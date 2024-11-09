@@ -5,19 +5,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
-import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
+import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
+import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
+import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.dto.request.CategoryRequest;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +39,9 @@ class BookmarkControllerTest extends IntegrationTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private BookmarkRepository bookmarkRepository;
 
 	private User testUser;
 
@@ -111,10 +120,69 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("유튜버 이름은 비어있을 수 없습니다.")));
 	}
 
-	private ResultActions performPostRequest(String url, Object content) throws Exception {
+	@DisplayName("유저의 북마크 리스트를 페이징으로 조회 성공")
+	@Test
+	void 유저_북마크_리스트_페이징_조회_성공() throws Exception {
+		// given
+		int size = 5;
+		Long cursor = null;
+		PagedRequest pagedRequest = new PagedRequest(cursor, size);
+		initBookmark();
+
+		// when
+		ResultActions resultActions = getResultActions(pagedRequest);
+
+		// then
+		resultActions
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.length()").value(size))
+			.andExpect(jsonPath("$.hasNext").value(true))
+			.andExpect(jsonPath("$.nextCursor").isNotEmpty());
+	}
+
+	@DisplayName("유저의 북마크 리스트 페이징 조회 - 마지막 페이지일 경우")
+	@Test
+	void 유저_북마크_리스트_페이징_조회_마지막_페이지() throws Exception {
+		// given
+		int size = 5;
+		Long cursor = 6L;
+		initBookmark();
+
+		// when
+		ResultActions resultActions = mvc.perform(get("/api/bookmarks")
+				.param("cursor", cursor.toString())
+				.param("size", String.valueOf(size))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print());
+
+		// then
+		resultActions
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.length()").value(4))
+			.andExpect(jsonPath("$.hasNext").value(false))
+			.andExpect(jsonPath("$.nextCursor").isEmpty());
+	}
+
+	private @NotNull ResultActions performPostRequest(String url, Object content) throws Exception {
 		return mvc.perform(post(url)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(content)))
 			.andDo(print());
+	}
+
+	private @NotNull ResultActions getResultActions(final PagedRequest pagedRequest) throws Exception {
+		return mvc.perform(get("/api/bookmarks")
+				.param("cursor", pagedRequest.cursor() == null ? "" : pagedRequest.cursor().toString())
+				.param("size", String.valueOf(pagedRequest.size()))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print());
+	}
+
+	private void initBookmark() {
+		List<Bookmark> bookmarks = new ArrayList<>();
+		for (int i = 1; i <= 10; i++) {
+			bookmarks.add(Bookmark.of("Bookmark" + i, BookmarkType.CUSTOM, null, null, testUser));
+		}
+		bookmarkRepository.saveAll(bookmarks);
 	}
 }

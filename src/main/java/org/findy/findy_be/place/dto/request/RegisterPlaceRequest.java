@@ -1,6 +1,5 @@
 package org.findy.findy_be.place.dto.request;
 
-import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
 import org.findy.findy_be.place.domain.Place;
 
 import io.swagger.v3.oas.annotations.media.Schema;

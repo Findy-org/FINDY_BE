@@ -9,10 +9,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
-import org.findy.findy_be.bookmark.application.find.FindBookMark;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
-import org.findy.findy_be.bookmark.dto.request.CategoryRequest;
+import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.common.exception.custom.ForbiddenAccessException;
 import org.findy.findy_be.marker.application.create.CreateMarker;
@@ -20,6 +19,7 @@ import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.dto.request.CategoryRequest;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
@@ -37,13 +37,13 @@ class RegisterPlaceServiceTest extends MockTest {
 	private FindPlace findPlace;
 
 	@Mock
-	private FindBookMark findBookMark;
-
-	@Mock
 	private CreateMarker createMarker;
 
 	@Mock
 	private PlaceRepository placeRepository;
+
+	@Mock
+	private BookmarkRepository bookmarkRepository;
 
 	@InjectMocks
 	private RegisterPlaceService registerPlaceService;
@@ -90,7 +90,7 @@ class RegisterPlaceServiceTest extends MockTest {
 	void 장소가_없을_경우_새로운_장소를_저장하고_마커_생성() {
 		// given
 		Long bookmarkId = 1L;
-		when(findBookMark.invoke(bookmarkId)).thenReturn(bookmark);
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.of(bookmark));
 		when(findPlace.invoke(placeRequest.title(), placeRequest.roadAddress())).thenReturn(Optional.empty());
 		when(placeRepository.save(any(Place.class))).thenReturn(place);
 
@@ -107,7 +107,7 @@ class RegisterPlaceServiceTest extends MockTest {
 	void 이미_존재하는_장소가_있을_경우_마커만_생성() {
 		// given
 		Long bookmarkId = 1L;
-		when(findBookMark.invoke(bookmarkId)).thenReturn(bookmark);
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.of(bookmark));
 		when(findPlace.invoke(placeRequest.title(), placeRequest.roadAddress())).thenReturn(Optional.of(place));
 
 		// when
@@ -124,7 +124,7 @@ class RegisterPlaceServiceTest extends MockTest {
 		// given
 		Long bookmarkId = 1L;
 
-		when(findBookMark.invoke(bookmarkId)).thenReturn(bookmark);
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.of(bookmark));
 		when(bookmark.getBookmarkType()).thenReturn(BookmarkType.YOUTUBE);
 
 		// when & then
@@ -139,7 +139,7 @@ class RegisterPlaceServiceTest extends MockTest {
 		// given
 		Long bookmarkId = 1L;
 
-		when(findBookMark.invoke(bookmarkId)).thenReturn(bookmark);
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.of(bookmark));
 		User otherUser = mock(User.class);
 		when(otherUser.getUserId()).thenReturn("다른사용자ID");
 		when(bookmark.getUser()).thenReturn(otherUser);
