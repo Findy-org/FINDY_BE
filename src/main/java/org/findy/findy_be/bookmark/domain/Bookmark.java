@@ -1,8 +1,13 @@
 package org.findy.findy_be.bookmark.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.findy.findy_be.common.entity.BaseTimeEntity;
+import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.user.domain.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -49,6 +55,10 @@ public class Bookmark extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	@OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL)
+	@Builder.Default
+	private List<Marker> markers = new ArrayList<>();
 
 	public void incrementMarkersCount(int incrementValue) {
 		this.markersCount += incrementValue;
