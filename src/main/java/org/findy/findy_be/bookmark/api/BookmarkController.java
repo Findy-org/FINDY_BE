@@ -3,7 +3,7 @@ package org.findy.findy_be.bookmark.api;
 import org.findy.findy_be.bookmark.api.swagger.BookmarkAPIPresentation;
 import org.findy.findy_be.bookmark.application.find.FindAllPagedBookmarks;
 import org.findy.findy_be.bookmark.application.register.RegisterYoutubeBookmark;
-import org.findy.findy_be.bookmark.dto.request.PagedBookmarkRequest;
+import org.findy.findy_be.bookmark.dto.request.PagedRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.common.dto.pagination.SliceResponse;
@@ -29,12 +29,12 @@ public class BookmarkController implements BookmarkAPIPresentation {
 
 	@PostMapping("/youtube")
 	public void registerPlace(@LoginUser User user, @Valid @RequestBody YoutubeBookmarkRequest request) {
-		registerYoutubeBookmark.invoke(user.getUserId(), request);
+		registerYoutubeBookmark.invoke(user, request);
 	}
 
 	@GetMapping
 	public SliceResponse<BookmarkResponse> getBookmarkList(@LoginUser User user,
-		@ModelAttribute PagedBookmarkRequest request) {
+		@ModelAttribute PagedRequest request) {
 		return findAllPagedBookmarks.invoke(user.getUserId(), request.cursor(), request.size());
 	}
 }

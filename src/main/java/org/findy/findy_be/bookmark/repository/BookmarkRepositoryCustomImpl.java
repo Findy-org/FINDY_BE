@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.QBookmark;
-import org.findy.findy_be.user.domain.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -21,12 +20,12 @@ public class BookmarkRepositoryCustomImpl implements BookmarkRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public Slice<Bookmark> findBookmarksByUser(User user, Pageable pageable, Long cursor) {
+	public Slice<Bookmark> findBookmarksByUserId(String userId, Pageable pageable, Long cursor) {
 		QBookmark bookmark = QBookmark.bookmark;
 
 		List<Bookmark> bookmarks = queryFactory
 			.selectFrom(bookmark)
-			.where(bookmark.user.eq(user)
+			.where(bookmark.user.userId.eq(userId)
 				.and(cursor != null ? bookmark.id.gt(cursor) : null))
 			.orderBy(bookmark.id.asc())
 			.limit(pageable.getPageSize() + 1)

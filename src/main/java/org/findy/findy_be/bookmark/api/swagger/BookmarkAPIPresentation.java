@@ -1,6 +1,6 @@
 package org.findy.findy_be.bookmark.api.swagger;
 
-import org.findy.findy_be.bookmark.dto.request.PagedBookmarkRequest;
+import org.findy.findy_be.bookmark.dto.request.PagedRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.common.dto.pagination.SliceResponse;
@@ -39,5 +39,5 @@ public interface BookmarkAPIPresentation {
 		@CustomApiResponse(error = "EntityNotFoundException", status = 404, message = "해당 id : {id}의 즐겨찾기가 존재하지 않습니다.", description = "존재하지 않는 즐겨찾기에 접근할 경우"),
 		@CustomApiResponse(error = "InternalServerError", status = 500, message = "내부 서버 오류가 발생했습니다.", description = "서버 내부에서 예기치 않은 오류가 발생한 경우")
 	})
-	SliceResponse<BookmarkResponse> getBookmarkList(@LoginUser User user, @ModelAttribute PagedBookmarkRequest request);
+	SliceResponse<BookmarkResponse> getBookmarkList(@LoginUser User user, @ModelAttribute PagedRequest request);
 }
