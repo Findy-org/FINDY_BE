@@ -10,7 +10,6 @@ import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.exception.custom.ForbiddenAccessException;
 import org.findy.findy_be.place.application.register.BatchRegisterPlace;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
-import org.findy.findy_be.user.application.UserService;
 import org.findy.findy_be.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,18 +23,16 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RegisterYoutubeBookmarkService implements RegisterYoutubeBookmark {
 
-	private final UserService userService;
 	private final BookmarkRepository bookmarkRepository;
 	private final BatchRegisterPlace batchRegisterPlace;
 
 	@Override
-	public void invoke(final String userId, final YoutubeBookmarkRequest request) {
-		User user = userService.findUser(userId);
+	public void invoke(final User user, final YoutubeBookmarkRequest request) {
 		List<RegisterPlaceRequest> placeRequests = request.places();
 		bookmarkRepository.findByUserAndYoutuberId(user, request.youtuberId()).ifPresentOrElse(
 			existingBookmark -> {
 				existingBookmark.updateYoutuberName(request.youtuberName());
-				validateBookmarkOwner(userId, existingBookmark);
+				validateBookmarkOwner(user, existingBookmark.getUser());
 				batchRegisterPlace.invoke(existingBookmark, placeRequests);
 			},
 			() -> {
@@ -48,9 +45,9 @@ public class RegisterYoutubeBookmarkService implements RegisterYoutubeBookmark {
 		);
 	}
 
-	private void validateBookmarkOwner(String userId, Bookmark bookmark) {
-		String bookmarkUserId = bookmark.getUser().getUserId();
-		if (!bookmarkUserId.equals(userId)) {
+	private void validateBookmarkOwner(User currentUser, User bookmarkUser) {
+		String bookmarkUserId = bookmarkUser.getUserId();
+		if (!bookmarkUserId.equals(currentUser.getUserId())) {
 			throw new ForbiddenAccessException(FORBIDDEN_BOOKMARK_ACCESS.getMessage());
 		}
 	}
