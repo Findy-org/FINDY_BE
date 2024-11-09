@@ -6,7 +6,7 @@ import org.findy.findy_be.common.meta.LoginUser;
 import org.findy.findy_be.place.api.swagger.PlaceAPIPresentation;
 import org.findy.findy_be.place.application.find.FindAllPagedPlaces;
 import org.findy.findy_be.place.application.register.RegisterPlace;
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.place.dto.request.RegisterSearchedPlaceRequest;
 import org.findy.findy_be.place.dto.response.PlaceResponse;
 import org.findy.findy_be.user.domain.User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +30,8 @@ public class PlaceController implements PlaceAPIPresentation {
 
 	@PostMapping("/{bookmarkId}")
 	public void registerPlace(@LoginUser User user, @PathVariable("bookmarkId") Long bookmarkId,
-		@Valid @RequestBody RegisterPlaceRequest request) {
-		registerPlace.invoke(user.getUserId(), request, bookmarkId);
+		@Valid @RequestBody RegisterSearchedPlaceRequest request) {
+		registerPlace.invoke(bookmarkId, request, user.getUserId());
 	}
 
 	@GetMapping("/{bookId}")
