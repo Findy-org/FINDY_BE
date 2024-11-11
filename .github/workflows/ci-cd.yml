@@ -166,8 +166,8 @@ jobs:
             sudo docker image prune -f
           debug: true
 
-      - name: Revoke Security Group Ingress
+      - name: Remove GitHub Actions IP
         run: |
           aws ec2 revoke-security-group-ingress \
-            --group-id *** \
-            --protocol tcp --port 22 --cidr "${{ env.ip }}/32"
+              --group-id ${{ secrets.DEV_EC2_SECURITY_GROUP_ID }} \
+              --protocol tcp --port 22 --cidr "${{ env.ip }}/32"
