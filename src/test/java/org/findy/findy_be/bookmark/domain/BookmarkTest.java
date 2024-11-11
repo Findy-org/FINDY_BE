@@ -29,9 +29,10 @@ class BookmarkTest {
 		String name = "걍밍경";
 		String youtuberId = "@iammingki";
 		String profileLink = "https://yt3.googleusercontent.com/ytc/AIdro_mieTH2WSE4oBMmczfLHB3HhikzOg1nz9tFD-MLad93Xnw=s160-c-k-c0x00ffffff-no-rj";
+		String youtubeLink = "https://www.youtube.com/shorts/venz1kOiz3c";
 
 		// when
-		Bookmark bookmark = Bookmark.createYoutubeType(name, youtuberId, profileLink, user);
+		Bookmark bookmark = Bookmark.createYoutubeType(name, youtuberId, profileLink, youtubeLink, user);
 
 		// then
 		assertThat(bookmark.getBookmarkType()).isEqualTo(BookmarkType.YOUTUBE);

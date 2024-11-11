@@ -71,7 +71,7 @@ class PlaceControllerTest extends IntegrationTest {
 		);
 		testUser = userRepository.saveAndFlush(testUser);
 
-		Bookmark bookmark = Bookmark.of("Test Bookmark", BookmarkType.CUSTOM, null, null, testUser);
+		Bookmark bookmark = Bookmark.of("Test Bookmark", BookmarkType.CUSTOM, null, null, null, testUser);
 		testBookmark = bookmarkRepository.save(bookmark);
 		UserPrincipal userPrincipal = UserPrincipal.create(testUser);
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
