@@ -14,6 +14,7 @@ public enum ErrorCode {
 	// 400 error
 	BAD_REQUEST_YOUTUBE_BOOKMARK_REGISTER_ERROR(BAD_REQUEST, "유튜브 즐겨찾기는 장소를 추가할 수 없습니다."),
 	BAD_REQUEST_CATEGORY_FORM_ERROR(BAD_REQUEST, "올바른 형식의 Category String이 아닙니다: %s"),
+	BAD_REQUEST_BOOKMARK_NAME(BAD_REQUEST, "이미 존재하는 북마크 이름입니다: %s"),
 
 	// 401 error
 	UNAUTHORIZED_REQUEST(UNAUTHORIZED, "로그인 후 다시 시도해주세요."),
