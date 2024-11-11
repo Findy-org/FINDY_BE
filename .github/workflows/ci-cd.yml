@@ -103,21 +103,25 @@ jobs:
           echo "DOCKER_REPO=${{ secrets.DOCKER_REPO }}" >> $GITHUB_ENV
           echo "GITHUB_RUN_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
 
-      - name: Check docker-compose.yml file
-        run: |
-          if [ ! -f docker/docker-compose.yml ]; then
-            echo "Error: docker/docker-compose.yml not found."
-            exit 1
-          fi
-
-      - name: Copy docker-compose into instance
+      - name: Copy docker-compose.yml and nginx.conf into instance
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.PUBLIC_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PEM_KEY }}
           source: "docker/docker-compose.yml"
-          target: "/home/${{ secrets.USERNAME }}/docker/docker-compose.yml"
+          target: "/home/${{ secrets.USERNAME }}/docker-compose.yml"
+          overwrite: true
+          debug: true
+
+      - name: Copy NGINX Configuration
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.PUBLIC_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PEM_KEY }}
+          source: "nginx/conf.d/nginx.conf"
+          target: "/home/${{ secrets.USERNAME }}/nginx/conf.d/nginx.conf"
           overwrite: true
           debug: true
 
