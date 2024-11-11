@@ -1,7 +1,5 @@
 package org.findy.findy_be.common.config;
 
-import java.util.Arrays;
-
 import org.findy.findy_be.auth.oauth.filter.TokenAuthenticationFilter;
 import org.findy.findy_be.auth.oauth.handler.OAuth2AuthenticationFailureHandler;
 import org.findy.findy_be.auth.oauth.handler.OAuth2AuthenticationSuccessHandler;
@@ -31,9 +29,6 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import lombok.RequiredArgsConstructor;
@@ -73,7 +68,6 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws
 		Exception {
 		http
-			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
@@ -164,17 +158,5 @@ public class SecurityConfig {
 		provider.setPasswordEncoder(passwordEncoder());
 		provider.setUserDetailsService(userDetailsService);
 		return new ProviderManager(provider);
-	}
-
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		UrlBasedCorsConfigurationSource corsConfigSource = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration corsConfig = new CorsConfiguration();
-		corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
-		corsConfig.setAllowedMethods(Arrays.asList(corsProperties.getAllowedMethods().split(",")));
-		corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
-		corsConfig.setAllowCredentials(true);
-		corsConfigSource.registerCorsConfiguration("/**", corsConfig);
-		return corsConfigSource;
 	}
 }
