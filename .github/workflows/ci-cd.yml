@@ -89,17 +89,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # Dockerfile.nginx Build & push
-      - name: Build and push NGINX Docker image
-        if: contains(github.ref, 'develop')
-        id: docker_nginx_build
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: ./docker/Dockerfile.nginx
-          push: true
-          tags: ${{ secrets.DOCKER_REPO }}:nginx-${{ github.run_number }}
-
   deploy:
     runs-on: ubuntu-latest
 
