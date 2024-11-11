@@ -98,11 +98,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Get Github Actions IP Addresses
-        id: publicip
-        run: |
-          response=$(curl -s canhazip.com)
-          echo "ip=$response" >> "$GITHUB_OUTPUT"
+      - name: Get GitHub Actions IP Address
+        id: get_ip
+        run: echo "ip=$(curl -s ifconfig.me)" >> $GITHUB_ENV
 
       - name: Set environment variables for Docker Compose
         run: |
@@ -116,13 +114,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'ap-northeast-2'
 
-      - name: Add GitHub Actions IP
+      - name: Add GitHub Actions IP to Security Group
+        env:
+          IP: ${{ env.ip }}
         run: |
           aws ec2 authorize-security-group-ingress \
-              --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
-              --protocol tcp \
-              --port 22 \
-              --cidr ${{ steps.publicip.outputs.ip }}/32
+            --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+            --protocol tcp --port 22 --cidr ${IP}/32
 
       - name: Copy docker-compose.yml and nginx.conf into instance
         uses: appleboy/scp-action@master
@@ -168,10 +166,8 @@ jobs:
             sudo docker image prune -f
           debug: true
 
-      - name: Remove GitHub Actions IP
+      - name: Remove GitHub Actions IP from Security Group
         run: |
           aws ec2 revoke-security-group-ingress \
-              --group-id ${{ secrets.DEV_EC2_SECURITY_GROUP_ID }} \
-              --protocol tcp \
-              --port 22 \
-              --cidr ${{ steps.publicip.outputs.ip }}/32
+            --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+            --protocol tcp --port 22 --cidr ${IP}/32
