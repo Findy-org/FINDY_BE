@@ -98,7 +98,8 @@ jobs:
           context: .
           file: ./docker/Dockerfile.nginx
           push: true
-          tags: ${{ secrets.DOCKER_REPO }}/nginx:${{ github.run_number }}
+          tags: ${{ secrets.DOCKER_REPO }}:nginx-${{ github.run_number }}
+
   deploy:
     runs-on: ubuntu-latest
 
