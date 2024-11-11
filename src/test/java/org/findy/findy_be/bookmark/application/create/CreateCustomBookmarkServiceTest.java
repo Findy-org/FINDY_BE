@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
 class CreateCustomBookmarkServiceTest extends MockTest {
 
@@ -61,7 +62,7 @@ class CreateCustomBookmarkServiceTest extends MockTest {
 		when(bookmarkRepository.findByName(request.name())).thenReturn(Optional.of(existingBookmark));
 
 		// when & then
-		IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
 			createCustomBookmarkService.invoke(testUser, request)
 		);
 
