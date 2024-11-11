@@ -1,8 +1,10 @@
 package org.findy.findy_be.bookmark.api;
 
 import org.findy.findy_be.bookmark.api.swagger.BookmarkAPIPresentation;
+import org.findy.findy_be.bookmark.application.create.CreateCustomBookmark;
 import org.findy.findy_be.bookmark.application.find.FindAllPagedBookmarks;
 import org.findy.findy_be.bookmark.application.register.RegisterYoutubeBookmark;
+import org.findy.findy_be.bookmark.dto.request.CreateCustomBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
@@ -25,11 +27,17 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkController implements BookmarkAPIPresentation {
 
 	private final RegisterYoutubeBookmark registerYoutubeBookmark;
+	private final CreateCustomBookmark createCustomBookmark;
 	private final FindAllPagedBookmarks findAllPagedBookmarks;
 
 	@PostMapping("/youtube")
-	public void registerPlace(@LoginUser User user, @Valid @RequestBody YoutubeBookmarkRequest request) {
+	public void registerYoutubeBookmark(@LoginUser User user, @Valid @RequestBody YoutubeBookmarkRequest request) {
 		registerYoutubeBookmark.invoke(user, request);
+	}
+
+	@PostMapping("/custom")
+	public void registerCustomBookmark(@LoginUser User user, @Valid @RequestBody CreateCustomBookmarkRequest request) {
+		createCustomBookmark.invoke(user, request);
 	}
 
 	@GetMapping
