@@ -10,4 +10,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, Bookm
 	Optional<Bookmark> findByIdAndUserUserId(final Long bookmarkId, String userId);
 
 	Optional<Bookmark> findByUserAndYoutuberId(final User user, final String youtuberId);
+
+	Optional<Bookmark> findByName(final String name);
 }

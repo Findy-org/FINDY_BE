@@ -37,8 +37,7 @@ public class RegisterYoutubeBookmarkService implements RegisterYoutubeBookmark {
 			},
 			() -> {
 				log.info("새로운 북마크에 저장합니다.");
-				Bookmark bookmark = Bookmark.createYoutubeType(request.youtuberName(), request.youtuberId(),
-					request.youtuberProfile(), user);
+				Bookmark bookmark = request.toEntity(user);
 				bookmarkRepository.save(bookmark);
 				batchRegisterPlace.invoke(bookmark, placeRequests);
 			}

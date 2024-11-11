@@ -48,6 +48,7 @@ public class Bookmark extends BaseTimeEntity {
 
 	private String youtuberId;
 	private String youtuberProfile;
+	private String youtubeLink;
 
 	@NotNull
 	private Long markersCount;
@@ -68,22 +69,25 @@ public class Bookmark extends BaseTimeEntity {
 		this.name = this.name.equals(youtuberName) ? this.name : youtuberName;
 	}
 
-	public static Bookmark of(String name, BookmarkType type, String youtuberId, String youtuberProfile, User user) {
+	public static Bookmark of(String name, BookmarkType type, String youtuberId, String youtuberProfile,
+		String youtubeLink, User user) {
 		return Bookmark.builder()
 			.name(name)
 			.bookmarkType(type)
 			.youtuberId(youtuberId)
 			.youtuberProfile(youtuberProfile)
+			.youtubeLink(youtubeLink)
 			.markersCount(0L)
 			.user(user)
 			.build();
 	}
 
-	public static Bookmark createYoutubeType(String name, String youtuberId, String youtuberProfile, User user) {
-		return Bookmark.of(name, BookmarkType.YOUTUBE, youtuberId, youtuberProfile, user);
+	public static Bookmark createYoutubeType(String name, String youtuberId, String youtuberProfile, String youtubeLink,
+		User user) {
+		return Bookmark.of(name, BookmarkType.YOUTUBE, youtuberId, youtuberProfile, youtubeLink, user);
 	}
 
 	public static Bookmark createCustomType(String name, User user) {
-		return Bookmark.of(name, BookmarkType.CUSTOM, null, null, user);
+		return Bookmark.of(name, BookmarkType.CUSTOM, null, null, null, user);
 	}
 }

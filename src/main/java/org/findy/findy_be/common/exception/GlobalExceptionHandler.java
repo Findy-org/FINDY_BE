@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -97,6 +98,14 @@ public class GlobalExceptionHandler {
 		log.error(LOG_FORMAT, timestamp, e.getClass().getSimpleName(), e.getMessage());
 		return ResponseEntity.status(BAD_REQUEST)
 			.body(ErrorResponse.of(e.getClass().getSimpleName(), BAD_REQUEST.value(), e.getMessage()));
+	}
+
+	@ExceptionHandler(ResponseStatusException.class)
+	public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException e) {
+		String timestamp = getCurrentTimestamp();
+		log.error(LOG_FORMAT, timestamp, e.getClass().getSimpleName(), e.getReason());
+		return ResponseEntity.status(e.getStatusCode())
+			.body(ErrorResponse.of(e.getClass().getSimpleName(), e.getStatusCode().value(), e.getReason()));
 	}
 
 	private String getCurrentTimestamp() {

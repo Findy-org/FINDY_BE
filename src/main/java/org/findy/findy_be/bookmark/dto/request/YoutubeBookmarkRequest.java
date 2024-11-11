@@ -2,8 +2,10 @@ package org.findy.findy_be.bookmark.dto.request;
 
 import java.util.List;
 
+import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.validation.ValidYoutuberId;
 import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.user.domain.User;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -27,4 +29,7 @@ public record YoutubeBookmarkRequest(
 
 	List<RegisterPlaceRequest> places
 ) {
+	public Bookmark toEntity(User user) {
+		return Bookmark.createYoutubeType(youtuberName, youtuberId, youtuberProfile, youtubeLink, user);
+	}
 }

@@ -12,6 +12,7 @@ import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
+import org.findy.findy_be.bookmark.dto.request.CreateCustomBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
@@ -160,6 +161,34 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.nextCursor").isEmpty());
 	}
 
+	@DisplayName("[성공] 유효한 커스텀 북마크 요청")
+	@Test
+	void 커스텀_북마크_등록_성공() throws Exception {
+		// given
+		CreateCustomBookmarkRequest request = new CreateCustomBookmarkRequest("서촌");
+
+		// when
+		ResultActions resultActions = PostCustomBookmark(request);
+
+		// then
+		resultActions.andExpect(status().isOk());
+	}
+
+	@DisplayName("[실패] 이미 존재하는 이름으로 커스텀 북마크 요청")
+	@Test
+	void 커스텀_북마크_등록_실패_중복_이름() throws Exception {
+		// given
+		bookmarkRepository.save(Bookmark.of("서촌", BookmarkType.CUSTOM, null, null, null, testUser));
+		CreateCustomBookmarkRequest duplicateRequest = new CreateCustomBookmarkRequest("서촌");
+
+		// when
+		ResultActions resultActions = PostCustomBookmark(duplicateRequest);
+
+		// then
+		resultActions.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("이미 존재하는 북마크 이름입니다")));
+	}
+
 	private @NotNull ResultActions PostYoutubeBookmark(Object content) throws Exception {
 		return mvc.perform(post("/api/bookmarks/youtube")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -175,10 +204,17 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andDo(print());
 	}
 
+	private @NotNull ResultActions PostCustomBookmark(Object content) throws Exception {
+		return mvc.perform(post("/api/bookmarks/custom")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(content)))
+			.andDo(print());
+	}
+
 	private void initBookmark() {
 		List<Bookmark> bookmarks = new ArrayList<>();
 		for (int i = 1; i <= 10; i++) {
-			bookmarks.add(Bookmark.of("Bookmark" + i, BookmarkType.CUSTOM, null, null, testUser));
+			bookmarks.add(Bookmark.of("Bookmark" + i, BookmarkType.CUSTOM, null, null, null, testUser));
 		}
 		bookmarkRepository.saveAll(bookmarks);
 	}
