@@ -48,5 +48,30 @@ jobs:
             if [ "$(sudo docker ps -q -f name=nginx)" ]; then
               sudo docker stop nginx && sudo docker rm nginx
             fi
-            sudo docker run -d --name nginx -p 80:80 -p 443:443 ${{ secrets.DOCKER_REPO }}:nginx-${{ github.run_number }}
+          debug: true
+
+      # nginx.conf 파일 복사
+      - name: Copy nginx.conf into EC2 instance
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.PUBLIC_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PEM_KEY }}
+          source: "nginx/conf.d/nginx.conf"
+          target: "/home/${{ secrets.USERNAME }}/nginx/conf.d/nginx.conf"
+          overwrite: true
+          debug: true
+
+      # Nginx 컨테이너 실행
+      - name: Run Nginx Container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PUBLIC_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PEM_KEY }}
+          script: |
+            sudo docker run -d --name nginx -p 80:80 -p 443:443 \
+              -v /home/${{ secrets.USERNAME }}/nginx/conf.d/nginx.conf:/etc/nginx/conf.d/default.conf \
+              -v /etc/letsencrypt:/etc/letsencrypt \
+              ${{ secrets.DOCKER_REPO }}:nginx-${{ github.run_number }}
           debug: true
