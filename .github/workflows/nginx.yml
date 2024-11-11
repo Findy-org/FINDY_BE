@@ -50,6 +50,9 @@ jobs:
             fi
           debug: true
 
+      - name: List all files
+        run: ls -R
+
       - name: Copy nginx.conf into EC2 instance
         uses: appleboy/scp-action@master
         with:
@@ -60,9 +63,6 @@ jobs:
           target: "/home/${{ secrets.USERNAME }}/nginx/conf.d/nginx.conf"
           overwrite: true
           debug: true
-
-      - name: List all files
-        run: ls -R
 
       - name: Run Nginx Container
         uses: appleboy/ssh-action@master
