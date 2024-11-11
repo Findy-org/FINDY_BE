@@ -9,5 +9,19 @@ services:
     volumes:
       - /home/ec2-user/logs:/logs'
 
+  nginx:
+    depends_on:
+      - findy-app
+    image: nginx:latest
+    container_name: findy-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    networks:
+      - findy-dev
+
 networks:
   findy-dev:
