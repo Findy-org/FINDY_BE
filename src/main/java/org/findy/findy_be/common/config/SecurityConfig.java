@@ -8,7 +8,6 @@ import org.findy.findy_be.auth.oauth.repository.OAuth2AuthorizationRequestBasedO
 import org.findy.findy_be.auth.oauth.service.CustomOAuth2UserService;
 import org.findy.findy_be.auth.oauth.service.CustomUserDetailsService;
 import org.findy.findy_be.auth.oauth.token.AuthTokenProvider;
-import org.findy.findy_be.auth.properties.CorsProperties;
 import org.findy.findy_be.user.repository.UserRefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +44,6 @@ public class SecurityConfig {
 	private static final String API_PREFIX = "/api";
 	private static final String ADMIN_API_PREFIX = "/api/admin";
 
-	private final CorsProperties corsProperties;
 	private final AppProperties appProperties;
 	private final AuthTokenProvider tokenProvider;
 	private final CustomUserDetailsService userDetailsService;
@@ -85,6 +83,8 @@ public class SecurityConfig {
 					.requestMatchers(new MvcRequestMatcher(introspector, "/oauth**"))
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/oauth2/authorization/**"))
+					.permitAll()
+					.requestMatchers(new MvcRequestMatcher(introspector, "/login/oauth2/code/**"))
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, API_PREFIX + "/login"))
 					.permitAll()

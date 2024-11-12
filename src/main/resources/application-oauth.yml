@@ -17,7 +17,7 @@ spring:
             redirect-uri: http://localhost:8081/login/oauth2/code/kakao
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
-            scope: profile_nickname, profile_image
+            scope: profile_nickname, profile_image, account_email
             client-name: Kakao
 
         provider:
@@ -50,7 +50,7 @@ jwt:
 app:
   auth:
     tokenSecret: ${TOKEN_SECRET}
-    tokenExpiry: 1800000
+    tokenExpiry: 18000000
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedRedirectUris:
