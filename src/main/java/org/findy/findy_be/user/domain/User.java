@@ -108,7 +108,6 @@ public class User {
 		@NotNull LocalDateTime createdAt,
 		@NotNull LocalDateTime updatedAt
 	) {
-		email = email != null ? email : "NO_EMAIL";
 		profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
 		return User.of(userId, username, email, emailVerifiedYn, profileImageUrl, socialProviderType, roleType,
 			createdAt, updatedAt);
