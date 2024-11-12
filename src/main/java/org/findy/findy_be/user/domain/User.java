@@ -100,7 +100,7 @@ public class User {
 	public static User create(
 		@NotNull @Size(max = 64) String userId,
 		@NotNull @Size(max = 100) String username,
-		@NotNull @Size(max = 512) String email,
+		@Size(max = 512) String email,
 		@NotNull @Size(max = 1) String emailVerifiedYn,
 		@NotNull @Size(max = 512) String profileImageUrl,
 		@NotNull SocialProviderType socialProviderType,
@@ -108,6 +108,7 @@ public class User {
 		@NotNull LocalDateTime createdAt,
 		@NotNull LocalDateTime updatedAt
 	) {
+		email = email != null ? email : "NO_EMAIL";
 		profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
 		return User.of(userId, username, email, emailVerifiedYn, profileImageUrl, socialProviderType, roleType,
 			createdAt, updatedAt);
