@@ -34,9 +34,9 @@ public class PlaceController implements PlaceAPIPresentation {
 		registerPlace.invoke(bookmarkId, request, user.getUserId());
 	}
 
-	@GetMapping("/{bookId}")
-	public SliceResponse<PlaceResponse> getPlaces(@LoginUser User user, @PathVariable("bookId") Long bookId,
+	@GetMapping("/{bookmarkId}")
+	public SliceResponse<PlaceResponse> getPlaces(@LoginUser User user, @PathVariable("bookmarkId") Long bookmarkId,
 		@ModelAttribute PagedRequest request) {
-		return findAllPagedPlaces.invoke(user.getUserId(), bookId, request.cursor(), request.size());
+		return findAllPagedPlaces.invoke(user.getUserId(), bookmarkId, request.cursor(), request.size());
 	}
 }
