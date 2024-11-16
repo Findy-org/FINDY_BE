@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "markers")
-@SequenceGenerator(name = "bookmark_sequence", sequenceName = "bookmark_seq")
+@SequenceGenerator(name = "marker_sequence", sequenceName = "marker_seq", allocationSize = 10)
 public class Marker extends BaseTimeEntity {
 
 	@Id
@@ -39,6 +39,11 @@ public class Marker extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "bookmark_id")
 	private Bookmark bookmark;
+
+	public void changeBookmark(Bookmark bookmark) {
+		this.bookmark = bookmark;
+		bookmark.getMarkers().add(this);
+	}
 
 	public static Marker create(final Bookmark bookmark, final Place place) {
 		return Marker.builder()

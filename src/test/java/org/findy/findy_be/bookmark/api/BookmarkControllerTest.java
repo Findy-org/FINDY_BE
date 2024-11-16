@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.bookmark.domain.Bookmark;
@@ -189,6 +191,20 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("이미 존재하는 북마크 이름입니다")));
 	}
 
+	@DisplayName("[성공] 북마크 삭제 요청")
+	@Test
+	void 북마크_삭제_요청() throws Exception {
+		// given
+		Bookmark bookmark = bookmarkRepository.save(Bookmark.of("서촌", BookmarkType.CUSTOM, null, null, null, testUser));
+
+		// when
+		DeleteBookmark(bookmark.getId());
+
+		// then
+		Optional<Bookmark> resultBookmark = bookmarkRepository.findById(bookmark.getId());
+		Assertions.assertThat(resultBookmark.isEmpty()).isTrue();
+	}
+
 	private @NotNull ResultActions PostYoutubeBookmark(Object content) throws Exception {
 		return mvc.perform(post("/api/bookmarks/youtube")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -208,6 +224,11 @@ class BookmarkControllerTest extends IntegrationTest {
 		return mvc.perform(post("/api/bookmarks/custom")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(content)))
+			.andDo(print());
+	}
+
+	private @NotNull ResultActions DeleteBookmark(Long id) throws Exception {
+		return mvc.perform(delete("/api/bookmarks/{id}", id))
 			.andDo(print());
 	}
 

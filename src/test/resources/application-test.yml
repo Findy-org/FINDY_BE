@@ -22,7 +22,7 @@ spring:
         batch_versioned_data: true
         jdbc.lob.non_contextual_creation: true
   datasource:
-    url: jdbc:tc:postgresql:10:///testdb
+    url: jdbc:tc:postgresql:15:///testdb
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
 
 jwt:

@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "places")
-@SequenceGenerator(name = "place_sequence", sequenceName = "place_seq")
+@SequenceGenerator(name = "place_sequence", sequenceName = "place_seq", allocationSize = 10)
 public class Place extends BaseTimeEntity {
 
 	@Id

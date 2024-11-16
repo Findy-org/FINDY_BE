@@ -20,10 +20,11 @@ public class CreateMarkerService implements CreateMarker {
 
 	@Override
 	public void invoke(final Bookmark bookmark, final Place place) {
-		Marker marker = Marker.create(bookmark, place);
 		Optional<Marker> existingMarker = markerRepository.findByBookmarkAndPlace(bookmark, place);
 		if (existingMarker.isEmpty()) {
+			Marker marker = Marker.create(bookmark, place);
 			markerRepository.save(marker);
+			marker.changeBookmark(bookmark);
 			bookmark.incrementMarkersCount(1);
 		}
 	}

@@ -42,7 +42,11 @@ public class BatchCreateMarkerService implements BatchCreateMarker {
 		final Set<Long> existingPlaceIds) {
 		return places.stream()
 			.filter(place -> !existingPlaceIds.contains(place.getId()))
-			.map(place -> Marker.create(bookmark, place))
+			.map(place -> {
+				Marker marker = Marker.create(bookmark, place);
+				marker.changeBookmark(bookmark);
+				return marker;
+			})
 			.collect(Collectors.toList());
 	}
 
