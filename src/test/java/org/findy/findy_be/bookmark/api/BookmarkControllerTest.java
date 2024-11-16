@@ -15,6 +15,7 @@ import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.dto.request.CreateCustomBookmarkRequest;
+import org.findy.findy_be.bookmark.dto.request.UpdateBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
@@ -205,6 +206,21 @@ class BookmarkControllerTest extends IntegrationTest {
 		Assertions.assertThat(resultBookmark.isEmpty()).isTrue();
 	}
 
+	@DisplayName("[성공] 북마크 수정 요청")
+	@Test
+	void 북마크_이름_수정() throws Exception {
+		// given
+		Bookmark bookmark = bookmarkRepository.save(Bookmark.of("서촌", BookmarkType.CUSTOM, null, null, null, testUser));
+		UpdateBookmarkRequest request = new UpdateBookmarkRequest("안국");
+
+		// when
+		PutBookmark(bookmark.getId(), request);
+
+		// then
+		Optional<Bookmark> resultBookmark = bookmarkRepository.findById(bookmark.getId());
+		Assertions.assertThat(resultBookmark.get().getName()).isEqualTo("안국");
+	}
+
 	private @NotNull ResultActions PostYoutubeBookmark(Object content) throws Exception {
 		return mvc.perform(post("/api/bookmarks/youtube")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -229,6 +245,13 @@ class BookmarkControllerTest extends IntegrationTest {
 
 	private @NotNull ResultActions DeleteBookmark(Long id) throws Exception {
 		return mvc.perform(delete("/api/bookmarks/{id}", id))
+			.andDo(print());
+	}
+
+	private @NotNull ResultActions PutBookmark(Long id, UpdateBookmarkRequest request) throws Exception {
+		return mvc.perform(put("/api/bookmarks/{id}", id)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
 			.andDo(print());
 	}
 
