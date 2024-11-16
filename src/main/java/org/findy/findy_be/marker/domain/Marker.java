@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "markers")
-@SequenceGenerator(name = "bookmark_sequence", sequenceName = "bookmark_seq")
+@SequenceGenerator(name = "marker_sequence", sequenceName = "marker_seq", allocationSize = 10)
 public class Marker extends BaseTimeEntity {
 
 	@Id

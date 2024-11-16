@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "bookmarks")
-@SequenceGenerator(name = "bookmark_sequence", sequenceName = "bookmark_seq")
+@SequenceGenerator(name = "bookmark_sequence", sequenceName = "bookmark_seq", allocationSize = 10)
 public class Bookmark extends BaseTimeEntity {
 
 	@Id
@@ -57,7 +57,7 @@ public class Bookmark extends BaseTimeEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "bookmark", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@Builder.Default
 	private List<Marker> markers = new ArrayList<>();
 
