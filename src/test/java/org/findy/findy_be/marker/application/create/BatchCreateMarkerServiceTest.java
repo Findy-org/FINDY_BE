@@ -13,7 +13,7 @@ import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.Place;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

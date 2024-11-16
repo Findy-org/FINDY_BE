@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.RepositoryTest;
-import org.findy.findy_be.place.domain.MajorCategory;
-import org.findy.findy_be.place.domain.MiddleCategory;
-import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.CategoryRequest;
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.marker.application.domain.MajorCategory;
+import org.findy.findy_be.marker.application.domain.MiddleCategory;
+import org.findy.findy_be.marker.application.domain.Place;
+import org.findy.findy_be.marker.dto.request.CategoryRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,7 @@ class BulkInsertRepositoryImplTest extends RepositoryTest {
 	private List<Place> generateTestPlaces(int entityCount) {
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		return IntStream.range(0, entityCount)
-			.mapToObj(i -> new RegisterPlaceRequest(
+			.mapToObj(i -> new RegisterMarkerRequest(
 				"Test Place " + i,
 				"Description " + i,
 				"02-1234-5678",

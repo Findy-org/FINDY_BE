@@ -1,7 +1,7 @@
 package org.findy.findy_be.place.dto.response;
 
-import org.findy.findy_be.place.domain.MajorCategory;
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.MajorCategory;
+import org.findy.findy_be.marker.application.domain.Place;
 
 import lombok.Builder;
 

@@ -2,7 +2,7 @@ package org.findy.findy_be.place.repository;
 
 import java.util.Optional;
 
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.Place;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

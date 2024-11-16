@@ -9,7 +9,7 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.Place;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class CreateMarkerServiceTest extends MockTest {
 	@Test
 	void 마커를_생성하고_저장() {
 		// given
-		Marker marker = Marker.create(bookmark, place);
+		Marker marker = Marker.createForCustomBookmark(bookmark, place);
 		when(markerRepository.findByBookmarkAndPlace(bookmark, place)).thenReturn(Optional.empty());
 		when(markerRepository.save(any(Marker.class))).thenReturn(marker);
 
@@ -54,7 +54,7 @@ class CreateMarkerServiceTest extends MockTest {
 	@Test
 	void 이미_존재하는_마커가_있을_경우() {
 		// given
-		Marker existingMarker = Marker.create(bookmark, place);
+		Marker existingMarker = Marker.createForCustomBookmark(bookmark, place);
 		when(markerRepository.findByBookmarkAndPlace(bookmark, place)).thenReturn(Optional.of(existingMarker));
 
 		// when

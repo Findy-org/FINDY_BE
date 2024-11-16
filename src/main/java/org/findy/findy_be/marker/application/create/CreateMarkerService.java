@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.Place;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +22,7 @@ public class CreateMarkerService implements CreateMarker {
 	public void invoke(final Bookmark bookmark, final Place place) {
 		Optional<Marker> existingMarker = markerRepository.findByBookmarkAndPlace(bookmark, place);
 		if (existingMarker.isEmpty()) {
-			Marker marker = Marker.create(bookmark, place);
+			Marker marker = Marker.createForCustomBookmark(bookmark, place);
 			markerRepository.save(marker);
 			marker.changeBookmark(bookmark);
 			bookmark.incrementMarkersCount(1);

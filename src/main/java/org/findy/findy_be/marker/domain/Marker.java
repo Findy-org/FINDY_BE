@@ -2,7 +2,7 @@ package org.findy.findy_be.marker.domain;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.entity.BaseTimeEntity;
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.Place;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +32,8 @@ public class Marker extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "marker_sequence")
 	private Long id;
 
+	private String timestamp;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "place_id")
 	private Place place;
@@ -45,8 +47,16 @@ public class Marker extends BaseTimeEntity {
 		bookmark.getMarkers().add(this);
 	}
 
-	public static Marker create(final Bookmark bookmark, final Place place) {
+	public static Marker createForCustomBookmark(final Bookmark bookmark, final Place place) {
 		return Marker.builder()
+			.place(place)
+			.bookmark(bookmark)
+			.build();
+	}
+
+	public static Marker createForYoutubeBookmark(final String timestamp, final Bookmark bookmark, final Place place) {
+		return Marker.builder()
+			.timestamp(timestamp)
 			.place(place)
 			.bookmark(bookmark)
 			.build();

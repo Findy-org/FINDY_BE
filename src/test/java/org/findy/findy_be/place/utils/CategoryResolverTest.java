@@ -3,9 +3,9 @@ package org.findy.findy_be.place.utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.findy.findy_be.common.exception.ErrorCode;
-import org.findy.findy_be.place.domain.MajorCategory;
-import org.findy.findy_be.place.domain.MiddleCategory;
-import org.findy.findy_be.place.domain.vo.Category;
+import org.findy.findy_be.marker.application.domain.MajorCategory;
+import org.findy.findy_be.marker.application.domain.MiddleCategory;
+import org.findy.findy_be.marker.application.domain.vo.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,9 +1,9 @@
-package org.findy.findy_be.place.domain;
+package org.findy.findy_be.marker.application.domain;
 
 import org.findy.findy_be.common.entity.BaseTimeEntity;
-import org.findy.findy_be.place.domain.vo.Category;
-import org.findy.findy_be.place.domain.vo.Coordinate;
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.marker.application.domain.vo.Category;
+import org.findy.findy_be.marker.application.domain.vo.Coordinate;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -54,7 +54,7 @@ public class Place extends BaseTimeEntity {
 	@Embedded
 	private Category category;
 
-	public static Place create(final RegisterPlaceRequest request) {
+	public static Place create(final RegisterMarkerRequest request) {
 		Coordinate coordinate = Coordinate.of(request.mapX(), request.mapY());
 		Category category = Category.of(request.category().majorCategory(), request.category().middleCategory());
 		return Place.builder()

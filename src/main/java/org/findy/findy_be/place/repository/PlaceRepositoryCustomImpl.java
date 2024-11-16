@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.findy.findy_be.bookmark.domain.QBookmark;
 import org.findy.findy_be.marker.domain.QMarker;
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.Place;
 import org.findy.findy_be.place.domain.QPlace;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

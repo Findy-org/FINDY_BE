@@ -20,7 +20,7 @@ import org.findy.findy_be.marker.application.register.RegisterMarkerService;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.marker.application.domain.Place;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -232,7 +232,7 @@ class MarkerControllerTest extends IntegrationTest {
 		List<Place> placeList = placeRepository.saveAll(places);
 
 		List<Marker> markers = placeList.stream()
-			.map(place -> Marker.create(bookmark, place))
+			.map(place -> Marker.createForCustomBookmark(bookmark, place))
 			.collect(Collectors.toList());
 
 		markerRepository.saveAll(markers);

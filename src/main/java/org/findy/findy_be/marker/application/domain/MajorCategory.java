@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.domain;
+package org.findy.findy_be.marker.application.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
