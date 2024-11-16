@@ -56,4 +56,34 @@ class BookmarkTest {
 		assertThat(bookmark.getName()).isEqualTo(name);
 		assertThat(bookmark.getYoutuberProfile()).isNull();
 	}
+
+	@DisplayName("[성공] 즐겨찾기 이름 변경")
+	@Test
+	public void 즐겨찾기_이름_변경_성공() throws Exception {
+		// given
+		String name = "서촌";
+		Bookmark bookmark = Bookmark.createCustomType(name, user);
+		String newName = "안국";
+
+		// when
+		bookmark.updateName(newName);
+
+		// then
+		assertThat(bookmark.getName()).isEqualTo(newName);
+	}
+
+	@DisplayName("[성공 case2] 즐겨찾기 이름 변경 null인 경우 유지")
+	@Test
+	public void 즐겨찾기_이름_변경_Null인_경우() throws Exception {
+		// given
+		String name = "서촌";
+		Bookmark bookmark = Bookmark.createCustomType(name, user);
+		String newNullName = null;
+
+		// when
+		bookmark.updateName(newNullName);
+
+		// then
+		assertThat(bookmark.getName()).isEqualTo(name);
+	}
 }

@@ -31,7 +31,7 @@ public class RegisterYoutubeBookmarkService implements RegisterYoutubeBookmark {
 		List<RegisterPlaceRequest> placeRequests = request.places();
 		bookmarkRepository.findByUserAndYoutuberId(user, request.youtuberId()).ifPresentOrElse(
 			existingBookmark -> {
-				existingBookmark.updateYoutuberName(request.youtuberName());
+				existingBookmark.updateName(request.youtuberName());
 				validateBookmarkOwner(user, existingBookmark.getUser());
 				batchRegisterPlace.invoke(existingBookmark, placeRequests);
 			},

@@ -65,8 +65,8 @@ public class Bookmark extends BaseTimeEntity {
 		this.markersCount += incrementValue;
 	}
 
-	public void updateYoutuberName(String youtuberName) {
-		this.name = this.name.equals(youtuberName) ? this.name : youtuberName;
+	public void updateName(String name) {
+		this.name = this.name.equals(name) || name == null ? this.name : name;
 	}
 
 	public static Bookmark of(String name, BookmarkType type, String youtuberId, String youtuberProfile,
