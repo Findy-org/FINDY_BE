@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.application.register;
+package org.findy.findy_be.marker.application.register;
 
 import static org.findy.findy_be.common.exception.ErrorCode.*;
 
@@ -6,9 +6,9 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.marker.application.create.CreateMarker;
+import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.RegisterSearchedPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class RegisterPlaceService implements RegisterPlace {
+public class RegisterMarkerService implements RegisterMarker {
 
 	private final FindPlace findPlace;
 	private final BookmarkRepository bookmarkRepository;
@@ -29,7 +29,7 @@ public class RegisterPlaceService implements RegisterPlace {
 	private final PlaceRepository placeRepository;
 
 	@Override
-	public void invoke(final Long bookmarkId, final RegisterSearchedPlaceRequest request, final String userId) {
+	public void invoke(final Long bookmarkId, final RegisterSearchedMarkerRequest request, final String userId) {
 		Bookmark bookmark = bookmarkRepository.findByIdAndUserUserId(bookmarkId, userId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(String.format(NOT_FOUND_BOOKMARK_BY_ID.getMessage(), bookmarkId)));

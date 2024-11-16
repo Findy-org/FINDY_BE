@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.application.find;
+package org.findy.findy_be.marker.application.find;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FindAllPagedPlacesService implements FindAllPagedPlaces {
+public class FindAllPagedMarkersService implements FindAllPagedMarkers {
 
 	private final PlaceRepository placeRepository;
 

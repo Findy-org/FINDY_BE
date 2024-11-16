@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.api;
+package org.findy.findy_be.marker.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -16,11 +16,11 @@ import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
 import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
+import org.findy.findy_be.marker.application.register.RegisterMarkerService;
 import org.findy.findy_be.marker.domain.Marker;
+import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.place.application.register.RegisterPlaceService;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.RegisterSearchedPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -36,10 +36,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 @WithMockUser(roles = "USER")
-class PlaceControllerTest extends IntegrationTest {
+class MarkerControllerTest extends IntegrationTest {
 
 	@Autowired
-	private RegisterPlaceService registerPlace;
+	private RegisterMarkerService registerMarker;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -85,7 +85,7 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_성공() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
-		RegisterSearchedPlaceRequest request = new RegisterSearchedPlaceRequest(
+		RegisterSearchedMarkerRequest request = new RegisterSearchedMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"음식점>분식",
 			"설명",
@@ -109,7 +109,7 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_검증_실패() throws Exception {
 		// given
 		Long bookmarkId = testBookmark.getId();
-		RegisterSearchedPlaceRequest invalidRequest = new RegisterSearchedPlaceRequest(
+		RegisterSearchedMarkerRequest invalidRequest = new RegisterSearchedMarkerRequest(
 			null,
 			"음식점>분식",
 			"설명",
@@ -134,7 +134,7 @@ class PlaceControllerTest extends IntegrationTest {
 	void 장소_등록_API_예외_존재하지_않는_즐겨찾기_ID() throws Exception {
 		// given
 		Long invalidBookmarkId = 999L;
-		RegisterSearchedPlaceRequest request = new RegisterSearchedPlaceRequest(
+		RegisterSearchedMarkerRequest request = new RegisterSearchedMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"음식점>분식",
 			"설명",
@@ -207,7 +207,7 @@ class PlaceControllerTest extends IntegrationTest {
 	}
 
 	private ResultActions PostSearchedPlace(final Long bookmarkId,
-		final RegisterSearchedPlaceRequest request) throws
+		final RegisterSearchedMarkerRequest request) throws
 		Exception {
 		return mvc.perform(post("/api/places/{bookmarkId}", bookmarkId)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -217,7 +217,7 @@ class PlaceControllerTest extends IntegrationTest {
 
 	private void initPlacesForBookmark(Bookmark bookmark, int count) {
 		List<Place> places = IntStream.range(1, count + 1)
-			.mapToObj(i -> new RegisterSearchedPlaceRequest(
+			.mapToObj(i -> new RegisterSearchedMarkerRequest(
 				"Test Place " + i,
 				"음식점>분식",
 				"Description " + i,

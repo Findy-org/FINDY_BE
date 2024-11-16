@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.application.find;
+package org.findy.findy_be.marker.application.find;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,13 +28,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-class FindAllPagedPlacesServiceTest extends MockTest {
+class FindAllPagedMarkersServiceTest extends MockTest {
 
 	@Mock
 	private PlaceRepository placeRepository;
 
 	@InjectMocks
-	private FindAllPagedPlacesService findAllPagedPlacesService;
+	private FindAllPagedMarkersService findAllPagedMarkersService;
 
 	private User testUser;
 	private List<Place> places;
@@ -60,9 +60,9 @@ class FindAllPagedPlacesServiceTest extends MockTest {
 			.collect(Collectors.toList());
 	}
 
-	@DisplayName("[성공 case1(다음페이지 있음)] 유저_북마크의 장소 조회 성공")
+	@DisplayName("[성공 case1(다음페이지 있음)] 유저 마커 조회 성공")
 	@Test
-	void 유저_북마크의_장소_조회_case1() {
+	void 유저_마커_조회_case1() {
 		// given
 		Long bookmarkId = 1L;
 		Pageable pageable = PageRequest.of(0, 3);
@@ -74,7 +74,7 @@ class FindAllPagedPlacesServiceTest extends MockTest {
 			.thenReturn(placeSlice);
 
 		// when
-		SliceResponse<PlaceResponse> response = findAllPagedPlacesService.invoke(testUser.getUserId(), 1L, 0L, 3);
+		SliceResponse<PlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L, 3);
 
 		// then
 		assertThat(response.data().size()).isEqualTo(3);
@@ -82,9 +82,9 @@ class FindAllPagedPlacesServiceTest extends MockTest {
 		assertThat(response.nextCursor()).isEqualTo(places.get(2).getId());
 	}
 
-	@DisplayName("[성공 case2(다음페이지 없음)] 유저_북마크의 장소 조회 성공")
+	@DisplayName("[성공 case2(다음페이지 없음)] 유저 마커 조회 성공")
 	@Test
-	void 유저_북마크의_장소_조회_성공_case2() {
+	void 유저_마커_조회_성공_case2() {
 		// given
 		Long bookmarkId = 1L;
 		Pageable pageable = PageRequest.of(0, 3);
@@ -96,7 +96,7 @@ class FindAllPagedPlacesServiceTest extends MockTest {
 			.thenReturn(placeSlice);
 
 		// when
-		SliceResponse<PlaceResponse> response = findAllPagedPlacesService.invoke(testUser.getUserId(), 1L, 0L, 3);
+		SliceResponse<PlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L, 3);
 
 		// then
 		assertThat(response.data().size()).isEqualTo(3);
