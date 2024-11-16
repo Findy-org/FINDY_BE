@@ -34,7 +34,6 @@ class CreateCustomBookmarkServiceTest extends MockTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		// Mock user setup
 		testUser = mock(User.class);
 		when(testUser.getUserId()).thenReturn("N49sfgdahdKz_fp-223424er1N3D6kd");
 
