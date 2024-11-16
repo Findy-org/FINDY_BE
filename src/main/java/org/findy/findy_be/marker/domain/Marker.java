@@ -40,6 +40,11 @@ public class Marker extends BaseTimeEntity {
 	@JoinColumn(name = "bookmark_id")
 	private Bookmark bookmark;
 
+	public void changeBookmark(Bookmark bookmark) {
+		this.bookmark = bookmark;
+		bookmark.getMarkers().add(this);
+	}
+
 	public static Marker create(final Bookmark bookmark, final Place place) {
 		return Marker.builder()
 			.place(place)
