@@ -5,7 +5,9 @@ import org.findy.findy_be.bookmark.application.create.CreateCustomBookmark;
 import org.findy.findy_be.bookmark.application.delete.DeleteBookmark;
 import org.findy.findy_be.bookmark.application.find.FindAllPagedBookmarks;
 import org.findy.findy_be.bookmark.application.register.RegisterYoutubeBookmark;
+import org.findy.findy_be.bookmark.application.update.UpdateBookmark;
 import org.findy.findy_be.bookmark.dto.request.CreateCustomBookmarkRequest;
+import org.findy.findy_be.bookmark.dto.request.UpdateBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +36,7 @@ public class BookmarkController implements BookmarkAPIPresentation {
 	private final CreateCustomBookmark createCustomBookmark;
 	private final FindAllPagedBookmarks findAllPagedBookmarks;
 	private final DeleteBookmark deleteBookmark;
+	private final UpdateBookmark updateBookmark;
 
 	@PostMapping("/youtube")
 	public void registerYoutubeBookmark(@LoginUser User user, @Valid @RequestBody YoutubeBookmarkRequest request) {
@@ -53,5 +57,11 @@ public class BookmarkController implements BookmarkAPIPresentation {
 	@DeleteMapping("/{id}")
 	public void deleteBookmark(@LoginUser User user, @PathVariable("id") Long bookmarkId) {
 		deleteBookmark.invoke(user.getUserId(), bookmarkId);
+	}
+
+	@PutMapping("/{id}")
+	public void updateBookmark(@LoginUser User user, @PathVariable("id") Long bookmarkId,
+		@RequestBody UpdateBookmarkRequest request) {
+		updateBookmark.invoke(user.getUserId(), bookmarkId, request);
 	}
 }
