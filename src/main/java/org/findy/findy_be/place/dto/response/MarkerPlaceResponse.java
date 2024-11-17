@@ -6,15 +6,15 @@ import org.findy.findy_be.place.domain.vo.Category;
 import lombok.Builder;
 
 @Builder
-public record PlaceResponse(
-	Long placeId,
+public record MarkerPlaceResponse(
+	Long markerId,
 	String title,
 	String address,
 	Category category
 ) {
-	public static PlaceResponse from(final Place place) {
-		return PlaceResponse.builder()
-			.placeId(place.getId())
+	public static MarkerPlaceResponse of(final Long markerId, final Place place) {
+		return MarkerPlaceResponse.builder()
+			.markerId(markerId)
 			.title(place.getTitle())
 			.address(place.getAddress())
 			.category(place.getCategory())
