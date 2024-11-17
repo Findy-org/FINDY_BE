@@ -6,11 +6,11 @@ import static org.mockito.Mockito.*;
 import java.util.Optional;
 
 import org.findy.findy_be.common.MockTest;
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
-import org.findy.findy_be.marker.application.domain.Place;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,14 +27,14 @@ class FindPlaceServiceTest extends MockTest {
 	@InjectMocks
 	private FindPlaceService findPlaceService;
 
-	private RegisterMarkerRequest placeRequest;
+	private RegisterYouTubeMarkerRequest placeRequest;
 	private Place place;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		placeRequest = new RegisterMarkerRequest(
+		placeRequest = new RegisterYouTubeMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
 			"서울특별시 종로구 공평동 124",
@@ -42,7 +42,8 @@ class FindPlaceServiceTest extends MockTest {
 			categoryRequest,
 			"1269827323",
 			"375719345",
-			"02-000-000"
+			"02-000-000",
+			"0.04"
 		);
 		place = mock(Place.class);
 	}

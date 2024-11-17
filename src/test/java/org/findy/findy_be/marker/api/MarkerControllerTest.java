@@ -20,7 +20,7 @@ import org.findy.findy_be.marker.application.register.RegisterMarkerService;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.marker.application.domain.Place;
+import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -199,7 +199,7 @@ class MarkerControllerTest extends IntegrationTest {
 	}
 
 	private ResultActions GetBookmarks(final Long bookmarkId, final PagedRequest pagedRequest) throws Exception {
-		return mvc.perform((get("/api/places/{bookmarkId}", bookmarkId)
+		return mvc.perform((get("/api/markers/{bookmarkId}", bookmarkId)
 				.param("cursor", pagedRequest.cursor() == null ? "" : pagedRequest.cursor().toString())
 				.param("size", String.valueOf(pagedRequest.size()))
 				.contentType(MediaType.APPLICATION_JSON)))
@@ -209,7 +209,7 @@ class MarkerControllerTest extends IntegrationTest {
 	private ResultActions PostSearchedPlace(final Long bookmarkId,
 		final RegisterSearchedMarkerRequest request) throws
 		Exception {
-		return mvc.perform(post("/api/places/{bookmarkId}", bookmarkId)
+		return mvc.perform(post("/api/markers/{bookmarkId}", bookmarkId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
 			.andDo(print());

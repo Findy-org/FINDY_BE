@@ -11,11 +11,11 @@ import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.marker.domain.Marker;
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
-import org.findy.findy_be.marker.application.domain.Place;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -51,7 +51,7 @@ class MarkerRepositoryTest extends RepositoryTest {
 			LocalDateTime.now(), LocalDateTime.now()));
 
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterMarkerRequest request = new RegisterMarkerRequest(
+		RegisterYouTubeMarkerRequest request = new RegisterYouTubeMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
 			"서울특별시 종로구 공평동 124",
@@ -59,7 +59,8 @@ class MarkerRepositoryTest extends RepositoryTest {
 			categoryRequest,
 			"1269827323",
 			"375719345",
-			"02-000-000"
+			"02-000-000",
+			"0.04"
 		);
 		testPlace = placeRepository.save(Place.create(request));
 		testBookmark = bookmarkRepository.save(Bookmark.of("서촌", BookmarkType.CUSTOM, null, null, null, testUser));

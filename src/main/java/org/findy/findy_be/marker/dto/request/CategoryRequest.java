@@ -1,7 +1,7 @@
 package org.findy.findy_be.marker.dto.request;
 
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

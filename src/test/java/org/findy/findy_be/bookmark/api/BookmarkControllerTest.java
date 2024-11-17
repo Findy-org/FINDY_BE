@@ -20,10 +20,10 @@ import org.findy.findy_be.bookmark.dto.request.UpdateBookmarkRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.IntegrationTest;
 import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
@@ -75,9 +75,10 @@ class BookmarkControllerTest extends IntegrationTest {
 	void 유튜브_북마크_등록_성공() throws Exception {
 		// given
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		List<RegisterMarkerRequest> selectedPlaces = List.of(
-			new RegisterMarkerRequest("Place1", "Description1", "Address1", "RoadAddress1", categoryRequest, "12345",
-				"67890", "02-000-0000"));
+		List<RegisterYouTubeMarkerRequest> selectedPlaces = List.of(
+			new RegisterYouTubeMarkerRequest("Place1", "Description1", "Address1", "RoadAddress1", categoryRequest,
+				"12345",
+				"67890", "02-000-0000", "0.04"));
 		RegisterYoutubeBookmarkRequest request = new RegisterYoutubeBookmarkRequest(
 			"@iammingki", "걍밍경", "https://yt3.googleusercontent.com/ytc/...",
 			"https://www.youtube.com/watch?v=hE2wMo5Coco", selectedPlaces);

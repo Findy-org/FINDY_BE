@@ -57,7 +57,7 @@ public class Bookmark extends BaseTimeEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@OneToMany(mappedBy = "bookmark", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
 	private List<Marker> markers = new ArrayList<>();
 

@@ -1,6 +1,6 @@
 package org.findy.findy_be.place.repository;
 
-import org.findy.findy_be.marker.application.domain.Place;
+import org.findy.findy_be.place.domain.Place;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

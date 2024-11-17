@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.RepositoryTest;
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
-import org.findy.findy_be.marker.application.domain.Place;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.Place;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 	void 주어진_상세_정보로_장소_조회() {
 		// given
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		RegisterMarkerRequest request = new RegisterMarkerRequest(
+		RegisterYouTubeMarkerRequest request = new RegisterYouTubeMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
 			"서울특별시 종로구 공평동 124",
@@ -36,7 +36,8 @@ class PlaceRepositoryTest extends RepositoryTest {
 			categoryRequest,
 			"1269827323",
 			"375719345",
-			"02-000-000"
+			"02-000-000",
+			"0.04"
 		);
 		Place savedPlace = placeRepository.save(Place.create(request));
 
@@ -70,7 +71,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 		// given
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		List<Place> places = IntStream.range(0, 100)
-			.mapToObj(i -> Place.create(new RegisterMarkerRequest(
+			.mapToObj(i -> Place.create(new RegisterYouTubeMarkerRequest(
 					"Test Place " + i,
 					"Description " + i,
 					"02-1234-5678",
@@ -78,8 +79,8 @@ class PlaceRepositoryTest extends RepositoryTest {
 					categoryRequest,
 					"1269827323",
 					"375719345",
-					"02-000-000"
-
+					"02-000-000",
+					"0.04"
 				)
 			)).collect(Collectors.toList());
 

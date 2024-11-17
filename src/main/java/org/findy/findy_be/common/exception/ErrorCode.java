@@ -30,7 +30,8 @@ public enum ErrorCode {
 	NOT_FOUND_BOOKMARK_BY_ID(NOT_FOUND, "해당 id : %s의 즐겨찾기가 존재하지 않습니다."),
 	NOT_FOUND_USER(NOT_FOUND, "해당 이메일을 가진 유저가 존재하지 않습니다."),
 	NOT_FOUND_USER_BY_ID(NOT_FOUND, "해당 id : %s를 가진 유저가 존재하지 않습니다."),
-	BAD_REQUEST_CATEGORY_NOT_FOUND_ERROR(NOT_FOUND, "해당 input : %s을 가진 카테고리가 없습니다.");
+	BAD_REQUEST_CATEGORY_NOT_FOUND_ERROR(NOT_FOUND, "해당 input : %s을 가진 카테고리가 없습니다."),
+	NOT_FOUND_PLACE(NOT_FOUND, "장소를 찾을 수 없습니다. 장소멸:  %s, 도로명 주소: %s");
 
 	// 500 error
 

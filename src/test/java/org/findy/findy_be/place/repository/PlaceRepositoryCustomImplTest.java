@@ -12,12 +12,12 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.marker.domain.Marker;
-import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
-import org.findy.findy_be.marker.application.domain.Place;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.repository.MarkerRepository;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
@@ -100,7 +100,7 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 
 	private void initPlacesForBookmark(Bookmark bookmark, int count) {
 		List<Place> places = IntStream.rangeClosed(1, count)
-			.mapToObj(i -> Place.create(new RegisterMarkerRequest(
+			.mapToObj(i -> Place.create(new RegisterYouTubeMarkerRequest(
 				"Test Place " + i,
 				"Description " + i,
 				"Address " + i,
@@ -108,7 +108,8 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 				new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN),
 				"1269827323",
 				"375719345",
-				"02-000-000" + i
+				"02-000-000" + i,
+				"0.04"
 			)))
 			.collect(Collectors.toList());
 

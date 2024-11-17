@@ -16,7 +16,7 @@ import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.application.create.CreateMarker;
 import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.place.application.find.FindPlace;
-import org.findy.findy_be.marker.application.domain.Place;
+import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;

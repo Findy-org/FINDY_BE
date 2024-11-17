@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.validation.ValidYoutuberId;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.user.domain.User;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +27,7 @@ public record RegisterYoutubeBookmarkRequest(
 	@Schema(description = "유튜브 링크", example = "https://www.youtube.com/watch?v=hE2wMo5Coco")
 	String youtubeLink,
 
-	List<RegisterMarkerRequest> places
+	List<RegisterYouTubeMarkerRequest> places
 ) {
 	public Bookmark toEntity(User user) {
 		return Bookmark.createYoutubeType(youtuberName, youtuberId, youtuberProfile, youtubeLink, user);

@@ -1,7 +1,7 @@
-package org.findy.findy_be.marker.application.domain.vo;
+package org.findy.findy_be.place.domain.vo;
 
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

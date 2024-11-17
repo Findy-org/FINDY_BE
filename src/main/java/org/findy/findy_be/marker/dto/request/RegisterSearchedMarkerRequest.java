@@ -2,8 +2,8 @@ package org.findy.findy_be.marker.dto.request;
 
 import static org.findy.findy_be.place.utils.CategoryResolver.*;
 
-import org.findy.findy_be.marker.application.domain.Place;
-import org.findy.findy_be.marker.application.domain.vo.Coordinate;
+import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.domain.vo.Coordinate;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

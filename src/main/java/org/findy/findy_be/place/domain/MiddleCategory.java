@@ -1,4 +1,4 @@
-package org.findy.findy_be.marker.application.domain;
+package org.findy.findy_be.place.domain;
 
 import java.util.Arrays;
 import java.util.Optional;

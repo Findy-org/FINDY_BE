@@ -9,11 +9,11 @@ import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
-import org.findy.findy_be.marker.application.domain.MajorCategory;
-import org.findy.findy_be.marker.application.domain.MiddleCategory;
-import org.findy.findy_be.marker.application.domain.Place;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.dto.response.PlaceResponse;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.User;
@@ -45,7 +45,7 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 		testUser = mock(User.class);
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
 		places = IntStream.range(0, 5)
-			.mapToObj(i -> new RegisterMarkerRequest(
+			.mapToObj(i -> new RegisterYouTubeMarkerRequest(
 				"Test Place " + i,
 				"Description " + i,
 				"02-1234-5678",
@@ -53,8 +53,8 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 				categoryRequest,
 				"1269827323",
 				"375719345",
-				"02-000-000"
-
+				"02-000-000",
+				"0.04"
 			))
 			.map(Place::create)
 			.collect(Collectors.toList());

@@ -12,8 +12,12 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.domain.Marker;
+import org.findy.findy_be.marker.dto.request.CategoryRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
-import org.findy.findy_be.marker.application.domain.Place;
+import org.findy.findy_be.place.domain.MajorCategory;
+import org.findy.findy_be.place.domain.MiddleCategory;
+import org.findy.findy_be.place.domain.Place;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,13 +39,31 @@ class BatchCreateMarkerServiceTest extends MockTest {
 	private Bookmark testBookmark;
 	private Place place1;
 	private Place place2;
+	private List<RegisterYouTubeMarkerRequest> requests;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		testBookmark = mock(Bookmark.class);
+
 		place1 = mock(Place.class);
+		when(place1.getTitle()).thenReturn("Place1");
+		when(place1.getRoadAddress()).thenReturn("RoadAddress1");
+
 		place2 = mock(Place.class);
+		when(place2.getTitle()).thenReturn("Place2");
+		when(place2.getRoadAddress()).thenReturn("RoadAddress2");
+
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		RegisterYouTubeMarkerRequest request1 = new RegisterYouTubeMarkerRequest(
+			"Place1", "Description1", "Address1", "RoadAddress1", categoryRequest,
+			"12345", "67890", "02-000-0000", "0.04"
+		);
+		RegisterYouTubeMarkerRequest request2 = new RegisterYouTubeMarkerRequest(
+			"Place2", "Description2", "Address2", "RoadAddress2", categoryRequest,
+			"54321", "09876", "02-000-0001", "0.04"
+		);
+		requests = Arrays.asList(request1, request2);
 	}
 
 	@DisplayName("[성공] 새로운 장소에 대한 마커 생성되고 마킹된 장소 수가 업데이트")
@@ -55,7 +77,7 @@ class BatchCreateMarkerServiceTest extends MockTest {
 			.thenReturn(List.of());
 
 		// when
-		batchCreateMarkerService.invoke(testBookmark, places);
+		batchCreateMarkerService.invoke(testBookmark, places, requests);
 
 		// then
 		verify(markerRepository, times(1)).saveAll(anyList());
@@ -75,7 +97,7 @@ class BatchCreateMarkerServiceTest extends MockTest {
 			.thenReturn(List.of(existingMarker));
 
 		// when
-		batchCreateMarkerService.invoke(testBookmark, places);
+		batchCreateMarkerService.invoke(testBookmark, places, requests);
 
 		// then
 		verify(markerRepository, times(1)).saveAll(anyList());

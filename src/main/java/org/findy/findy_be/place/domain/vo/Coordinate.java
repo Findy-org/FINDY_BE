@@ -1,4 +1,4 @@
-package org.findy.findy_be.marker.application.domain.vo;
+package org.findy.findy_be.place.domain.vo;
 
 import java.util.Objects;
 

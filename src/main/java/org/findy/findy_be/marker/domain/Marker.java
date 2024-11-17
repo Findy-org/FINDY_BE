@@ -1,8 +1,10 @@
 package org.findy.findy_be.marker.domain;
 
+import java.util.Objects;
+
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.entity.BaseTimeEntity;
-import org.findy.findy_be.marker.application.domain.Place;
+import org.findy.findy_be.place.domain.Place;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -61,4 +63,20 @@ public class Marker extends BaseTimeEntity {
 			.bookmark(bookmark)
 			.build();
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Marker marker = (Marker)o;
+		return Objects.equals(id, marker.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
 }
