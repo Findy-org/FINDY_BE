@@ -9,12 +9,10 @@ import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
-import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
-import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.response.PlaceResponse;
+import org.findy.findy_be.place.domain.vo.Category;
+import org.findy.findy_be.place.dto.response.MarkerPlaceResponse;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,26 +35,21 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 	private FindAllPagedMarkersService findAllPagedMarkersService;
 
 	private User testUser;
-	private List<Place> places;
+	private List<MarkerPlaceResponse> markerPlaceResponses;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 		testUser = mock(User.class);
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
-		places = IntStream.range(0, 5)
-			.mapToObj(i -> new RegisterYouTubeMarkerRequest(
-				"Test Place " + i,
-				"Description " + i,
-				"02-1234-5678",
-				"Seoul Road " + i,
-				categoryRequest,
-				"1269827323",
-				"375719345",
-				"02-000-000",
-				"0.04"
-			))
-			.map(Place::create)
+
+		Category category = Category.of(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		markerPlaceResponses = IntStream.range(0, 5)
+			.mapToObj(i -> MarkerPlaceResponse.builder()
+				.markerId((long)i)
+				.title("Test Place " + i)
+				.address("Seoul Road " + i)
+				.category(category)
+				.build())
 			.collect(Collectors.toList());
 	}
 
@@ -66,7 +59,7 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 		// given
 		Long bookmarkId = 1L;
 		Pageable pageable = PageRequest.of(0, 3);
-		Slice<Place> placeSlice = new SliceImpl<>(places.subList(0, 3), pageable, true);
+		Slice<MarkerPlaceResponse> placeSlice = new SliceImpl<>(markerPlaceResponses.subList(0, 3), pageable, true);
 
 		when(placeRepository.findPlacesByUserIdAndBookmarkId(eq(testUser.getUserId()), eq(bookmarkId),
 			any(Pageable.class),
@@ -74,12 +67,13 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 			.thenReturn(placeSlice);
 
 		// when
-		SliceResponse<PlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L, 3);
+		SliceResponse<MarkerPlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L,
+			3);
 
 		// then
 		assertThat(response.data().size()).isEqualTo(3);
 		assertThat(response.hasNext()).isTrue();
-		assertThat(response.nextCursor()).isEqualTo(places.get(2).getId());
+		assertThat(response.nextCursor()).isEqualTo(markerPlaceResponses.get(2).markerId());
 	}
 
 	@DisplayName("[성공 case2(다음페이지 없음)] 유저 마커 조회 성공")
@@ -88,7 +82,7 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 		// given
 		Long bookmarkId = 1L;
 		Pageable pageable = PageRequest.of(0, 3);
-		Slice<Place> placeSlice = new SliceImpl<>(places.subList(0, 3), pageable, false);
+		Slice<MarkerPlaceResponse> placeSlice = new SliceImpl<>(markerPlaceResponses.subList(0, 3), pageable, false);
 
 		when(placeRepository.findPlacesByUserIdAndBookmarkId(eq(testUser.getUserId()), eq(bookmarkId),
 			any(Pageable.class),
@@ -96,7 +90,8 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 			.thenReturn(placeSlice);
 
 		// when
-		SliceResponse<PlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L, 3);
+		SliceResponse<MarkerPlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L,
+			3);
 
 		// then
 		assertThat(response.data().size()).isEqualTo(3);

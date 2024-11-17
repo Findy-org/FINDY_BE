@@ -18,6 +18,7 @@ import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.dto.response.MarkerPlaceResponse;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
@@ -48,7 +49,6 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 
 	private User testUser;
 	private Bookmark testBookmark;
-	private List<Place> persistPlaces;
 
 	@BeforeEach
 	void setUp() {
@@ -71,18 +71,22 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 		initPlacesForBookmark(testBookmark, 10);
 	}
 
-	@DisplayName("[성공 (다음 페이지가 있는 경우)]유저의 특정 북마크에 저장된 장소 목록을 페이징 조회")
+	@DisplayName("[성공 (다음 페이지가 있는 경우)] 유저의 특정 북마크에 저장된 장소 목록을 페이징 조회")
 	@Test
 	void 유저_북마크_장소_조회_성공_case1() {
 		Pageable pageable = PageRequest.of(0, 5);
 		Long cursor = 0L;
 
-		Slice<Place> placeSlice = placeRepository.findPlacesByUserIdAndBookmarkId(testUser.getUserId(),
-			testBookmark.getId(), pageable, cursor);
+		Slice<MarkerPlaceResponse> placeSlice = placeRepository.findPlacesByUserIdAndBookmarkId(
+			testUser.getUserId(),
+			testBookmark.getId(),
+			pageable,
+			cursor
+		);
 
 		assertThat(placeSlice.getContent()).hasSize(5);
 		assertThat(placeSlice.hasNext()).isTrue();
-		assertThat(placeSlice.getContent().get(0).getTitle()).isEqualTo("Test Place 1");
+		assertThat(placeSlice.getContent().get(0).title()).isEqualTo("Test Place 1");
 	}
 
 	@DisplayName("[성공 (마지막 페이지)] 유저의 특정 북마크에 저장된 장소 목록을 페이징 조회")
@@ -91,11 +95,16 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 		Pageable pageable = PageRequest.of(0, 11);
 		Long cursor = 0L;
 
-		Slice<Place> placeSlice = placeRepository.findPlacesByUserIdAndBookmarkId(testUser.getUserId(),
-			testBookmark.getId(), pageable, cursor);
+		Slice<MarkerPlaceResponse> placeSlice = placeRepository.findPlacesByUserIdAndBookmarkId(
+			testUser.getUserId(),
+			testBookmark.getId(),
+			pageable,
+			cursor
+		);
+
 		assertThat(placeSlice.getContent()).hasSize(10);
 		assertThat(placeSlice.hasNext()).isFalse();
-		assertThat(placeSlice.getContent().get(0).getTitle()).isEqualTo("Test Place 1");
+		assertThat(placeSlice.getContent().get(0).title()).isEqualTo("Test Place 1");
 	}
 
 	private void initPlacesForBookmark(Bookmark bookmark, int count) {
@@ -113,9 +122,9 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 			)))
 			.collect(Collectors.toList());
 
-		persistPlaces = placeJpaRepository.saveAll(places);
+		List<Place> persistPlaces = placeJpaRepository.saveAll(places);
 
-		List<Marker> markers = places.stream()
+		List<Marker> markers = persistPlaces.stream()
 			.map(place -> Marker.createForCustomBookmark(bookmark, place))
 			.collect(Collectors.toList());
 

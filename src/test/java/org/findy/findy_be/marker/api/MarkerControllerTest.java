@@ -6,9 +6,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.assertj.core.api.Assertions;
 import org.findy.findy_be.auth.oauth.domain.SocialProviderType;
 import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.bookmark.domain.Bookmark;
@@ -25,6 +27,7 @@ import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
 import org.findy.findy_be.user.repository.UserRepository;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -198,6 +201,21 @@ class MarkerControllerTest extends IntegrationTest {
 			.andExpect(jsonPath("$.nextCursor").doesNotExist());
 	}
 
+	@DisplayName("[성공] 마커 삭제 요청")
+	@Test
+	void 마커_삭제_요청() throws Exception {
+		// given
+		initPlacesForBookmark(testBookmark, 1);
+		Long markerId = markerRepository.findAll().get(0).getId();
+
+		// when
+		DeleteMarker(markerId);
+
+		// then
+		Optional<Marker> resultMarker = markerRepository.findById(markerId);
+		Assertions.assertThat(resultMarker.isEmpty()).isTrue();
+	}
+
 	private ResultActions GetBookmarks(final Long bookmarkId, final PagedRequest pagedRequest) throws Exception {
 		return mvc.perform((get("/api/markers/{bookmarkId}", bookmarkId)
 				.param("cursor", pagedRequest.cursor() == null ? "" : pagedRequest.cursor().toString())
@@ -212,6 +230,11 @@ class MarkerControllerTest extends IntegrationTest {
 		return mvc.perform(post("/api/markers/{bookmarkId}", bookmarkId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
+			.andDo(print());
+	}
+
+	private @NotNull ResultActions DeleteMarker(Long id) throws Exception {
+		return mvc.perform(delete("/api/markers/{id}", id))
 			.andDo(print());
 	}
 

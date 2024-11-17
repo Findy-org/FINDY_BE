@@ -4,11 +4,13 @@ import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
 import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
 import org.findy.findy_be.common.meta.LoginUser;
 import org.findy.findy_be.marker.api.swagger.MarkerAPIPresentation;
+import org.findy.findy_be.marker.application.delete.DeleteMarker;
 import org.findy.findy_be.marker.application.find.FindAllPagedMarkers;
 import org.findy.findy_be.marker.application.register.RegisterMarker;
 import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
-import org.findy.findy_be.place.dto.response.PlaceResponse;
+import org.findy.findy_be.place.dto.response.MarkerPlaceResponse;
 import org.findy.findy_be.user.domain.User;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,7 @@ public class MarkerController implements MarkerAPIPresentation {
 
 	private final RegisterMarker registerMarker;
 	private final FindAllPagedMarkers findAllPagedMarkers;
+	private final DeleteMarker deleteMarker;
 
 	@PostMapping("/{bookmarkId}")
 	public void registerMarker(@LoginUser User user, @PathVariable("bookmarkId") Long bookmarkId,
@@ -35,8 +38,14 @@ public class MarkerController implements MarkerAPIPresentation {
 	}
 
 	@GetMapping("/{bookmarkId}")
-	public SliceResponse<PlaceResponse> getMarkers(@LoginUser User user, @PathVariable("bookmarkId") Long bookmarkId,
+	public SliceResponse<MarkerPlaceResponse> getMarkers(@LoginUser User user,
+		@PathVariable("bookmarkId") Long bookmarkId,
 		@ModelAttribute PagedRequest request) {
 		return findAllPagedMarkers.invoke(user.getUserId(), bookmarkId, request.cursor(), request.size());
+	}
+
+	@DeleteMapping("/{id}")
+	public void deleteMarker(@LoginUser User user, @PathVariable("id") Long markerId) {
+		deleteMarker.invoke(user.getUserId(), markerId);
 	}
 }
