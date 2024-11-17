@@ -77,12 +77,21 @@ public class Place extends BaseTimeEntity {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Place place = (Place)o;
+
+		if (id != null && id.equals(place.id)) {
+			return true;
+		}
+
 		return Objects.equals(title, place.title) &&
 			Objects.equals(roadAddress, place.roadAddress);
 	}
 
 	@Override
 	public int hashCode() {
+		if (id != null) {
+			return Objects.hash(id);
+		}
+
 		return Objects.hash(title, roadAddress);
 	}
 }
