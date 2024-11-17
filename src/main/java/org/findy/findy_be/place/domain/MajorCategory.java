@@ -1,5 +1,8 @@
 package org.findy.findy_be.place.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,4 +22,19 @@ public enum MajorCategory {
 	OTHER("기타");
 
 	private final String label;
+
+	@JsonValue
+	public String getLabel() {
+		return label;
+	}
+
+	@JsonCreator
+	public static MajorCategory fromLabel(String label) {
+		for (MajorCategory category : values()) {
+			if (category.label.equals(label)) {
+				return category;
+			}
+		}
+		throw new IllegalArgumentException("잘못된 대분류입니다. 대분류: " + label);
+	}
 }
