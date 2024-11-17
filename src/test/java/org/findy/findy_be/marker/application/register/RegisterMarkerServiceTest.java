@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.application.register;
+package org.findy.findy_be.marker.application.register;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.findy.findy_be.common.exception.ErrorCode.*;
@@ -14,9 +14,9 @@ import org.findy.findy_be.bookmark.domain.BookmarkType;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.application.create.CreateMarker;
+import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.Place;
-import org.findy.findy_be.place.dto.request.RegisterSearchedPlaceRequest;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -27,7 +27,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class RegisterPlaceServiceTest extends MockTest {
+class RegisterMarkerServiceTest extends MockTest {
 
 	@Mock
 	private FindPlace findPlace;
@@ -42,9 +42,9 @@ class RegisterPlaceServiceTest extends MockTest {
 	private BookmarkRepository bookmarkRepository;
 
 	@InjectMocks
-	private RegisterPlaceService registerPlaceService;
+	private RegisterMarkerService registerMarkerService;
 
-	private RegisterSearchedPlaceRequest placeRequest;
+	private RegisterSearchedMarkerRequest placeRequest;
 	private User user;
 	private Bookmark bookmark;
 	private Place place;
@@ -63,7 +63,7 @@ class RegisterPlaceServiceTest extends MockTest {
 			LocalDateTime.now(),
 			LocalDateTime.now()
 		);
-		placeRequest = new RegisterSearchedPlaceRequest(
+		placeRequest = new RegisterSearchedMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"음식점>분식",
 			"설명",
@@ -90,7 +90,7 @@ class RegisterPlaceServiceTest extends MockTest {
 		when(placeRepository.save(any(Place.class))).thenReturn(place);
 
 		// when
-		registerPlaceService.invoke(bookmarkId, placeRequest, user.getUserId());
+		registerMarkerService.invoke(bookmarkId, placeRequest, user.getUserId());
 
 		// then
 		verify(placeRepository, times(1)).save(any(Place.class));
@@ -106,7 +106,7 @@ class RegisterPlaceServiceTest extends MockTest {
 		when(findPlace.invoke(placeRequest.title(), placeRequest.roadAddress())).thenReturn(Optional.of(place));
 
 		// when
-		registerPlaceService.invoke(bookmarkId, placeRequest, user.getUserId());
+		registerMarkerService.invoke(bookmarkId, placeRequest, user.getUserId());
 
 		// then
 		verify(placeRepository, never()).save(any(Place.class));
@@ -123,7 +123,7 @@ class RegisterPlaceServiceTest extends MockTest {
 		when(bookmark.getBookmarkType()).thenReturn(BookmarkType.YOUTUBE);
 
 		// when & then
-		assertThatThrownBy(() -> registerPlaceService.invoke(bookmarkId, placeRequest, user.getUserId()))
+		assertThatThrownBy(() -> registerMarkerService.invoke(bookmarkId, placeRequest, user.getUserId()))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage(BAD_REQUEST_YOUTUBE_BOOKMARK_REGISTER_ERROR.getMessage());
 	}

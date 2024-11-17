@@ -1,4 +1,4 @@
-package org.findy.findy_be.place.dto.request;
+package org.findy.findy_be.marker.dto.request;
 
 import static org.findy.findy_be.place.utils.CategoryResolver.*;
 
@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "장소 DTO")
-public record RegisterSearchedPlaceRequest(
+public record RegisterSearchedMarkerRequest(
 
 	@NotNull(message = "장소명은 비어있을 수 없습니다.")
 	@Schema(description = "장소명", example = "동대문<b>엽기떡볶이</b> 종각점")

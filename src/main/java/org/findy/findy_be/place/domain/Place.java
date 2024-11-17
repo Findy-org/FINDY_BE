@@ -1,9 +1,11 @@
 package org.findy.findy_be.place.domain;
 
+import java.util.Objects;
+
 import org.findy.findy_be.common.entity.BaseTimeEntity;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.domain.vo.Coordinate;
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -54,7 +56,7 @@ public class Place extends BaseTimeEntity {
 	@Embedded
 	private Category category;
 
-	public static Place create(final RegisterPlaceRequest request) {
+	public static Place create(final RegisterYouTubeMarkerRequest request) {
 		Coordinate coordinate = Coordinate.of(request.mapX(), request.mapY());
 		Category category = Category.of(request.category().majorCategory(), request.category().middleCategory());
 		return Place.builder()
@@ -66,5 +68,30 @@ public class Place extends BaseTimeEntity {
 			.telephone(request.telephone())
 			.title(request.title())
 			.build();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Place place = (Place)o;
+
+		if (id != null && id.equals(place.id)) {
+			return true;
+		}
+
+		return Objects.equals(title, place.title) &&
+			Objects.equals(roadAddress, place.roadAddress);
+	}
+
+	@Override
+	public int hashCode() {
+		if (id != null) {
+			return Objects.hash(id);
+		}
+
+		return Objects.hash(title, roadAddress);
 	}
 }

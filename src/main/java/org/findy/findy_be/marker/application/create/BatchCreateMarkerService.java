@@ -7,8 +7,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
-import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.marker.domain.Marker;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.domain.Place;
 import org.springframework.stereotype.Service;
@@ -25,43 +25,55 @@ import lombok.extern.slf4j.Slf4j;
 public class BatchCreateMarkerService implements BatchCreateMarker {
 
 	private final MarkerRepository markerRepository;
-	private final BookmarkRepository bookmarkRepository;
 
 	@Override
-	public void invoke(final Bookmark bookmark, final List<Place> places) {
-		List<Marker> existingMarkers = markerRepository.findAllByBookmarkAndPlaces(bookmark, places);
+	public void invoke(final Bookmark bookmark, final List<Place> places,
+		final List<RegisterYouTubeMarkerRequest> requests) {
+		Set<Long> existingPlaceIds = findExistingPlaceIds(bookmark, places);
 
-		Set<Long> existingPlaceIds = getExistingPlaceIds(existingMarkers);
-		List<Marker> newMarkers = getNewMarkers(bookmark, places, existingPlaceIds);
+		List<Marker> newMarkers = createNewMarkers(bookmark, places, requests, existingPlaceIds);
 
-		markerRepository.saveAll(newMarkers);
-		updateMarkersCount(bookmark.getId(), newMarkers);
+		saveMarkersAndIncrementCount(bookmark, newMarkers);
 	}
 
-	private static List<Marker> getNewMarkers(final Bookmark bookmark, final List<Place> places,
-		final Set<Long> existingPlaceIds) {
-		return places.stream()
-			.filter(place -> !existingPlaceIds.contains(place.getId()))
-			.map(place -> {
-				Marker marker = Marker.create(bookmark, place);
-				marker.changeBookmark(bookmark);
-				return marker;
-			})
-			.collect(Collectors.toList());
-	}
-
-	private static Set<Long> getExistingPlaceIds(final List<Marker> existingMarkers) {
-		Set<Long> existingPlaceIds;
-		existingPlaceIds = existingMarkers.stream()
+	private Set<Long> findExistingPlaceIds(Bookmark bookmark, List<Place> places) {
+		return markerRepository.findAllByBookmarkAndPlaces(bookmark, places).stream()
 			.map(marker -> marker.getPlace().getId())
 			.collect(Collectors.toSet());
-		return existingPlaceIds;
 	}
 
-	private void updateMarkersCount(final Long bookmarkId, final List<Marker> newMarkers) {
-		Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
-			.orElseThrow(() -> new EntityNotFoundException(
-				String.format(NOT_FOUND_BOOKMARK_BY_ID.getMessage(), bookmarkId)));
+	private List<Marker> createNewMarkers(Bookmark bookmark, List<Place> places,
+		List<RegisterYouTubeMarkerRequest> requests, Set<Long> existingPlaceIds) {
+		return requests.stream()
+			.filter(request -> !existingPlaceIds.contains(
+				findPlaceIdByTitleAndRoadAddress(places, request.title(), request.roadAddress())))
+			.map(request -> createMarker(bookmark, places, request))
+			.toList();
+	}
+
+	private Marker createMarker(Bookmark bookmark, List<Place> places, RegisterYouTubeMarkerRequest request) {
+		Place place = findPlaceByTitleAndRoadAddress(places, request.title(), request.roadAddress());
+		return Marker.createForYoutubeBookmark(request.timestamp(), bookmark, place);
+	}
+
+	private void saveMarkersAndIncrementCount(Bookmark bookmark, List<Marker> newMarkers) {
+		markerRepository.saveAll(newMarkers);
 		bookmark.incrementMarkersCount(newMarkers.size());
+	}
+
+	private Place findPlaceByTitleAndRoadAddress(List<Place> places, String title, String roadAddress) {
+		return places.stream()
+			.filter(place -> place.getTitle().equals(title) && place.getRoadAddress().equals(roadAddress))
+			.findFirst()
+			.orElseThrow(
+				() -> new EntityNotFoundException(String.format(NOT_FOUND_PLACE.getMessage(), title, roadAddress)));
+	}
+
+	private Long findPlaceIdByTitleAndRoadAddress(List<Place> places, String title, String roadAddress) {
+		return places.stream()
+			.filter(place -> place.getTitle().equals(title) && place.getRoadAddress().equals(roadAddress))
+			.map(Place::getId)
+			.findFirst()
+			.orElse(null);
 	}
 }

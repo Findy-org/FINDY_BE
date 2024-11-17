@@ -22,7 +22,7 @@ public class CreateMarkerService implements CreateMarker {
 	public void invoke(final Bookmark bookmark, final Place place) {
 		Optional<Marker> existingMarker = markerRepository.findByBookmarkAndPlace(bookmark, place);
 		if (existingMarker.isEmpty()) {
-			Marker marker = Marker.create(bookmark, place);
+			Marker marker = Marker.createForCustomBookmark(bookmark, place);
 			markerRepository.save(marker);
 			marker.changeBookmark(bookmark);
 			bookmark.incrementMarkersCount(1);

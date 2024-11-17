@@ -3,6 +3,9 @@ package org.findy.findy_be.place.domain;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -202,5 +205,18 @@ public enum MiddleCategory {
 
 	public boolean matchesMajorCategoryLabel(String label) {
 		return this.majorCategory.getLabel().equals(label);
+	}
+
+	@JsonValue
+	public String getLabel() {
+		return label;
+	}
+
+	@JsonCreator
+	public static MiddleCategory fromLabel(String label) {
+		return Arrays.stream(MiddleCategory.values())
+			.filter(category -> category.getLabel().equals(label))
+			.findFirst()
+			.orElseThrow(() -> new IllegalArgumentException("잘못된 중분류입니다. 중분류:" + label));
 	}
 }

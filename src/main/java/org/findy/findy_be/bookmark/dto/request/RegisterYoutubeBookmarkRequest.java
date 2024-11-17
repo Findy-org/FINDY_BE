@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.validation.ValidYoutuberId;
-import org.findy.findy_be.place.dto.request.RegisterPlaceRequest;
+import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.user.domain.User;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "유튜브 즐겨찾기 DTO")
-public record YoutubeBookmarkRequest(
+public record RegisterYoutubeBookmarkRequest(
 
 	@ValidYoutuberId(message = "유튜버 ID는 @으로 시작해야합니다.")
 	@Schema(description = "유튜버 ID", example = "@iammingki")
@@ -27,7 +27,7 @@ public record YoutubeBookmarkRequest(
 	@Schema(description = "유튜브 링크", example = "https://www.youtube.com/watch?v=hE2wMo5Coco")
 	String youtubeLink,
 
-	List<RegisterPlaceRequest> places
+	List<RegisterYouTubeMarkerRequest> places
 ) {
 	public Bookmark toEntity(User user) {
 		return Bookmark.createYoutubeType(youtuberName, youtuberId, youtuberProfile, youtubeLink, user);

@@ -7,8 +7,8 @@ import org.findy.findy_be.bookmark.application.find.FindAllPagedBookmarks;
 import org.findy.findy_be.bookmark.application.register.RegisterYoutubeBookmark;
 import org.findy.findy_be.bookmark.application.update.UpdateBookmark;
 import org.findy.findy_be.bookmark.dto.request.CreateCustomBookmarkRequest;
+import org.findy.findy_be.bookmark.dto.request.RegisterYoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.request.UpdateBookmarkRequest;
-import org.findy.findy_be.bookmark.dto.request.YoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
 import org.findy.findy_be.common.dto.pagination.request.PagedRequest;
 import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
@@ -39,7 +39,8 @@ public class BookmarkController implements BookmarkAPIPresentation {
 	private final UpdateBookmark updateBookmark;
 
 	@PostMapping("/youtube")
-	public void registerYoutubeBookmark(@LoginUser User user, @Valid @RequestBody YoutubeBookmarkRequest request) {
+	public void registerYoutubeBookmark(@LoginUser User user,
+		@Valid @RequestBody RegisterYoutubeBookmarkRequest request) {
 		registerYoutubeBookmark.invoke(user, request);
 	}
 
