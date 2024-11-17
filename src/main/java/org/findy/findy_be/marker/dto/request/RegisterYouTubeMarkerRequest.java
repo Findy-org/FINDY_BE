@@ -1,7 +1,5 @@
 package org.findy.findy_be.marker.dto.request;
 
-import org.findy.findy_be.bookmark.domain.Bookmark;
-import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.place.domain.Place;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,10 +42,5 @@ public record RegisterYouTubeMarkerRequest(
 
 	public Place toPlaceEntity() {
 		return Place.create(this);
-	}
-
-	public Marker toMarkerEntity(Bookmark bookmark) {
-		Place place = toPlaceEntity();
-		return Marker.createForYoutubeBookmark(timestamp, bookmark, place);
 	}
 }
