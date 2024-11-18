@@ -22,6 +22,7 @@ public enum MiddleCategory {
 	CHINESE(MajorCategory.RESTAURANT, "중식"),
 	KOREAN_STREET_FOOD(MajorCategory.RESTAURANT, "분식"),
 	OTHER_FOOD(MajorCategory.RESTAURANT, "기타 음식"),
+	CAFE_AND_DESSERT(MajorCategory.RESTAURANT, "카페,디저트"),
 
 	// 카페/디저트 중분류
 	ICE_CREAM(MajorCategory.CAFE_AND_DESSERT, "아이스크림"),
