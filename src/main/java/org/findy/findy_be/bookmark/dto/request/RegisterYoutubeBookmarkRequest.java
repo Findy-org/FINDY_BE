@@ -3,7 +3,6 @@ package org.findy.findy_be.bookmark.dto.request;
 import java.util.List;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
-import org.findy.findy_be.common.validation.ValidYoutuberId;
 import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.user.domain.User;
 
@@ -13,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 @Schema(description = "유튜브 즐겨찾기 DTO")
 public record RegisterYoutubeBookmarkRequest(
 
-	@ValidYoutuberId(message = "유튜버 ID는 @으로 시작해야합니다.")
+	// @ValidYoutuberId(message = "유튜버 ID는 @으로 시작해야합니다.")
 	@Schema(description = "유튜버 ID", example = "@iammingki")
 	String youtuberId,
 
