@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 public class Coordinate {
 
 	@NotNull
-	private String mapX;
+	private String mapx;
 
 	@NotNull
-	private String mapY;
+	private String mapy;
 
-	public static Coordinate of(String mapX, String mapY) {
-		return new Coordinate(mapX, mapY);
+	public static Coordinate of(String mapx, String mapy) {
+		return new Coordinate(mapx, mapy);
 	}
 
 	@Override
@@ -32,11 +32,11 @@ public class Coordinate {
 		if (!(o instanceof Coordinate))
 			return false;
 		Coordinate that = (Coordinate)o;
-		return mapX.equals(that.mapX) && mapY.equals(that.mapY);
+		return mapx.equals(that.mapx) && mapy.equals(that.mapy);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(mapX, mapY);
+		return Objects.hash(mapx, mapy);
 	}
 }

@@ -11,8 +11,8 @@ public record MarkerPlaceResponse(
 	String title,
 	String address,
 	Category category,
-	String mapX,
-	String mapY
+	String mapx,
+	String mapy
 ) {
 	public static MarkerPlaceResponse of(final Long markerId, final Place place) {
 		return MarkerPlaceResponse.builder()
@@ -20,8 +20,8 @@ public record MarkerPlaceResponse(
 			.title(place.getTitle())
 			.address(place.getAddress())
 			.category(place.getCategory())
-			.mapX(place.getCoordinate().getMapX())
-			.mapY(place.getCoordinate().getMapY())
+			.mapx(place.getCoordinate().getMapx())
+			.mapy(place.getCoordinate().getMapy())
 			.build();
 	}
 }

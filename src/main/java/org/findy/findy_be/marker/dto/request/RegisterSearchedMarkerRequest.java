@@ -34,14 +34,14 @@ public record RegisterSearchedMarkerRequest(
 
 	@NotNull(message = "좌표는 비어있을 수 없습니다.")
 	@Schema(description = "x 좌표", example = "1269827323")
-	String mapX,
+	String mapx,
 
 	@NotNull(message = "좌표는 비어있을 수 없습니다.")
 	@Schema(description = "y 좌표", example = "375719345")
-	String mapY
+	String mapy
 ) {
 	public Place toEntity() {
-		Coordinate coordinate = Coordinate.of(this.mapX, this.mapY);
+		Coordinate coordinate = Coordinate.of(this.mapx, this.mapy);
 		return Place.builder()
 			.title(this.title())
 			.category(resolveCategory(this.category))
