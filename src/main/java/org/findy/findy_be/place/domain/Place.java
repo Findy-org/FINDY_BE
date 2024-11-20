@@ -57,7 +57,7 @@ public class Place extends BaseTimeEntity {
 	private Category category;
 
 	public static Place create(final RegisterYouTubeMarkerRequest request) {
-		Coordinate coordinate = Coordinate.of(request.mapX(), request.mapY());
+		Coordinate coordinate = Coordinate.of(request.mapx(), request.mapy());
 		Category category = Category.of(request.category().majorCategory(), request.category().middleCategory());
 		return Place.builder()
 			.address(request.address())
