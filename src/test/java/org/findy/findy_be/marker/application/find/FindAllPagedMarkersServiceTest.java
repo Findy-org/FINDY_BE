@@ -4,11 +4,14 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.findy.findy_be.bookmark.domain.Bookmark;
+import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
-import org.findy.findy_be.common.dto.pagination.response.SliceResponse;
+import org.findy.findy_be.marker.dto.response.PagedMarkerResponse;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.vo.Category;
@@ -30,6 +33,9 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 
 	@Mock
 	private PlaceRepository placeRepository;
+
+	@Mock
+	private BookmarkRepository bookmarkRepository;
 
 	@InjectMocks
 	private FindAllPagedMarkersService findAllPagedMarkersService;
@@ -65,15 +71,17 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 			any(Pageable.class),
 			anyLong()))
 			.thenReturn(placeSlice);
-
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(
+			Optional.of(Bookmark.createCustomType("북마크", testUser)));
 		// when
-		SliceResponse<MarkerPlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L,
+
+		PagedMarkerResponse response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L,
 			3);
 
 		// then
-		assertThat(response.data().size()).isEqualTo(3);
-		assertThat(response.hasNext()).isTrue();
-		assertThat(response.nextCursor()).isEqualTo(markerPlaceResponses.get(2).markerId());
+		assertThat(response.markers().data().size()).isEqualTo(3);
+		assertThat(response.markers().hasNext()).isTrue();
+		assertThat(response.markers().nextCursor()).isEqualTo(markerPlaceResponses.get(2).markerId());
 	}
 
 	@DisplayName("[성공 case2(다음페이지 없음)] 유저 마커 조회 성공")
@@ -88,14 +96,16 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 			any(Pageable.class),
 			anyLong()))
 			.thenReturn(placeSlice);
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(
+			Optional.of(Bookmark.createCustomType("북마크", testUser)));
 
 		// when
-		SliceResponse<MarkerPlaceResponse> response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L,
+		PagedMarkerResponse response = findAllPagedMarkersService.invoke(testUser.getUserId(), 1L, 0L,
 			3);
 
 		// then
-		assertThat(response.data().size()).isEqualTo(3);
-		assertThat(response.hasNext()).isFalse();
-		assertThat(response.nextCursor()).isNull();
+		assertThat(response.markers().data().size()).isEqualTo(3);
+		assertThat(response.markers().hasNext()).isFalse();
+		assertThat(response.markers().nextCursor()).isNull();
 	}
 }

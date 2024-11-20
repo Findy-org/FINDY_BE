@@ -162,7 +162,6 @@ class MarkerControllerTest extends IntegrationTest {
 	@Test
 	public void 장소_조회_API_성공() throws Exception {
 		// given
-
 		Long bookmarkId = testBookmark.getId();
 		int size = 5;
 		Long cursor = 0L;
@@ -175,9 +174,9 @@ class MarkerControllerTest extends IntegrationTest {
 		// then
 		resultActions
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.length()").value(size))
-			.andExpect(jsonPath("$.hasNext").value(true))
-			.andExpect(jsonPath("$.nextCursor").isNotEmpty());
+			.andExpect(jsonPath("$.markers.data.length()").value(size))
+			.andExpect(jsonPath("$.markers.hasNext").value(true))
+			.andExpect(jsonPath("$.markers.nextCursor").isNotEmpty());
 	}
 
 	@DisplayName("[성공 case 2] 장소 조회 API-마지막_페이지")
@@ -196,9 +195,9 @@ class MarkerControllerTest extends IntegrationTest {
 		// then
 		resultActions
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.length()").value(10))
-			.andExpect(jsonPath("$.hasNext").value(false))
-			.andExpect(jsonPath("$.nextCursor").doesNotExist());
+			.andExpect(jsonPath("$.markers.length()").value(5))
+			.andExpect(jsonPath("$.markers.hasNext").value(false))
+			.andExpect(jsonPath("$.markers.nextCursor").doesNotExist());
 	}
 
 	@DisplayName("[성공] 마커 삭제 요청")

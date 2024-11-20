@@ -37,7 +37,7 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
 			.join(marker.place, place)
 			.where(bookmark.user.userId.eq(userId)
 				.and(bookmark.id.eq(bookmarkId))
-				.and(cursor != null ? bookmark.id.gt(cursor) : null))
+				.and(cursor != null ? marker.id.gt(cursor) : null))
 			.orderBy(bookmark.id.asc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
