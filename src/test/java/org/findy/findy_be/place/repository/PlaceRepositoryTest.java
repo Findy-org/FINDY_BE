@@ -27,7 +27,8 @@ class PlaceRepositoryTest extends RepositoryTest {
 	@Test
 	void 주어진_상세_정보로_장소_조회() {
 		// given
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		RegisterYouTubeMarkerRequest request = new RegisterYouTubeMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
@@ -44,7 +45,9 @@ class PlaceRepositoryTest extends RepositoryTest {
 		// when
 		Place foundPlace = placeRepository.findPlaceByDetails(
 			savedPlace.getTitle(),
-			savedPlace.getRoadAddress()
+			savedPlace.getRoadAddress(),
+			savedPlace.getCategory().getMajorCategory(),
+			savedPlace.getCategory().getMiddleCategory()
 		).orElse(null);
 
 		// then
@@ -57,7 +60,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 	void 주어진_상세_정보와_일치하는_장소가_없으면_null() {
 		// given // when
 		Optional<Place> foundPlace = placeRepository.findPlaceByDetails(
-			"존재하지 않는 장소", "도로명 주소"
+			"존재하지 않는 장소", "도로명 주소", "음식점", "한식"
 		);
 
 		// then
@@ -69,7 +72,8 @@ class PlaceRepositoryTest extends RepositoryTest {
 	@Transactional
 	void bulkInsertPlaces_여러_장소_일괄_삽입() {
 		// given
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		List<Place> places = IntStream.range(0, 100)
 			.mapToObj(i -> Place.create(new RegisterYouTubeMarkerRequest(
 					"Test Place " + i,

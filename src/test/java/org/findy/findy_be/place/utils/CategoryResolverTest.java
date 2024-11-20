@@ -17,8 +17,8 @@ class CategoryResolverTest {
 		String input = "음식점>한식";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.RESTAURANT, result.getMajorCategory());
-		assertEquals(MiddleCategory.KOREAN, result.getMiddleCategory());
+		assertEquals(MajorCategory.RESTAURANT.getLabel(), result.getMajorCategory());
+		assertEquals(MiddleCategory.KOREAN.getLabel(), result.getMiddleCategory());
 	}
 
 	@DisplayName("[성공 case2] 정상적인 '카페,디저트>아이스크림' 입력을 Category로 변환")
@@ -27,8 +27,8 @@ class CategoryResolverTest {
 		String input = "카페,디저트>아이스크림";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.CAFE_AND_DESSERT, result.getMajorCategory());
-		assertEquals(MiddleCategory.ICE_CREAM, result.getMiddleCategory());
+		assertEquals(MajorCategory.CAFE_AND_DESSERT.getLabel(), result.getMajorCategory());
+		assertEquals(MiddleCategory.ICE_CREAM.getLabel(), result.getMiddleCategory());
 	}
 
 	@DisplayName("[성공 case3] '아이스크림>아돈노' 입력 시 첫번째 입력을 기준으로 Category로 변환")
@@ -37,8 +37,8 @@ class CategoryResolverTest {
 		String input = "아이스크림>아돈노";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.CAFE_AND_DESSERT, result.getMajorCategory());
-		assertEquals(MiddleCategory.ICE_CREAM, result.getMiddleCategory());
+		assertEquals(MajorCategory.CAFE_AND_DESSERT.getLabel(), result.getMajorCategory());
+		assertEquals(MiddleCategory.ICE_CREAM.getLabel(), result.getMiddleCategory());
 	}
 
 	@DisplayName("[성공 case4] 정상적인 '음식점 > 한식' 입력을 Category로 변환")
@@ -47,8 +47,8 @@ class CategoryResolverTest {
 		String input = "음식점 > 한식";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.RESTAURANT, result.getMajorCategory());
-		assertEquals(MiddleCategory.KOREAN, result.getMiddleCategory());
+		assertEquals(MajorCategory.RESTAURANT.getLabel(), result.getMajorCategory());
+		assertEquals(MiddleCategory.KOREAN.getLabel(), result.getMiddleCategory());
 	}
 
 	@Test
@@ -57,8 +57,8 @@ class CategoryResolverTest {
 		String input = "한식 > 정의되지 않은 값";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.RESTAURANT, result.getMajorCategory());
-		assertEquals(MiddleCategory.KOREAN, result.getMiddleCategory());
+		assertEquals(MajorCategory.RESTAURANT.getLabel(), result.getMajorCategory());
+		assertEquals(MiddleCategory.KOREAN.getLabel(), result.getMiddleCategory());
 	}
 
 	@Test
@@ -67,8 +67,8 @@ class CategoryResolverTest {
 		String input = "카페,디저트 > 아이스크림";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.CAFE_AND_DESSERT, result.getMajorCategory());
-		assertEquals(MiddleCategory.ICE_CREAM, result.getMiddleCategory());
+		assertEquals(MajorCategory.CAFE_AND_DESSERT.getLabel(), result.getMajorCategory());
+		assertEquals(MiddleCategory.ICE_CREAM.getLabel(), result.getMiddleCategory());
 	}
 
 	@Test

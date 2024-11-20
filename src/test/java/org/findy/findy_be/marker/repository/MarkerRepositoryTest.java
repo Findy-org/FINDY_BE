@@ -50,7 +50,8 @@ class MarkerRepositoryTest extends RepositoryTest {
 			"https://github.com/account", SocialProviderType.NAVER, RoleType.USER,
 			LocalDateTime.now(), LocalDateTime.now()));
 
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		RegisterYouTubeMarkerRequest request = new RegisterYouTubeMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",

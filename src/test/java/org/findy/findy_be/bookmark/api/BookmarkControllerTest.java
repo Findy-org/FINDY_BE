@@ -74,7 +74,8 @@ class BookmarkControllerTest extends IntegrationTest {
 	@Test
 	void 유튜브_북마크_등록_성공() throws Exception {
 		// given
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		List<RegisterYouTubeMarkerRequest> selectedPlaces = List.of(
 			new RegisterYouTubeMarkerRequest("Place1", "Description1", "Address1", "RoadAddress1", categoryRequest,
 				"12345",
@@ -91,22 +92,23 @@ class BookmarkControllerTest extends IntegrationTest {
 			.andExpect(status().isOk());
 	}
 
-	@DisplayName("[실패] 유튜브 북마크 요청 시 유효성 검증 실패 - 유튜버 ID 형식 오류")
-	@Test
-	void 유튜브_북마크_등록_유효성_검증_실패_유튜버_ID_형식() throws Exception {
-		// given
-		RegisterYoutubeBookmarkRequest invalidRequest = new RegisterYoutubeBookmarkRequest(
-			"iammingki", "걍밍경", "https://yt3.googleusercontent.com/ytc/...",
-			"https://www.youtube.com/watch?v=hE2wMo5Coco", null);
-
-		// when
-		ResultActions resultActions = PostYoutubeBookmark(invalidRequest);
-
-		// then
-		resultActions
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("유튜버 ID는 @으로 시작해야합니다.")));
-	}
+	// 비지니스로 로직으로 인한 폐기
+	// @DisplayName("[실패] 유튜브 북마크 요청 시 유효성 검증 실패 - 유튜버 ID 형식 오류")
+	// @Test
+	// void 유튜브_북마크_등록_유효성_검증_실패_유튜버_ID_형식() throws Exception {
+	// 	// given
+	// 	RegisterYoutubeBookmarkRequest invalidRequest = new RegisterYoutubeBookmarkRequest(
+	// 		"iammingki", "걍밍경", "https://yt3.googleusercontent.com/ytc/...",
+	// 		"https://www.youtube.com/watch?v=hE2wMo5Coco", null);
+	//
+	// 	// when
+	// 	ResultActions resultActions = PostYoutubeBookmark(invalidRequest);
+	//
+	// 	// then
+	// 	resultActions
+	// 		.andExpect(status().isBadRequest())
+	// 		.andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("유튜버 ID는 @으로 시작해야합니다.")));
+	// }
 
 	@DisplayName("[실패] 유튜브 북마크 요청 시 유효성 검증 실패 - 유튜버 이름 누락")
 	@Test

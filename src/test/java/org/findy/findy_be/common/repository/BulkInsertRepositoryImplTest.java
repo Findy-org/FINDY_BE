@@ -36,7 +36,8 @@ class BulkInsertRepositoryImplTest extends RepositoryTest {
 	}
 
 	private List<Place> generateTestPlaces(int entityCount) {
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		return IntStream.range(0, entityCount)
 			.mapToObj(i -> new RegisterYouTubeMarkerRequest(
 				"Test Place " + i,

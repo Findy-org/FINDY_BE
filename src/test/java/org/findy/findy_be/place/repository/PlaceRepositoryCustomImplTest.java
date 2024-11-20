@@ -114,7 +114,7 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 				"Description " + i,
 				"Address " + i,
 				"RoadAddress " + i,
-				new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN),
+				new CategoryRequest(MajorCategory.RESTAURANT.getLabel(), MiddleCategory.KOREAN.getLabel()),
 				"1269827323",
 				"375719345",
 				"02-000-000" + i,

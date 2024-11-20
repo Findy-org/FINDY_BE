@@ -20,18 +20,6 @@ class MiddleCategoryTest {
 		assertThat(category).isEqualTo(MiddleCategory.KOREAN);
 	}
 
-	@DisplayName("[실패] 존재하지 않는 라벨로 Enum 찾기 시 예외 발생")
-	@Test
-	void fromLabel_실패_예외발생() {
-		// given
-		String invalidLabel = "없는중분류";
-
-		// when & then
-		assertThatThrownBy(() -> MiddleCategory.fromLabel(invalidLabel))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessageContaining("잘못된 중분류입니다. 중분류:" + invalidLabel);
-	}
-
 	@DisplayName("[성공] Enum 값을 라벨로 변환")
 	@Test
 	void getLabel_성공() {

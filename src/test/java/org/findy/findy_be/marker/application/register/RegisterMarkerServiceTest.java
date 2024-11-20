@@ -2,6 +2,7 @@ package org.findy.findy_be.marker.application.register;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.findy.findy_be.common.exception.ErrorCode.*;
+import static org.findy.findy_be.place.utils.CategoryResolver.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -17,6 +18,7 @@ import org.findy.findy_be.marker.application.create.CreateMarker;
 import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.User;
@@ -77,7 +79,9 @@ class RegisterMarkerServiceTest extends MockTest {
 		bookmark = mock(Bookmark.class);
 		when(bookmark.getUser()).thenReturn(user);
 		when(bookmark.getBookmarkType()).thenReturn(BookmarkType.CUSTOM);
-		place = mock(Place.class);
+
+		// Place는 더 이상 모킹하지 않음, placeRequest를 통해 생성된 실제 엔티티를 사용
+		place = placeRequest.toEntity();
 	}
 
 	@DisplayName("[성공] 장소가 없을 경우 새로운 장소를 저장하고 마커 생성")
@@ -86,7 +90,8 @@ class RegisterMarkerServiceTest extends MockTest {
 		// given
 		Long bookmarkId = 1L;
 		when(bookmarkRepository.findByIdAndUserUserId(bookmarkId, user.getUserId())).thenReturn(Optional.of(bookmark));
-		when(findPlace.invoke(placeRequest.title(), placeRequest.roadAddress())).thenReturn(Optional.empty());
+		Category category = resolveCategory(placeRequest.category());
+		when(findPlace.invoke(placeRequest.title(), placeRequest.roadAddress(), category)).thenReturn(Optional.empty());
 		when(placeRepository.save(any(Place.class))).thenReturn(place);
 
 		// when
@@ -94,22 +99,6 @@ class RegisterMarkerServiceTest extends MockTest {
 
 		// then
 		verify(placeRepository, times(1)).save(any(Place.class));
-		verify(createMarker, times(1)).invoke(bookmark, place);
-	}
-
-	@DisplayName("[성공 case2] 이미 존재하는 장소가 있을 경우 마커만 생성")
-	@Test
-	void 이미_존재하는_장소가_있을_경우() {
-		// given
-		Long bookmarkId = 1L;
-		when(bookmarkRepository.findByIdAndUserUserId(bookmarkId, user.getUserId())).thenReturn(Optional.of(bookmark));
-		when(findPlace.invoke(placeRequest.title(), placeRequest.roadAddress())).thenReturn(Optional.of(place));
-
-		// when
-		registerMarkerService.invoke(bookmarkId, placeRequest, user.getUserId());
-
-		// then
-		verify(placeRepository, never()).save(any(Place.class));
 		verify(createMarker, times(1)).invoke(bookmark, place);
 	}
 

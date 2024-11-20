@@ -11,6 +11,7 @@ import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,8 @@ class FindPlaceServiceTest extends MockTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		placeRequest = new RegisterYouTubeMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
@@ -54,17 +56,22 @@ class FindPlaceServiceTest extends MockTest {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress()
+			placeRequest.roadAddress(),
+			placeRequest.category().majorCategory(),
+			placeRequest.category().middleCategory()
 		)).thenReturn(Optional.of(place));
+		Category category = placeRequest.category().toEntity();
 
 		// when
-		Place foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress()).get();
+		Place foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress(), category).get();
 
 		// then
 		assertThat(foundPlace).isNotNull();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress()
+			placeRequest.roadAddress(),
+			placeRequest.category().majorCategory(),
+			placeRequest.category().middleCategory()
 		);
 	}
 
@@ -74,17 +81,23 @@ class FindPlaceServiceTest extends MockTest {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress()
+			placeRequest.roadAddress(),
+			placeRequest.category().majorCategory(),
+			placeRequest.category().middleCategory()
 		)).thenReturn(Optional.empty());
+		Category category = placeRequest.category().toEntity();
 
 		// when
-		Optional<Place> foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress());
+		Optional<Place> foundPlace = findPlaceService.invoke(placeRequest.title(), placeRequest.roadAddress(),
+			category);
 
 		// then
 		assertThat(foundPlace).isEmpty();
 		verify(placeRepository, times(1)).findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress()
+			placeRequest.roadAddress(),
+			placeRequest.category().majorCategory(),
+			placeRequest.category().middleCategory()
 		);
 	}
 }
