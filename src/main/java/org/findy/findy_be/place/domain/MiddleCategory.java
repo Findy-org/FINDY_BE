@@ -20,6 +20,7 @@ public enum MiddleCategory {
 	JAPANESE(MajorCategory.RESTAURANT, "일식"),
 	WESTERN(MajorCategory.RESTAURANT, "양식"),
 	CHINESE(MajorCategory.RESTAURANT, "중식"),
+	THAILAND(MajorCategory.RESTAURANT, "태국음식"),
 	KOREAN_STREET_FOOD(MajorCategory.RESTAURANT, "분식"),
 	OTHER_FOOD(MajorCategory.RESTAURANT, "기타 음식"),
 	CAFE_AND_DESSERT(MajorCategory.RESTAURANT, "카페,디저트"),
@@ -218,6 +219,6 @@ public enum MiddleCategory {
 		return Arrays.stream(MiddleCategory.values())
 			.filter(category -> category.getLabel().equals(label))
 			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("잘못된 중분류입니다. 중분류:" + label));
+			.orElse(null);
 	}
 }
