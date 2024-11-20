@@ -42,7 +42,7 @@ public class BatchRegisterMarkerService implements BatchRegisterMarker {
 
 	private List<Place> findExistingPlaces(List<RegisterYouTubeMarkerRequest> requests) {
 		return requests.stream()
-			.map(request -> findPlace.invoke(request.title(), request.roadAddress()))
+			.map(request -> findPlace.invoke(request.title(), request.roadAddress(), request.category().toEntity()))
 			.filter(Optional::isPresent)
 			.map(Optional::get)
 			.collect(Collectors.toList());

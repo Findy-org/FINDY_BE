@@ -19,25 +19,24 @@ public class CategoryResolver {
 		String firstCategory = parts[0].trim();
 		String secondCategory = parts[1].trim();
 
-		Category middleCategory = getCategoryBySecondCategory(secondCategory, firstCategory);
-		if (middleCategory != null)
-			return middleCategory;
+		Category category = getCategoryBySecondCategory(secondCategory, firstCategory);
+		if (category != null)
+			return category;
 
-		return getCategoryByFirstCategory(input, firstCategory);
+		return getCategoryByFirstCategory(firstCategory, secondCategory);
 	}
 
 	private static Category getCategoryBySecondCategory(final String secondCategory, final String firstCategory) {
 		return MiddleCategory.findByLabel(secondCategory)
 			.filter(middleCategory -> middleCategory.matchesMajorCategoryLabel(firstCategory))
-			.map(middleCategory -> Category.of(middleCategory.getMajorCategory(), middleCategory))
+			.map(middleCategory -> Category.of(middleCategory.getMajorCategory().getLabel(), middleCategory.getLabel()))
 			.orElse(null);
 	}
 
-	private static Category getCategoryByFirstCategory(final String input, final String firstCategory) {
+	private static Category getCategoryByFirstCategory(final String firstCategory, final String secondCategory) {
 		return MiddleCategory.findByLabel(firstCategory)
-			.map(middleCategory -> Category.of(middleCategory.getMajorCategory(), middleCategory))
-			.orElseThrow(() -> new IllegalArgumentException(
-				String.format(BAD_REQUEST_CATEGORY_NOT_FOUND_ERROR.getMessage(), input)));
+			.map(middleCategory -> Category.of(middleCategory.getMajorCategory().getLabel(), middleCategory.getLabel()))
+			.orElse(Category.of(firstCategory, secondCategory));
 	}
 
 }

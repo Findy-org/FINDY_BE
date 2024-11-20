@@ -54,7 +54,8 @@ class BatchCreateMarkerServiceTest extends MockTest {
 		when(place2.getTitle()).thenReturn("Place2");
 		when(place2.getRoadAddress()).thenReturn("RoadAddress2");
 
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		RegisterYouTubeMarkerRequest request1 = new RegisterYouTubeMarkerRequest(
 			"Place1", "Description1", "Address1", "RoadAddress1", categoryRequest,
 			"12345", "67890", "02-000-0000", "0.04"

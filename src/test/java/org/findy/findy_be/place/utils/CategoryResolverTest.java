@@ -1,5 +1,6 @@
 package org.findy.findy_be.place.utils;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.findy.findy_be.common.exception.ErrorCode;
@@ -17,8 +18,8 @@ class CategoryResolverTest {
 		String input = "음식점>한식";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.RESTAURANT, result.getMajorCategory());
-		assertEquals(MiddleCategory.KOREAN, result.getMiddleCategory());
+		assertThat(MajorCategory.RESTAURANT.getLabel()).isEqualTo(result.getMajorCategory());
+		assertThat(MiddleCategory.KOREAN.getLabel()).isEqualTo(result.getMiddleCategory());
 	}
 
 	@DisplayName("[성공 case2] 정상적인 '카페,디저트>아이스크림' 입력을 Category로 변환")
@@ -27,8 +28,8 @@ class CategoryResolverTest {
 		String input = "카페,디저트>아이스크림";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.CAFE_AND_DESSERT, result.getMajorCategory());
-		assertEquals(MiddleCategory.ICE_CREAM, result.getMiddleCategory());
+		assertThat(MajorCategory.CAFE_AND_DESSERT.getLabel()).isEqualTo(result.getMajorCategory());
+		assertThat(MiddleCategory.ICE_CREAM.getLabel()).isEqualTo(result.getMiddleCategory());
 	}
 
 	@DisplayName("[성공 case3] '아이스크림>아돈노' 입력 시 첫번째 입력을 기준으로 Category로 변환")
@@ -37,8 +38,8 @@ class CategoryResolverTest {
 		String input = "아이스크림>아돈노";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.CAFE_AND_DESSERT, result.getMajorCategory());
-		assertEquals(MiddleCategory.ICE_CREAM, result.getMiddleCategory());
+		assertThat(MajorCategory.CAFE_AND_DESSERT.getLabel()).isEqualTo(result.getMajorCategory());
+		assertThat(MiddleCategory.ICE_CREAM.getLabel()).isEqualTo(result.getMiddleCategory());
 	}
 
 	@DisplayName("[성공 case4] 정상적인 '음식점 > 한식' 입력을 Category로 변환")
@@ -47,8 +48,8 @@ class CategoryResolverTest {
 		String input = "음식점 > 한식";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.RESTAURANT, result.getMajorCategory());
-		assertEquals(MiddleCategory.KOREAN, result.getMiddleCategory());
+		assertThat(MajorCategory.RESTAURANT.getLabel()).isEqualTo(result.getMajorCategory());
+		assertThat(MiddleCategory.KOREAN.getLabel()).isEqualTo(result.getMiddleCategory());
 	}
 
 	@Test
@@ -57,8 +58,8 @@ class CategoryResolverTest {
 		String input = "한식 > 정의되지 않은 값";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.RESTAURANT, result.getMajorCategory());
-		assertEquals(MiddleCategory.KOREAN, result.getMiddleCategory());
+		assertThat(MajorCategory.RESTAURANT.getLabel()).isEqualTo(result.getMajorCategory());
+		assertThat(MiddleCategory.KOREAN.getLabel()).isEqualTo(result.getMiddleCategory());
 	}
 
 	@Test
@@ -67,8 +68,8 @@ class CategoryResolverTest {
 		String input = "카페,디저트 > 아이스크림";
 		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(MajorCategory.CAFE_AND_DESSERT, result.getMajorCategory());
-		assertEquals(MiddleCategory.ICE_CREAM, result.getMiddleCategory());
+		assertThat(MajorCategory.CAFE_AND_DESSERT.getLabel()).isEqualTo(result.getMajorCategory());
+		assertThat(MiddleCategory.ICE_CREAM.getLabel()).isEqualTo(result.getMiddleCategory());
 	}
 
 	@Test
@@ -79,19 +80,18 @@ class CategoryResolverTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 			() -> CategoryResolver.resolveCategory(input));
 
-		assertEquals(String.format(ErrorCode.BAD_REQUEST_CATEGORY_FORM_ERROR.getMessage(), input),
+		assertThat(String.format(ErrorCode.BAD_REQUEST_CATEGORY_FORM_ERROR.getMessage(), input)).isEqualTo(
 			exception.getMessage());
 	}
 
 	@Test
-	@DisplayName("[실패 case2] 존재하지 않는 카테고리 입력으로 예외 발생")
-	void 존재하지_않는_카테고리_입력시_예외발생() {
+	@DisplayName("[실패 case2] 존재하지 않는 카테고리 입력의 경우 그대로 저장합니다.")
+	void 존재하지_않는_카테고리_입력시_그대로_저장() {
 		String input = "음식점 > 존재하지 않는 값";
 
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-			() -> CategoryResolver.resolveCategory(input));
+		Category result = CategoryResolver.resolveCategory(input);
 
-		assertEquals(String.format(ErrorCode.BAD_REQUEST_CATEGORY_NOT_FOUND_ERROR.getMessage(), input),
-			exception.getMessage());
+		assertThat(result.getMajorCategory()).isEqualTo("음식점");
+		assertThat(result.getMiddleCategory()).isEqualTo("존재하지 않는 값");
 	}
 }

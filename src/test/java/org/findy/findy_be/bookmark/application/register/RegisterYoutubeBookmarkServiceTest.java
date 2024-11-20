@@ -44,7 +44,8 @@ class RegisterYoutubeBookmarkServiceTest extends MockTest {
 		testUser = mock(User.class);
 		when(testUser.getUserId()).thenReturn("N49sfgdahdKz_fp-223424er1N3D6kd");
 
-		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
+			MiddleCategory.KOREAN.getLabel());
 		selectedPlaces = List.of(
 			new RegisterYouTubeMarkerRequest("Place1", "Description1", "Address1", "RoadAddress1", categoryRequest,
 				"12345", "67890", "02-000-0000", "0.04")

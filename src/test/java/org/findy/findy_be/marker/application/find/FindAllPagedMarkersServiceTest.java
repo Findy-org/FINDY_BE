@@ -42,7 +42,7 @@ class FindAllPagedMarkersServiceTest extends MockTest {
 		MockitoAnnotations.openMocks(this);
 		testUser = mock(User.class);
 
-		Category category = Category.of(MajorCategory.RESTAURANT, MiddleCategory.KOREAN);
+		Category category = Category.of(MajorCategory.RESTAURANT.getLabel(), MiddleCategory.KOREAN.getLabel());
 		markerPlaceResponses = IntStream.range(0, 5)
 			.mapToObj(i -> MarkerPlaceResponse.builder()
 				.markerId((long)i)

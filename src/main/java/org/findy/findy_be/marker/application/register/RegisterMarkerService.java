@@ -1,6 +1,7 @@
 package org.findy.findy_be.marker.application.register;
 
 import static org.findy.findy_be.common.exception.ErrorCode.*;
+import static org.findy.findy_be.place.utils.CategoryResolver.*;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.bookmark.domain.BookmarkType;
@@ -9,6 +10,7 @@ import org.findy.findy_be.marker.application.create.CreateMarker;
 import org.findy.findy_be.marker.dto.request.RegisterSearchedMarkerRequest;
 import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.Place;
+import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.repository.PlaceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +38,8 @@ public class RegisterMarkerService implements RegisterMarker {
 
 		validateBookmarkType(bookmark);
 
-		findPlace.invoke(request.title(), request.roadAddress()).ifPresentOrElse(
+		Category category = resolveCategory(request.category());
+		findPlace.invoke(request.title(), request.roadAddress(), category).ifPresentOrElse(
 			existingPlace -> {
 				createMarker.invoke(bookmark, existingPlace);
 			},
