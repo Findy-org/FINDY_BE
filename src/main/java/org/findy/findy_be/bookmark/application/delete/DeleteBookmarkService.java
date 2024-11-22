@@ -27,7 +27,7 @@ public class DeleteBookmarkService implements DeleteBookmark {
 	}
 
 	private static void validateBookmarkUser(final String userId, final Bookmark bookmark) {
-		if (!bookmark.getUser().getUserId().equals(userId)) {
+		if (!bookmark.getUser().getUserId().equals(userId) || bookmark.getName().equals("내 장소")) {
 			throw new IllegalArgumentException(FORBIDDEN_BOOKMARK_ACCESS.getMessage());
 		}
 	}

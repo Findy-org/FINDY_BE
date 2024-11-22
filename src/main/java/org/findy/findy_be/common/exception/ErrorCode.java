@@ -23,7 +23,7 @@ public enum ErrorCode {
 
 	// 403 error,
 	AUTHENTICATION_EXCEPTION_ERROR(FORBIDDEN, "Authentication Content-Type not supported: %s"),
-	FORBIDDEN_BOOKMARK_ACCESS(FORBIDDEN, "해당 즐겨찾기에 접근할 권한이 없습니다."),
+	FORBIDDEN_BOOKMARK_ACCESS(FORBIDDEN, "해당 즐겨찾기는 지울 수 없습니다."),
 	FORBIDDEN_MARKER_ACCESS(FORBIDDEN, "해당 마커에 접근할 권한이 없습니다."),
 
 	// 404 error
