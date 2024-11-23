@@ -82,6 +82,8 @@ public class SecurityConfig {
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/oauth**"))
 					.permitAll()
+					.requestMatchers(new MvcRequestMatcher(introspector, "/api/oauth/**"))
+					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/oauth2/authorization/**"))
 					.permitAll()
 					.requestMatchers(new MvcRequestMatcher(introspector, "/login/oauth2/code/**"))

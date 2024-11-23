@@ -1,6 +1,7 @@
 package org.findy.findy_be.auth.api.swagger;
 
 import org.findy.findy_be.auth.dto.request.AuthRequestModel;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,4 +26,9 @@ public interface AuthAPIPresentation {
 		@ApiResponse(responseCode = "401", description = "인증 실패 - 잘못된 또는 만료된 토큰")
 	})
 	void refreshToken(HttpServletRequest request, HttpServletResponse response);
+
+	@Operation(summary = "소셜 로그인", description = "소셜 로그인입니다.", responses = {
+		@ApiResponse(responseCode = "200", description = "성공적으로 로그인됨"),
+	})
+	String oauth(@PathVariable("app") String app);
 }
