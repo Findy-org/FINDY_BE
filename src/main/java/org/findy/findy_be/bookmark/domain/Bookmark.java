@@ -65,6 +65,10 @@ public class Bookmark extends BaseTimeEntity {
 		this.markersCount += incrementValue;
 	}
 
+	public void decreaseMarkersCount() {
+		this.markersCount--;
+	}
+
 	public void updateName(String name) {
 		this.name = this.name.equals(name) || name == null ? this.name : name;
 	}
