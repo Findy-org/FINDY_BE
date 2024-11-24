@@ -94,4 +94,8 @@ public class Bookmark extends BaseTimeEntity {
 	public static Bookmark createCustomType(String name, User user) {
 		return Bookmark.of(name, BookmarkType.CUSTOM, null, null, null, user);
 	}
+
+	public static Bookmark createNaverType(String name, User user) {
+		return Bookmark.of(name, BookmarkType.NAVER, null, null, null, user);
+	}
 }

@@ -1,9 +1,12 @@
 package org.findy.findy_be.place.domain;
 
+import static org.findy.findy_be.place.utils.CategoryResolver.*;
+
 import java.util.Objects;
 
 import org.findy.findy_be.common.entity.BaseTimeEntity;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterNaverMarkerRequest;
 import org.findy.findy_be.place.domain.vo.Category;
 import org.findy.findy_be.place.domain.vo.Coordinate;
 
@@ -56,7 +59,7 @@ public class Place extends BaseTimeEntity {
 	@Embedded
 	private Category category;
 
-	public static Place create(final RegisterYouTubeMarkerRequest request) {
+	public static Place valueOfYoutubeMarker(final RegisterMarkerRequest request) {
 		Coordinate coordinate = Coordinate.of(request.mapx(), request.mapy());
 		Category category = Category.of(request.category().majorCategory(), request.category().middleCategory());
 		return Place.builder()
@@ -70,6 +73,20 @@ public class Place extends BaseTimeEntity {
 			.build();
 	}
 
+	public static Place valueOfNaverMarker(final RegisterNaverMarkerRequest request) {
+		Coordinate coordinate = Coordinate.of(request.mapx(), request.mapy());
+		Category category = resolveCategory(request.category() + ">" + request.category());
+		return Place.builder()
+			.address(request.address())
+			.description(null)
+			.category(category)
+			.coordinate(coordinate)
+			.roadAddress(request.address())
+			.telephone(null)
+			.title(request.title())
+			.build();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -78,20 +95,14 @@ public class Place extends BaseTimeEntity {
 			return false;
 		Place place = (Place)o;
 
-		if (id != null && id.equals(place.id)) {
-			return true;
-		}
-
 		return Objects.equals(title, place.title) &&
-			Objects.equals(roadAddress, place.roadAddress);
+			Objects.equals(address, place.address) &&
+			Objects.equals(category.getMajorCategory(), place.category.getMajorCategory());
 	}
 
 	@Override
 	public int hashCode() {
-		if (id != null) {
-			return Objects.hash(id);
-		}
-
-		return Objects.hash(title, roadAddress);
+		return Objects.hash(title, address, category.getMajorCategory());
 	}
+
 }

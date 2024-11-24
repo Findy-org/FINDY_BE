@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 public enum BookmarkType {
 
 	YOUTUBE("유튜브에서 불러온 즐겨찾기"),
+	NAVER("네이버에서 불러온 즐겨찾기"),
 	CUSTOM("사용자 custom 즐겨찾기");
 
 	private final String description;
