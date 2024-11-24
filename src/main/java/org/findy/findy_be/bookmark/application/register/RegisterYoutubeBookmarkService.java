@@ -9,7 +9,7 @@ import org.findy.findy_be.bookmark.dto.request.RegisterYoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.exception.custom.ForbiddenAccessException;
 import org.findy.findy_be.marker.application.register.BatchRegisterMarker;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,11 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 public class RegisterYoutubeBookmarkService implements RegisterYoutubeBookmark {
 
 	private final BookmarkRepository bookmarkRepository;
-	private final BatchRegisterMarker batchRegisterMarker;
+	private final BatchRegisterMarker<RegisterMarkerRequest> batchRegisterMarker;
 
 	@Override
 	public void invoke(final User user, final RegisterYoutubeBookmarkRequest request) {
-		List<RegisterYouTubeMarkerRequest> placeRequests = request.places();
+		List<RegisterMarkerRequest> placeRequests = request.places();
 
 		bookmarkRepository.findByUserAndYoutuberId(user, request.youtuberId())
 			.ifPresentOrElse(

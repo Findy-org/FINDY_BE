@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.marker.domain.Marker;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.domain.Place;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BatchCreateMarkerService implements BatchCreateMarker {
+public class BatchCreateMarkerService implements BatchCreateMarker<RegisterMarkerRequest> {
 
 	private final MarkerRepository markerRepository;
 
 	@Override
 	public void invoke(final Bookmark bookmark, final List<Place> places,
-		final List<RegisterYouTubeMarkerRequest> requests) {
+		final List<RegisterMarkerRequest> requests) {
 		Set<Long> existingPlaceIds = findExistingPlaceIds(bookmark, places);
 
 		List<Marker> newMarkers = createNewMarkers(bookmark, places, requests, existingPlaceIds);
@@ -43,7 +43,7 @@ public class BatchCreateMarkerService implements BatchCreateMarker {
 	}
 
 	private List<Marker> createNewMarkers(Bookmark bookmark, List<Place> places,
-		List<RegisterYouTubeMarkerRequest> requests, Set<Long> existingPlaceIds) {
+		List<RegisterMarkerRequest> requests, Set<Long> existingPlaceIds) {
 		return requests.stream()
 			.filter(request -> !existingPlaceIds.contains(
 				findPlaceIdByTitleAndRoadAddress(places, request.title(), request.roadAddress())))
@@ -51,7 +51,7 @@ public class BatchCreateMarkerService implements BatchCreateMarker {
 			.toList();
 	}
 
-	private Marker createMarker(Bookmark bookmark, List<Place> places, RegisterYouTubeMarkerRequest request) {
+	private Marker createMarker(Bookmark bookmark, List<Place> places, RegisterMarkerRequest request) {
 		Place place = findPlaceByTitleAndRoadAddress(places, request.title(), request.roadAddress());
 		return Marker.createForYoutubeBookmark(request.timestamp(), bookmark, place);
 	}

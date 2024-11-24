@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.marker.application.create.BatchCreateMarker;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.place.application.find.FindPlace;
 import org.findy.findy_be.place.domain.Place;
 import org.findy.findy_be.place.repository.PlaceRepository;
@@ -23,14 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BatchRegisterMarkerService implements BatchRegisterMarker {
+public class BatchRegisterMarkerService implements BatchRegisterMarker<RegisterMarkerRequest> {
 
 	private final FindPlace findPlace;
 	private final PlaceRepository placeRepository;
-	private final BatchCreateMarker batchCreateMarker;
+	private final BatchCreateMarker<RegisterMarkerRequest> batchCreateMarker;
 
 	@Override
-	public void invoke(final Bookmark bookmark, final List<RegisterYouTubeMarkerRequest> requests) {
+	public void invoke(final Bookmark bookmark, final List<RegisterMarkerRequest> requests) {
 		List<Place> existingPlaces = findExistingPlaces(requests);
 		List<Place> newPlaces = findNewPlaces(requests, existingPlaces);
 
@@ -40,19 +40,19 @@ public class BatchRegisterMarkerService implements BatchRegisterMarker {
 		batchCreateMarker.invoke(bookmark, allPlaces, requests);
 	}
 
-	private List<Place> findExistingPlaces(List<RegisterYouTubeMarkerRequest> requests) {
+	private List<Place> findExistingPlaces(List<RegisterMarkerRequest> requests) {
 		return requests.stream()
-			.map(request -> findPlace.invoke(request.title(), request.roadAddress(), request.category().toEntity()))
+			.map(request -> findPlace.invoke(request.title(), request.address(), request.category().toEntity()))
 			.filter(Optional::isPresent)
 			.map(Optional::get)
 			.collect(Collectors.toList());
 	}
 
-	private List<Place> findNewPlaces(List<RegisterYouTubeMarkerRequest> requests, List<Place> existingPlaces) {
+	private List<Place> findNewPlaces(List<RegisterMarkerRequest> requests, List<Place> existingPlaces) {
 		Set<Place> existingPlaceSet = new HashSet<>(existingPlaces);
 
 		return requests.stream()
-			.map(RegisterYouTubeMarkerRequest::toPlaceEntity)
+			.map(RegisterMarkerRequest::toPlaceEntity)
 			.filter(place -> !existingPlaceSet.contains(place))
 			.toList();
 	}
