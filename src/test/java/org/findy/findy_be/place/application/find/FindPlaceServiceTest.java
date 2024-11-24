@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
@@ -28,7 +28,7 @@ class FindPlaceServiceTest extends MockTest {
 	@InjectMocks
 	private FindPlaceService findPlaceService;
 
-	private RegisterYouTubeMarkerRequest placeRequest;
+	private RegisterMarkerRequest placeRequest;
 	private Place place;
 
 	@BeforeEach
@@ -36,7 +36,7 @@ class FindPlaceServiceTest extends MockTest {
 		MockitoAnnotations.openMocks(this);
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
 			MiddleCategory.KOREAN.getLabel());
-		placeRequest = new RegisterYouTubeMarkerRequest(
+		placeRequest = new RegisterMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
 			"서울특별시 종로구 공평동 124",
@@ -81,7 +81,7 @@ class FindPlaceServiceTest extends MockTest {
 		// given
 		when(placeRepository.findPlaceByDetails(
 			placeRequest.title(),
-			placeRequest.roadAddress(),
+			placeRequest.address(),
 			placeRequest.category().majorCategory(),
 			placeRequest.category().middleCategory()
 		)).thenReturn(Optional.empty());

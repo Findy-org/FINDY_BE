@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.marker.domain.Marker;
-import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterNaverMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.domain.Place;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BatchCreateMarkerService implements BatchCreateMarker<RegisterMarkerRequest> {
+public class BatchCreateNaverMarkerService implements BatchCreateMarker<RegisterNaverMarkerRequest> {
 
 	private final MarkerRepository markerRepository;
 
 	@Override
 	public void invoke(final Bookmark bookmark, final List<Place> places,
-		final List<RegisterMarkerRequest> requests) {
+		final List<RegisterNaverMarkerRequest> requests) {
 		Set<Long> existingPlaceIds = findExistingPlaceIds(bookmark, places);
 
 		List<Marker> newMarkers = createNewMarkers(bookmark, places, requests, existingPlaceIds);
@@ -43,17 +43,17 @@ public class BatchCreateMarkerService implements BatchCreateMarker<RegisterMarke
 	}
 
 	private List<Marker> createNewMarkers(Bookmark bookmark, List<Place> places,
-		List<RegisterMarkerRequest> requests, Set<Long> existingPlaceIds) {
+		List<RegisterNaverMarkerRequest> requests, Set<Long> existingPlaceIds) {
 		return requests.stream()
 			.filter(request -> !existingPlaceIds.contains(
-				findPlaceIdByTitleAndRoadAddress(places, request.title(), request.roadAddress())))
+				findPlaceIdByTitleAndRoadAddress(places, request.title(), request.address())))
 			.map(request -> createMarker(bookmark, places, request))
 			.toList();
 	}
 
-	private Marker createMarker(Bookmark bookmark, List<Place> places, RegisterMarkerRequest request) {
-		Place place = findPlaceByTitleAndRoadAddress(places, request.title(), request.roadAddress());
-		return Marker.createForYoutubeBookmark(request.timestamp(), bookmark, place);
+	private Marker createMarker(Bookmark bookmark, List<Place> places, RegisterNaverMarkerRequest request) {
+		Place place = findPlaceByTitleAndRoadAddress(places, request.title(), request.address());
+		return Marker.createForNaverBookmark(bookmark, place);
 	}
 
 	private void saveMarkersAndIncrementCount(Bookmark bookmark, List<Marker> newMarkers) {

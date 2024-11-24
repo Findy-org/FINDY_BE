@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
@@ -29,7 +29,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 		// given
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
 			MiddleCategory.KOREAN.getLabel());
-		RegisterYouTubeMarkerRequest request = new RegisterYouTubeMarkerRequest(
+		RegisterMarkerRequest request = new RegisterMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
 			"서울특별시 종로구 공평동 124",
@@ -40,7 +40,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 			"02-000-000",
 			"0.04"
 		);
-		Place savedPlace = placeRepository.save(Place.create(request));
+		Place savedPlace = placeRepository.save(Place.valueOfYoutubeMarker(request));
 
 		// when
 		Place foundPlace = placeRepository.findPlaceByDetails(
@@ -60,7 +60,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 	void 주어진_상세_정보와_일치하는_장소가_없으면_null() {
 		// given // when
 		Optional<Place> foundPlace = placeRepository.findPlaceByDetails(
-			"존재하지 않는 장소", "도로명 주소", "음식점", "한식"
+			"존재하지 않는 장소", "주소", "음식점", "한식"
 		);
 
 		// then
@@ -75,7 +75,7 @@ class PlaceRepositoryTest extends RepositoryTest {
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
 			MiddleCategory.KOREAN.getLabel());
 		List<Place> places = IntStream.range(0, 100)
-			.mapToObj(i -> Place.create(new RegisterYouTubeMarkerRequest(
+			.mapToObj(i -> Place.valueOfYoutubeMarker(new RegisterMarkerRequest(
 					"Test Place " + i,
 					"Description " + i,
 					"02-1234-5678",

@@ -201,7 +201,7 @@ public enum MiddleCategory {
 
 	public static Optional<MiddleCategory> findByLabel(String label) {
 		return Arrays.stream(MiddleCategory.values())
-			.filter(category -> category.getLabel().equals(label))
+			.filter(category -> category.getLabel().contains(label))
 			.findFirst();
 	}
 

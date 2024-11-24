@@ -61,4 +61,11 @@ public class Marker extends BaseTimeEntity {
 			.bookmark(bookmark)
 			.build();
 	}
+
+	public static Marker createForNaverBookmark(final Bookmark bookmark, final Place place) {
+		return Marker.builder()
+			.place(place)
+			.bookmark(bookmark)
+			.build();
+	}
 }

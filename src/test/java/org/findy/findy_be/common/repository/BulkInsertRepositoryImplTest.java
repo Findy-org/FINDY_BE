@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
@@ -39,7 +39,7 @@ class BulkInsertRepositoryImplTest extends RepositoryTest {
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
 			MiddleCategory.KOREAN.getLabel());
 		return IntStream.range(0, entityCount)
-			.mapToObj(i -> new RegisterYouTubeMarkerRequest(
+			.mapToObj(i -> new RegisterMarkerRequest(
 				"Test Place " + i,
 				"Description " + i,
 				"02-1234-5678",
@@ -50,7 +50,7 @@ class BulkInsertRepositoryImplTest extends RepositoryTest {
 				"02-000-000",
 				"0.04"
 			))
-			.map(Place::create)
+			.map(Place::valueOfYoutubeMarker)
 			.collect(Collectors.toList());
 	}
 

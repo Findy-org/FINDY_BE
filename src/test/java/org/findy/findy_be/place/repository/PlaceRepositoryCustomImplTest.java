@@ -13,7 +13,7 @@ import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
@@ -109,7 +109,7 @@ class PlaceRepositoryCustomImplTest extends RepositoryTest {
 
 	private void initPlacesForBookmark(Bookmark bookmark, int count) {
 		List<Place> places = IntStream.rangeClosed(1, count)
-			.mapToObj(i -> Place.create(new RegisterYouTubeMarkerRequest(
+			.mapToObj(i -> Place.valueOfYoutubeMarker(new RegisterMarkerRequest(
 				"Test Place " + i,
 				"Description " + i,
 				"Address " + i,
