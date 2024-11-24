@@ -24,6 +24,7 @@ public class DeleteMarkerService implements DeleteMarker {
 				() -> new EntityNotFoundException(String.format(NOT_FOUND_MARKER_BY_ID.getMessage(), markerId)));
 		validateMarkerUser(userId, marker);
 		markerRepository.delete(marker);
+		marker.getBookmark().decreaseMarkersCount();
 	}
 
 	private static void validateMarkerUser(final String userId, final Marker marker) {
