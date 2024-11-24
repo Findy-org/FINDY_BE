@@ -13,7 +13,7 @@ import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.marker.repository.MarkerRepository;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
@@ -39,7 +39,7 @@ class BatchCreateMarkerServiceTest extends MockTest {
 	private Bookmark testBookmark;
 	private Place place1;
 	private Place place2;
-	private List<RegisterYouTubeMarkerRequest> requests;
+	private List<RegisterMarkerRequest> requests;
 
 	@BeforeEach
 	void setUp() {
@@ -56,11 +56,11 @@ class BatchCreateMarkerServiceTest extends MockTest {
 
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
 			MiddleCategory.KOREAN.getLabel());
-		RegisterYouTubeMarkerRequest request1 = new RegisterYouTubeMarkerRequest(
+		RegisterMarkerRequest request1 = new RegisterMarkerRequest(
 			"Place1", "Description1", "Address1", "RoadAddress1", categoryRequest,
 			"12345", "67890", "02-000-0000", "0.04"
 		);
-		RegisterYouTubeMarkerRequest request2 = new RegisterYouTubeMarkerRequest(
+		RegisterMarkerRequest request2 = new RegisterMarkerRequest(
 			"Place2", "Description2", "Address2", "RoadAddress2", categoryRequest,
 			"54321", "09876", "02-000-0001", "0.04"
 		);

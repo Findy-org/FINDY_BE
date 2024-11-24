@@ -11,7 +11,7 @@ import org.findy.findy_be.bookmark.domain.Bookmark;
 import org.findy.findy_be.common.MockTest;
 import org.findy.findy_be.marker.application.create.BatchCreateMarkerService;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.place.application.find.FindPlaceService;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
@@ -40,8 +40,8 @@ class BatchRegisterMarkerServiceTest extends MockTest {
 	private BatchRegisterMarkerService batchRegisterMarkerService;
 
 	private Bookmark testBookmark;
-	private RegisterYouTubeMarkerRequest request1;
-	private RegisterYouTubeMarkerRequest request2;
+	private RegisterMarkerRequest request1;
+	private RegisterMarkerRequest request2;
 	private Place place1;
 	private Place place2;
 
@@ -51,10 +51,10 @@ class BatchRegisterMarkerServiceTest extends MockTest {
 		testBookmark = mock(Bookmark.class);
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
 			MiddleCategory.KOREAN.getLabel());
-		request1 = new RegisterYouTubeMarkerRequest("Place1", "Description1", "Address1", "RoadAddress1",
+		request1 = new RegisterMarkerRequest("Place1", "Description1", "Address1", "RoadAddress1",
 			categoryRequest,
 			"12345", "67890", "02-000-0000", "0.04");
-		request2 = new RegisterYouTubeMarkerRequest("Place2", "Description2", "Address2", "RoadAddress2",
+		request2 = new RegisterMarkerRequest("Place2", "Description2", "Address2", "RoadAddress2",
 			categoryRequest,
 			"54321", "09876", "02-000-0001", "0.04");
 		place1 = mock(Place.class);
@@ -65,7 +65,7 @@ class BatchRegisterMarkerServiceTest extends MockTest {
 	@Test
 	void 새로운_장소_모두_등록_및_마커_생성() {
 		// given
-		List<RegisterYouTubeMarkerRequest> requests = Arrays.asList(request1, request2);
+		List<RegisterMarkerRequest> requests = Arrays.asList(request1, request2);
 
 		Category category1 = request1.category().toEntity();
 		Category category2 = request2.category().toEntity();
@@ -85,7 +85,7 @@ class BatchRegisterMarkerServiceTest extends MockTest {
 	@Test
 	void 단일_장소_등록_및_마커_생성() {
 		// given
-		List<RegisterYouTubeMarkerRequest> requests = Arrays.asList(request1);
+		List<RegisterMarkerRequest> requests = Arrays.asList(request1);
 
 		Category category1 = request1.category().toEntity();
 		when(findPlace.invoke(request1.title(), request1.roadAddress(), category1)).thenReturn(Optional.empty());

@@ -12,7 +12,7 @@ import org.findy.findy_be.bookmark.repository.BookmarkRepository;
 import org.findy.findy_be.common.RepositoryTest;
 import org.findy.findy_be.marker.domain.Marker;
 import org.findy.findy_be.marker.dto.request.CategoryRequest;
-import org.findy.findy_be.marker.dto.request.RegisterYouTubeMarkerRequest;
+import org.findy.findy_be.marker.dto.request.RegisterMarkerRequest;
 import org.findy.findy_be.place.domain.MajorCategory;
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.Place;
@@ -52,7 +52,7 @@ class MarkerRepositoryTest extends RepositoryTest {
 
 		CategoryRequest categoryRequest = new CategoryRequest(MajorCategory.RESTAURANT.getLabel(),
 			MiddleCategory.KOREAN.getLabel());
-		RegisterYouTubeMarkerRequest request = new RegisterYouTubeMarkerRequest(
+		RegisterMarkerRequest request = new RegisterMarkerRequest(
 			"동대문엽기떡볶이 종각점",
 			"설명",
 			"서울특별시 종로구 공평동 124",
@@ -63,7 +63,7 @@ class MarkerRepositoryTest extends RepositoryTest {
 			"02-000-000",
 			"0.04"
 		);
-		testPlace = placeRepository.save(Place.create(request));
+		testPlace = placeRepository.save(Place.valueOfYoutubeMarker(request));
 		testBookmark = bookmarkRepository.save(Bookmark.of("서촌", BookmarkType.CUSTOM, null, null, null, testUser));
 		testMarker = markerRepository.save(Marker.createForCustomBookmark(testBookmark, testPlace));
 		testMarker.changeBookmark(testBookmark);
