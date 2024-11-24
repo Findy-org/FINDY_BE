@@ -4,9 +4,11 @@ import org.findy.findy_be.bookmark.api.swagger.BookmarkAPIPresentation;
 import org.findy.findy_be.bookmark.application.create.CreateCustomBookmark;
 import org.findy.findy_be.bookmark.application.delete.DeleteBookmark;
 import org.findy.findy_be.bookmark.application.find.FindAllPagedBookmarks;
+import org.findy.findy_be.bookmark.application.register.RegisterNaverBookmark;
 import org.findy.findy_be.bookmark.application.register.RegisterYoutubeBookmark;
 import org.findy.findy_be.bookmark.application.update.UpdateBookmark;
 import org.findy.findy_be.bookmark.dto.request.CreateCustomBookmarkRequest;
+import org.findy.findy_be.bookmark.dto.request.RegisterNaverBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.request.RegisterYoutubeBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.request.UpdateBookmarkRequest;
 import org.findy.findy_be.bookmark.dto.response.BookmarkResponse;
@@ -33,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkController implements BookmarkAPIPresentation {
 
 	private final RegisterYoutubeBookmark registerYoutubeBookmark;
+	private final RegisterNaverBookmark registerNaverBookmark;
 	private final CreateCustomBookmark createCustomBookmark;
 	private final FindAllPagedBookmarks findAllPagedBookmarks;
 	private final DeleteBookmark deleteBookmark;
@@ -42,6 +45,12 @@ public class BookmarkController implements BookmarkAPIPresentation {
 	public void registerYoutubeBookmark(@LoginUser User user,
 		@Valid @RequestBody RegisterYoutubeBookmarkRequest request) {
 		registerYoutubeBookmark.invoke(user, request);
+	}
+
+	@PostMapping("/naver")
+	public void registerNaverBookmark(@LoginUser User user,
+		@Valid @RequestBody RegisterNaverBookmarkRequest request) {
+		registerNaverBookmark.invoke(user, request);
 	}
 
 	@PostMapping("/custom")
