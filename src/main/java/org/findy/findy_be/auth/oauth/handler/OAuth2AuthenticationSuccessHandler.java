@@ -40,7 +40,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	@Value("${jwt.access.header}")
 	private String accessHeader;
 
+	@Value("${jwt.access.frontUrl}")
+	private String frontUrl;
+
 	private static final String BEARER = "Bearer ";
+	private static final String LOCAL_URL = "http://localhost:5173";
 
 	private final AuthTokenProvider tokenProvider;
 	private final AppProperties appProperties;
@@ -121,7 +125,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
 		CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-		return UriComponentsBuilder.fromUriString("http://localhost:5173")
+		if (frontUrl.equals(LOCAL_URL)) {
+			return UriComponentsBuilder.fromUriString(LOCAL_URL)
+				.queryParam("token", accessToken.getToken())
+				.build().toUriString()
+				.replace("/?", "/oauth?");
+		}
+
+		return UriComponentsBuilder.fromUriString(frontUrl)
 			.queryParam("token", accessToken.getToken())
 			.build().toUriString()
 			.replace("/?", "/oauth?");

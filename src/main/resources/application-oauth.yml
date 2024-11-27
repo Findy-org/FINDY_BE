@@ -45,6 +45,7 @@ jwt:
 
   access:
     header: "Authorization"
+    frontUrl: ${FRONT_URL}
 
 # 토큰 관련 secret Key 및 RedirectUri 설정
 app:
