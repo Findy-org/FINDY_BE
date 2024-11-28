@@ -68,10 +68,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 			new Date(System.currentTimeMillis() + appProperties.getAuth().getTokenExpiry())
 		);
 
+		int cookieMaxAge =
+			(int)new Date(System.currentTimeMillis() + appProperties.getAuth().getTokenExpiry()).getTime() / 60;
+
+		CookieUtil.addCookie(response, "access_token", accessToken.getToken(), cookieMaxAge);
+
 		response.setHeader(accessHeader, BEARER + accessToken.getToken());
 
-		clearAuthenticationAttributes(request, response);
-		getRedirectStrategy().sendRedirect(request, response, targetUrl);
+		// clearAuthenticationAttributes(request, response);
+		// getRedirectStrategy().sendRedirect(request, response, targetUrl);
 	}
 
 	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
