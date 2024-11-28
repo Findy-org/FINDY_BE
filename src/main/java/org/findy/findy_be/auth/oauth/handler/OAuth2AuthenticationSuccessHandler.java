@@ -40,9 +40,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	@Value("${jwt.access.header}")
 	private String accessHeader;
 
-	@Value("${jwt.access.frontUrl}")
-	private String frontUrl;
-
 	private static final String BEARER = "Bearer ";
 	private static final String LOCAL_URL = "http://localhost:5173";
 
@@ -71,8 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		int cookieMaxAge =
 			(int)new Date(System.currentTimeMillis() + appProperties.getAuth().getTokenExpiry()).getTime() / 60;
 
-		CookieUtil.addCookie(response, "access_token", accessToken.getToken(), cookieMaxAge);
-
+		CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge);
 		response.setHeader(accessHeader, BEARER + accessToken.getToken());
 
 		// clearAuthenticationAttributes(request, response);

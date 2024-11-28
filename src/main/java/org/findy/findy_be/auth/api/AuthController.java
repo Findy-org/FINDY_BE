@@ -3,8 +3,6 @@ package org.findy.findy_be.auth.api;
 import java.util.Date;
 
 import org.findy.findy_be.auth.api.swagger.AuthAPIPresentation;
-import org.findy.findy_be.auth.dto.request.AuthRequestModel;
-import org.findy.findy_be.auth.oauth.domain.UserPrincipal;
 import org.findy.findy_be.auth.oauth.token.AuthToken;
 import org.findy.findy_be.auth.oauth.token.AuthTokenProvider;
 import org.findy.findy_be.common.config.AppProperties;
@@ -13,15 +11,9 @@ import org.findy.findy_be.common.utils.HeaderUtil;
 import org.findy.findy_be.user.domain.RoleType;
 import org.findy.findy_be.user.domain.UserRefreshToken;
 import org.findy.findy_be.user.repository.UserRefreshTokenRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import io.jsonwebtoken.Claims;
@@ -36,7 +28,6 @@ public class AuthController implements AuthAPIPresentation {
 
 	private final AppProperties appProperties;
 	private final AuthTokenProvider tokenProvider;
-	private final AuthenticationManager authenticationManager;
 	private final UserRefreshTokenRepository userRefreshTokenRepository;
 
 	private final static long THREE_DAYS_MSEC = 259200000;
@@ -50,53 +41,6 @@ public class AuthController implements AuthAPIPresentation {
 	@GetMapping("/api/oauth/{app}")
 	public String oauth(@PathVariable("app") String app) {
 		return "redirect:/oauth2/authorization/" + app;
-	}
-
-	@PostMapping("/api/auth/login")
-	public String login(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		@RequestBody AuthRequestModel authRequestModel
-	) {
-		Authentication authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(
-				authRequestModel.getId(),
-				authRequestModel.getPassword()
-			)
-		);
-
-		String userId = authRequestModel.getId();
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		Date now = new Date();
-		AuthToken accessToken = tokenProvider.createAuthToken(
-			userId,
-			((UserPrincipal)authentication.getPrincipal()).getRoleType().getCode(),
-			new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-		);
-
-		long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-		AuthToken refreshToken = tokenProvider.createAuthToken(
-			appProperties.getAuth().getTokenSecret(),
-			new Date(now.getTime() + refreshTokenExpiry)
-		);
-
-		// userId refresh token 으로 DB 확인
-		UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userId);
-		if (userRefreshToken == null) {
-			// 없는 경우 새로 등록
-			userRefreshToken = new UserRefreshToken(userId, refreshToken.getToken());
-			userRefreshTokenRepository.saveAndFlush(userRefreshToken);
-		} else {
-			// DB에 refresh 토큰 업데이트
-			userRefreshToken.setRefreshToken(refreshToken.getToken());
-		}
-
-		int cookieMaxAge = (int)refreshTokenExpiry / 60;
-		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-		CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
-
-		return accessToken.getToken();
 	}
 
 	@GetMapping("/api/auth/refresh")
