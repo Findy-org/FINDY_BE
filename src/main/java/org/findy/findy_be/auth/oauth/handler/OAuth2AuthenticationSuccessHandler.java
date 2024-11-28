@@ -125,14 +125,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
 		CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-		if (frontUrl.equals(LOCAL_URL)) {
-			return UriComponentsBuilder.fromUriString(LOCAL_URL)
-				.queryParam("token", accessToken.getToken())
-				.build().toUriString()
-				.replace("/?", "/oauth?");
-		}
-
-		return UriComponentsBuilder.fromUriString(frontUrl)
+		return UriComponentsBuilder.fromUriString(LOCAL_URL)
 			.queryParam("token", accessToken.getToken())
 			.build().toUriString()
 			.replace("/?", "/oauth?");
