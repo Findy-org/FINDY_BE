@@ -71,12 +71,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge);
 		response.setHeader(accessHeader, BEARER + accessToken.getToken());
 
-		clearAuthenticationAttributes(request, response);
 		if (request.getRequestURI().contains("http://localhost:5173")) {
 			getRedirectStrategy().sendRedirect(request, response, "http://localhost:5173/map");
 		} else {
 			getRedirectStrategy().sendRedirect(request, response, "https://findynow.com/map");
 		}
+		clearAuthenticationAttributes(request, response);
 	}
 
 	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
