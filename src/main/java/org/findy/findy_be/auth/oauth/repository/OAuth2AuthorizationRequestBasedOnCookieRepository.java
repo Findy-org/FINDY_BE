@@ -1,5 +1,7 @@
 package org.findy.findy_be.auth.oauth.repository;
 
+import static org.findy.findy_be.auth.oauth.handler.OAuth2AuthenticationSuccessHandler.*;
+
 import org.findy.findy_be.common.utils.CookieUtil;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -36,10 +38,11 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository
 		}
 
 		CookieUtil.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME,
-			CookieUtil.serialize(authorizationRequest), cookieExpireSeconds);
+			CookieUtil.serialize(authorizationRequest), cookieExpireSeconds, FRONT_DOMAIN);
 		String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
 		if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
-			CookieUtil.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieExpireSeconds);
+			CookieUtil.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieExpireSeconds,
+				FRONT_DOMAIN);
 		}
 	}
 

@@ -42,6 +42,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 	private static final String BEARER = "Bearer ";
 	private static final String LOCAL_URL = "http://localhost:5173";
+	public static final String FRONT_DOMAIN = "findynow.com";
+	public static final String FRONT_LOCAL_DOMAIN = "localhost";
 
 	private final AuthTokenProvider tokenProvider;
 	private final AppProperties appProperties;
@@ -68,12 +70,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		int cookieMaxAge =
 			(int)new Date(System.currentTimeMillis() + appProperties.getAuth().getTokenExpiry()).getTime() / 60;
 
-		CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge);
 		response.setHeader(accessHeader, BEARER + accessToken.getToken());
 
 		if (request.getRequestURI().contains("http://localhost:5173")) {
+			CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge, FRONT_LOCAL_DOMAIN);
 			getRedirectStrategy().sendRedirect(request, response, "http://localhost:5173/map");
 		} else {
+			CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge, FRONT_DOMAIN);
 			getRedirectStrategy().sendRedirect(request, response, "https://findynow.com/map");
 		}
 		clearAuthenticationAttributes(request, response);
@@ -128,7 +131,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		int cookieMaxAge = (int)refreshTokenExpiry / 60;
 
 		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-		CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+		CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge, FRONT_DOMAIN);
 
 		return UriComponentsBuilder.fromUriString(LOCAL_URL)
 			.queryParam("token", accessToken.getToken())

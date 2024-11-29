@@ -1,5 +1,7 @@
 package org.findy.findy_be.auth.api;
 
+import static org.findy.findy_be.auth.oauth.handler.OAuth2AuthenticationSuccessHandler.*;
+
 import java.util.Date;
 
 import org.findy.findy_be.auth.api.swagger.AuthAPIPresentation;
@@ -89,7 +91,7 @@ public class AuthController implements AuthAPIPresentation {
 
 			int cookieMaxAge = (int)refreshTokenExpiry / 60;
 			CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-			CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
+			CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge, FRONT_DOMAIN);
 		}
 	}
 }
