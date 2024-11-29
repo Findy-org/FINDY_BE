@@ -53,7 +53,6 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository
 		CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
 		CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
 		CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
-		CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
 	}
 }
 
