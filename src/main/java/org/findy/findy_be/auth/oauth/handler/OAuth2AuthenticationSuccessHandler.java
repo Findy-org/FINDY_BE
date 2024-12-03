@@ -43,7 +43,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	private static final String BEARER = "Bearer ";
 	private static final String LOCAL_URL = "http://localhost:5173";
 	public static final String FRONT_DOMAIN = "findynow.com";
-	public static final String FRONT_LOCAL_DOMAIN = "localhost";
+	public static final String FRONT_LOCAL_DOMAIN = "localhost:5173";
 
 	private final AuthTokenProvider tokenProvider;
 	private final AppProperties appProperties;
