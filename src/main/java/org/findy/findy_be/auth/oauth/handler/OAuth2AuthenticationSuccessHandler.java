@@ -71,14 +71,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 			(int)new Date(System.currentTimeMillis() + appProperties.getAuth().getTokenExpiry()).getTime() / 60;
 
 		response.setHeader(accessHeader, BEARER + accessToken.getToken());
-
-		if (request.getRequestURI().contains("http://localhost:5173")) {
-			CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge, FRONT_LOCAL_DOMAIN);
-			getRedirectStrategy().sendRedirect(request, response, "http://localhost:5173/map");
-		} else {
-			CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge, FRONT_DOMAIN);
-			getRedirectStrategy().sendRedirect(request, response, "https://findynow.com/map");
-		}
+		CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge, FRONT_LOCAL_DOMAIN);
+		getRedirectStrategy().sendRedirect(request, response, "http://localhost:5173/map");
+		// if (request.getRequestURI().contains("http://localhost:5173")) {
+		// 	CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge, FRONT_LOCAL_DOMAIN);
+		// 	getRedirectStrategy().sendRedirect(request, response, "http://localhost:5173/map");
+		// } else {
+		// 	CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge, FRONT_DOMAIN);
+		// 	getRedirectStrategy().sendRedirect(request, response, "https://findynow.com/map");
+		// }
 		clearAuthenticationAttributes(request, response);
 	}
 
