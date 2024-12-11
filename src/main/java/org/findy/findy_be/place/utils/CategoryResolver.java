@@ -1,19 +1,18 @@
 package org.findy.findy_be.place.utils;
 
-import static org.findy.findy_be.common.exception.ErrorCode.*;
-
 import org.findy.findy_be.place.domain.MiddleCategory;
 import org.findy.findy_be.place.domain.vo.Category;
 
 public class CategoryResolver {
 
-	private static final String DELIMITER = ">";
+	private static final String DELIMITER_ONE = ">";
+	private static final String DELIMITER_TWO = ",";
 
 	public static Category resolveCategory(String input) {
-		String[] parts = input.split(DELIMITER);
+		String[] parts = input.split(DELIMITER_ONE);
 
 		if (parts.length != 2) {
-			throw new IllegalArgumentException(String.format(BAD_REQUEST_CATEGORY_FORM_ERROR.getMessage(), input));
+			parts = input.split(DELIMITER_TWO);
 		}
 
 		String firstCategory = parts[0].trim();
