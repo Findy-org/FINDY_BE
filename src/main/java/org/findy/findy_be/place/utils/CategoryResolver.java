@@ -12,7 +12,12 @@ public class CategoryResolver {
 		String[] parts = input.split(DELIMITER_ONE);
 
 		if (parts.length != 2) {
-			parts = input.split(DELIMITER_TWO);
+			if (input.contains(DELIMITER_TWO)) {
+				parts = input.split(DELIMITER_TWO);
+			} else {
+				return Category.of(input, null);
+			}
+
 		}
 
 		String firstCategory = parts[0].trim();
